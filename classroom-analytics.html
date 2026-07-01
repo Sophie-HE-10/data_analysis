@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>班级学情 - 九章爱学</title>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Microsoft YaHei',Arial,sans-serif;font-size:13px;background:#f5f7fa;overflow:hidden;}
+.app{display:flex;height:100vh;}
+
+/* ── Sidebar ── */
+.sidebar{width:160px;background:#fff;border-right:1px solid #eee;display:flex;flex-direction:column;overflow-y:auto;flex-shrink:0;}
+.sidebar-logo{height:50px;display:flex;align-items:center;padding:0 14px;gap:8px;border-bottom:1px solid #f0f0f0;flex-shrink:0;}
+.logo-icon{width:32px;height:32px;background:linear-gradient(135deg,#00c6d4,#0099e0);border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.logo-icon svg{width:18px;height:18px;fill:none;stroke:#fff;stroke-width:2.5;}
+.logo-text{font-size:14px;font-weight:bold;color:#1a1a1a;}
+.nav{flex:1;padding:8px 0;}
+.nav-item{display:flex;align-items:center;padding:9px 16px;cursor:pointer;color:#555;font-size:13px;transition:color .15s;}
+.nav-item:hover{color:#00b3d4;background:#f0fbfc;}
+.nav-item.active{color:#00b3d4;}
+.nav-icon{width:16px;height:16px;margin-right:6px;flex-shrink:0;stroke:currentColor;fill:none;stroke-width:2;}
+.arrow{margin-left:auto;font-size:10px;color:#bbb;}
+.nav-sub .nav-item{padding:7px 16px 7px 30px;font-size:12px;color:#666;}
+.nav-sub .nav-item.active{color:#00b3d4;font-weight:600;}
+.nav-manual{padding:12px 16px;color:#00b3d4;font-size:12px;cursor:pointer;}
+
+/* ── Main ── */
+.main-wrap{flex:1;display:flex;flex-direction:column;min-width:0;}
+.topbar{height:50px;background:#fff;border-bottom:1px solid #eee;display:flex;align-items:center;padding:0 18px;flex-shrink:0;}
+.topbar-icon{font-size:15px;color:#888;cursor:pointer;margin-right:12px;}
+.topbar-right{margin-left:auto;font-size:13px;color:#555;display:flex;gap:4px;}
+.content-area{flex:1;display:flex;flex-direction:column;min-height:0;overflow:hidden;}
+.breadcrumb{padding:9px 20px;font-size:12px;color:#999;background:#fff;border-bottom:1px solid #f0f0f0;flex-shrink:0;}
+.breadcrumb a{color:#999;text-decoration:none;}
+.breadcrumb .sep{margin:0 5px;}
+.breadcrumb .cur{color:#555;}
+.page-tabs{background:#fff;border-bottom:1px solid #eee;padding:0 20px;display:flex;flex-shrink:0;}
+.page-tab{padding:12px 14px;font-size:13px;color:#666;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;}
+.page-tab:hover{color:#00b3d4;}
+.page-tab.active{color:#00b3d4;border-bottom-color:#00b3d4;font-weight:500;}
+.tab-panel{display:none;flex:1;flex-direction:column;min-height:0;overflow:hidden;}
+.tab-panel.active{display:flex;}
+
+/* ── Shared filter bar ── */
+.filter-bar{background:#fff;padding:10px 20px;display:flex;align-items:center;gap:10px;border-bottom:1px solid #f0f0f0;flex-shrink:0;}
+.filter-bar select{border:1px solid #ddd;padding:4px 8px;border-radius:4px;font-size:12px;outline:none;color:#555;}
+.date-sel{display:flex;align-items:center;gap:5px;border:1px solid #ddd;padding:4px 10px;border-radius:4px;font-size:12px;color:#555;cursor:pointer;}
+.date-sel:hover{border-color:#00b3d4;}
+.btn-export{margin-left:auto;background:#00b3d4;color:#fff;border:none;padding:5px 14px;border-radius:4px;font-size:12px;cursor:pointer;}
+
+/* ═══════════════════════════════
+   TAB 0 — 学情总览
+═══════════════════════════════ */
+.zt-wrap{flex:1;overflow-y:auto;padding:14px 20px;display:flex;flex-direction:column;gap:12px;}
+
+/* Hero row */
+.hero-row{display:flex;background:#fff;border-radius:6px;overflow:hidden;}
+.hero-left{width:26%;flex-shrink:0;padding:18px 14px;display:flex;flex-direction:column;align-items:center;justify-content:center;border-right:1px solid #f5f5f5;text-align:center;gap:4px;}
+.hero-right{flex:1;padding:14px 18px;display:flex;flex-direction:column;}
+#donutChart{width:72px;height:72px;}
+.big-rate{font-size:44px;font-weight:700;color:#00b3d4;line-height:1;margin-top:2px;}
+.rate-compare{margin-top:8px;display:flex;flex-direction:column;gap:4px;}
+.rate-vs{font-size:12px;color:#888;}
+.rate-up{color:#52c41a;font-weight:600;}
+.rate-dn{color:#ff4d4f;font-weight:600;}
+.card-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
+.card-title{font-size:13px;font-weight:600;color:#222;}
+.toggle-btns{display:flex;border:1px solid #ddd;border-radius:4px;overflow:hidden;}
+.toggle-btn{padding:3px 10px;font-size:11px;cursor:pointer;border-right:1px solid #ddd;background:#fff;color:#666;}
+.toggle-btn:last-child{border:none;}
+.toggle-btn.act{background:#00b3d4;color:#fff;}
+#trendChart0{width:100%;height:140px;}
+
+/* Data cards */
+.data-cards{display:flex;gap:10px;}
+.data-card{flex:1;background:#fff;border-radius:6px;padding:13px 14px;cursor:pointer;border:2px solid transparent;transition:border-color .15s,box-shadow .15s;}
+.data-card:hover{border-color:#b3e8f0;}
+.data-card.active{border-color:#00b3d4;box-shadow:0 2px 8px rgba(0,179,212,.12);}
+.dc-hd{font-size:11px;color:#aaa;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;}
+.dc-arrow{font-size:14px;color:#ccc;line-height:1;}
+.dc-main{display:flex;align-items:baseline;gap:3px;}
+.dc-num{font-size:26px;font-weight:700;color:#333;line-height:1;}
+.dc-unit{font-size:13px;color:#888;}
+.dc-sub{font-size:11px;color:#aaa;margin-top:4px;}
+/* Detail tags row */
+.detail-tags-row{background:#fff;border-radius:6px;padding:10px 16px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;min-height:42px;}
+.dtag-grp{display:inline-flex;align-items:center;gap:4px;background:#f5f7fa;border:1px solid #eee;border-radius:14px;padding:3px 10px;}
+.dtag-name{font-size:11px;color:#aaa;}
+.dtag-val{font-size:12px;font-weight:600;color:#333;}
+.dtag-vs{font-size:10px;color:#ccc;margin-left:2px;}
+.dtag-up{color:#52c41a;font-size:11px;font-weight:600;}
+.dtag-dn{color:#ff4d4f;font-size:11px;font-weight:600;}
+
+/* Task ranking */
+.ranking-card{background:#fff;border-radius:6px;padding:14px 18px;}
+.rank-tbl{width:100%;border-collapse:collapse;font-size:12px;margin-top:8px;}
+.rank-tbl th{padding:6px 8px;text-align:left;color:#999;font-weight:normal;border-bottom:1px solid #f0f0f0;}
+.rank-tbl td{padding:7px 8px;border-bottom:1px solid #f9f9f9;color:#333;}
+.rank-tbl tr:hover td{background:#f8fdfe;}
+.rank-badge{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;font-size:11px;font-weight:700;}
+.rank-1{background:#f5a623;color:#fff;}
+.rank-2{background:#aaa;color:#fff;}
+.rank-3{background:#b87333;color:#fff;}
+.rank-n{color:#666;font-weight:600;}
+.progress-bar{height:6px;background:#f0f0f0;border-radius:3px;overflow:hidden;width:80px;display:inline-block;vertical-align:middle;margin-left:6px;}
+.progress-fill{height:100%;background:#00b3d4;border-radius:3px;}
+.tag-sm{display:inline-block;padding:1px 5px;border-radius:3px;font-size:10px;}
+.tag-up{background:#f6ffed;color:#52c41a;border:1px solid #b7eb8f;}
+.tag-dn{background:#fff1f0;color:#ff4d4f;border:1px solid #ffa39e;}
+.action-link{color:#00b3d4;cursor:pointer;font-size:12px;}
+.action-link:hover{text-decoration:underline;}
+
+/* ═══════════════════════════════
+   TAB 1 — 知识掌握学情
+═══════════════════════════════ */
+.kg-wrap{flex:1;display:flex;flex-direction:column;min-height:0;overflow:hidden;}
+.kg-filter{background:#fff;padding:8px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #eee;flex-shrink:0;}
+.kg-tabs{display:flex;gap:6px;flex-wrap:wrap;}
+.kg-tab{padding:3px 10px;border-radius:4px;cursor:pointer;font-size:12px;color:#555;border:1px solid #ddd;background:#fff;transition:all .15s;}
+.kg-tab:hover{border-color:#00b3d4;color:#00b3d4;}
+.kg-tab.act{background:#00b3d4;color:#fff;border-color:#00b3d4;}
+.kg-subfilter{background:#fff;padding:6px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid #eee;flex-shrink:0;}
+.kg-subfilter select{border:1px solid #ddd;padding:3px 6px;border-radius:4px;font-size:12px;outline:none;}
+.vb{display:flex;border:1px solid #ddd;border-radius:4px;overflow:hidden;}
+.vbtn{padding:3px 8px;cursor:pointer;border-right:1px solid #ddd;font-size:12px;background:#fff;}
+.vbtn:last-child{border:none;}
+.vbtn.act{background:#00b3d4;color:#fff;}
+.ftag{padding:3px 10px;border-radius:4px;font-size:12px;color:#555;border:1px solid #ddd;cursor:pointer;}
+.kg-main{flex:1;display:flex;min-height:0;gap:8px;padding:8px;}
+.kg-left{background:#fff;border-radius:4px;position:relative;flex:0 0 52%;}
+#treeChart{width:100%;height:100%;}
+.tree-badge{position:absolute;top:8px;left:10px;font-size:11px;color:#999;background:rgba(255,255,255,.9);padding:2px 8px;border-radius:10px;border:1px solid #eee;pointer-events:none;}
+.kg-right{flex:1;display:flex;flex-direction:column;gap:8px;min-width:0;}
+.detail-card{background:#fff;border-radius:4px;padding:14px;flex:1;overflow:hidden;display:flex;flex-direction:column;min-height:0;}
+.ph{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;color:#ccc;font-size:13px;gap:6px;}
+.ph-icon{font-size:32px;}
+.rdt-title{font-size:14px;font-weight:bold;color:#333;margin-bottom:5px;}
+.rdt-sub{font-size:12px;color:#999;margin-bottom:10px;}
+.rdt-sub b{color:#f5a623;}
+.rdt-body{display:flex;gap:10px;flex:1;min-height:0;overflow:hidden;}
+.gauge-col{width:150px;flex-shrink:0;display:flex;flex-direction:column;align-items:center;}
+#gaugeChart{width:150px;height:118px;}
+.glabels{width:100%;padding:0 2px;}
+.glabel{display:flex;align-items:center;gap:5px;font-size:11px;color:#555;margin-bottom:3px;}
+.gdot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.table-col{flex:1;display:flex;flex-direction:column;min-width:0;overflow:hidden;}
+.dtabs{display:flex;border-bottom:1px solid #eee;margin-bottom:6px;}
+.dtab{padding:4px 10px;font-size:12px;cursor:pointer;color:#666;border-bottom:2px solid transparent;white-space:nowrap;}
+.dtab:hover{color:#00b3d4;}
+.dtab.act{color:#00b3d4;border-bottom-color:#00b3d4;}
+.frow{display:flex;gap:5px;margin-bottom:6px;align-items:center;flex-wrap:wrap;}
+.frow input,.frow select{border:1px solid #ddd;padding:2px 5px;border-radius:3px;font-size:11px;outline:none;}
+.sbtn{background:#00b3d4;color:#fff;border:none;padding:3px 10px;border-radius:3px;font-size:11px;cursor:pointer;}
+.tbl-wrap{overflow-y:auto;flex:1;}
+.stbl{width:100%;border-collapse:collapse;font-size:12px;}
+.stbl th{background:#fafafa;padding:5px 4px;text-align:center;border-bottom:1px solid #eee;color:#666;font-weight:normal;white-space:nowrap;position:sticky;top:0;}
+.stbl td{padding:4px;text-align:center;border-bottom:1px solid #f5f5f5;}
+.stbl tr:hover td{background:#f0fbfc;}
+.tag{display:inline-block;padding:1px 5px;border-radius:3px;font-size:10px;}
+.tg{background:#f6ffed;color:#52c41a;border:1px solid #b7eb8f;}
+.to{background:#fff7e6;color:#fa8c16;border:1px solid #ffd591;}
+.tr{background:#fff1f0;color:#ff4d4f;border:1px solid #ffa39e;}
+.scatter-card{background:#fff;border-radius:4px;padding:10px;height:232px;display:flex;gap:8px;flex-shrink:0;}
+#scatterChart{flex:1;height:100%;}
+.sl{display:flex;flex-direction:column;justify-content:center;gap:8px;padding-right:2px;}
+.sli{display:flex;align-items:center;gap:5px;font-size:11px;color:#333;}
+.slbox{width:10px;height:10px;border-radius:2px;flex-shrink:0;}
+
+/* ═══════════════════════════════
+   TAB 2 — 考试学情
+═══════════════════════════════ */
+.ks-wrap{flex:1;overflow-y:auto;padding:14px 20px;display:flex;flex-direction:column;gap:14px;}
+.ks-row{display:flex;gap:12px;}
+.ks-trend{flex:1;background:#fff;border-radius:6px;padding:14px 18px;}
+#ksChart{width:100%;height:200px;}
+.ks-dist{width:280px;flex-shrink:0;background:#fff;border-radius:6px;padding:14px 18px;}
+#distChart{width:100%;height:200px;}
+.exam-card{background:#fff;border-radius:6px;padding:14px 18px;}
+.exam-tbl{width:100%;border-collapse:collapse;font-size:12px;margin-top:8px;}
+.exam-tbl th{padding:8px 10px;text-align:left;color:#999;font-weight:normal;border-bottom:1px solid #f0f0f0;}
+.exam-tbl td{padding:8px 10px;border-bottom:1px solid #f9f9f9;color:#333;}
+.exam-tbl tr:hover td{background:#f8fdfe;}
+.rank-delta{display:inline-flex;align-items:center;gap:2px;font-size:11px;font-weight:600;}
+.rank-delta.up{color:#52c41a;}
+.rank-delta.dn{color:#ff4d4f;}
+.rank-delta.same{color:#aaa;}
+.score-bar{display:flex;align-items:center;gap:6px;}
+.score-val{font-weight:700;color:#00b3d4;min-width:36px;}
+.score-track{flex:1;height:6px;background:#f0f0f0;border-radius:3px;overflow:hidden;}
+.score-fill{height:100%;background:linear-gradient(90deg,#00c6d4,#0099e0);border-radius:3px;}
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-icon">
+      <svg viewBox="0 0 24 24"><path d="M4 19V8l8-5 8 5v11"/><path d="M9 19v-5h6v5"/><path d="M12 3v16"/></svg>
+    </div>
+    <span class="logo-text">九章爱学</span>
+  </div>
+  <nav class="nav">
+    <div class="nav-item">我的课表</div>
+    <div class="nav-item">智能备课</div>
+    <div class="nav-item">个人云盘</div>
+    <div class="nav-item">校本云盘</div>
+    <div class="nav-item">题库组卷</div>
+    <div class="nav-item">精品资源</div>
+    <div class="nav-item">校本资源</div>
+    <div>
+      <div class="nav-item" onclick="toggleSub(this)">
+        <svg class="nav-icon" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6M9 13h6M9 17h4"/></svg>
+        作业任务<span class="arrow">▾</span>
+      </div>
+      <div class="nav-sub" style="display:none">
+        <div class="nav-item">布置作业</div>
+        <div class="nav-item">靶向提升</div>
+        <div class="nav-item">错题管理</div>
+      </div>
+    </div>
+    <div>
+      <div class="nav-item" onclick="toggleSub(this)">
+        <svg class="nav-icon" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+        班级管理<span class="arrow">▾</span>
+      </div>
+      <div class="nav-sub" style="display:none"><div class="nav-item">班级列表</div></div>
+    </div>
+    <div>
+      <div class="nav-item active" onclick="toggleSub(this)" id="xqNav">
+        <svg class="nav-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4"/></svg>
+        学情中心<span class="arrow" style="transform:rotate(180deg)">▾</span>
+      </div>
+      <div class="nav-sub">
+        <div class="nav-item">考试分析</div>
+        <div class="nav-item">校级学情</div>
+        <div class="nav-item">年级学情</div>
+        <div class="nav-item active">班级学情</div>
+        <div class="nav-item">学生学情</div>
+      </div>
+    </div>
+    <div>
+      <div class="nav-item" onclick="toggleSub(this)">
+        <svg class="nav-icon" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>
+        学校管理<span class="arrow">▾</span>
+      </div>
+      <div class="nav-sub" style="display:none"><div class="nav-item">学校设置</div></div>
+    </div>
+    <div class="nav-manual">使用手册</div>
+  </nav>
+</div>
+
+<!-- MAIN -->
+<div class="main-wrap">
+  <div class="topbar">
+    <span class="topbar-icon">☰</span>
+    <span class="topbar-icon">↻</span>
+    <div class="topbar-right"><span>丽江市第一高级中学 ∨</span>&nbsp;|&nbsp;<span>何依翎 ∨</span></div>
+  </div>
+  <div class="content-area">
+    <div class="breadcrumb">
+      <a href="#">🏠 首页</a><span class="sep">/</span>
+      <a href="#">学情中心</a><span class="sep">/</span>
+      <span class="cur">班级学情</span>
+    </div>
+    <div class="page-tabs">
+      <div class="page-tab active" onclick="switchTab(0)">学情总览</div>
+      <div class="page-tab" onclick="switchTab(1)">知识图谱</div>
+      <div class="page-tab" onclick="switchTab(2)">考试学情</div>
+    </div>
+
+    <!-- ══ TAB 0: 学情总览 ══ -->
+    <div class="tab-panel active" id="panel0">
+      <div class="filter-bar">
+        <select><option>523班</option><option>高三19班</option></select>
+        <select><option>英语</option><option>数学</option><option>物理</option></select>
+        <div class="date-sel">2026-06-24 → 2026-07-01 □</div>
+        <select style="width:110px"><option>选择任务类型</option><option>作业</option><option>测验</option></select>
+        <button class="btn-export">导出数据</button>
+      </div>
+      <div class="zt-wrap">
+
+        <!-- HERO ROW: 班级正确率 + 趋势图 -->
+        <div class="hero-row">
+          <div class="hero-left">
+            <div id="donutChart"></div>
+            <div class="big-rate">86.4%</div>
+            <div style="font-size:12px;color:#888;margin-top:2px">班级综合正确率</div>
+            <div class="rate-compare">
+              <div class="rate-vs">年级平均 <span style="color:#333;font-weight:600">83.5%</span></div>
+              <div class="rate-vs">超年级 <span class="rate-up">↑ 2.9%</span></div>
+              <div class="rate-vs">近7天 <span class="rate-up">↑ 1.2%</span></div>
+            </div>
+          </div>
+          <div class="hero-right">
+            <div class="card-hd">
+              <span class="card-title">正确率趋势</span>
+              <div style="display:flex;align-items:center;gap:16px;">
+                <span style="font-size:11px;color:#888">
+                  <span style="display:inline-block;width:10px;height:2px;background:#00b3d4;border-radius:1px;vertical-align:middle;margin-right:4px"></span>班级正确率
+                  <span style="display:inline-block;width:10px;height:2px;background:#ddd;border-radius:1px;vertical-align:middle;margin:0 4px 0 10px"></span>年级正确率
+                </span>
+                <div class="toggle-btns">
+                  <div class="toggle-btn act">按周</div>
+                  <div class="toggle-btn">按月</div>
+                </div>
+              </div>
+            </div>
+            <div id="trendChart0"></div>
+          </div>
+        </div>
+
+        <!-- 5 DATA CARDS -->
+        <div class="data-cards">
+          <div class="data-card active" data-card="tasks" onclick="selectCard(this)">
+            <div class="dc-hd"><span>任务数据</span><span class="dc-arrow">›</span></div>
+            <div class="dc-main"><span class="dc-num">174</span><span class="dc-unit">次</span></div>
+            <div class="dc-sub">任务次数</div>
+          </div>
+          <div class="data-card" data-card="self" onclick="selectCard(this)">
+            <div class="dc-hd"><span>自学数据</span><span class="dc-arrow">›</span></div>
+            <div class="dc-main"><span class="dc-num">44</span><span class="dc-unit">人</span></div>
+            <div class="dc-sub">自学人数</div>
+          </div>
+          <div class="data-card" data-card="interact" onclick="selectCard(this)">
+            <div class="dc-hd"><span>课堂互动</span><span class="dc-arrow">›</span></div>
+            <div class="dc-main"><span class="dc-num">63</span><span class="dc-unit">次</span></div>
+            <div class="dc-sub">互动次数</div>
+          </div>
+          <div class="data-card" data-card="video" onclick="selectCard(this)">
+            <div class="dc-hd"><span>观看视频</span><span class="dc-arrow">›</span></div>
+            <div class="dc-main"><span class="dc-num">44</span><span class="dc-unit">人</span></div>
+            <div class="dc-sub">观看人数</div>
+          </div>
+          <div class="data-card" data-card="ai" onclick="selectCard(this)">
+            <div class="dc-hd"><span>AI讲题</span><span class="dc-arrow">›</span></div>
+            <div class="dc-main"><span class="dc-num">44</span><span class="dc-unit">人</span></div>
+            <div class="dc-sub">使用人数</div>
+          </div>
+        </div>
+
+        <!-- DETAIL TAGS ROW -->
+        <div class="detail-tags-row" id="detailTagsRow"></div>
+
+        <!-- DYNAMIC TABLE -->
+        <div class="ranking-card">
+          <div class="card-hd">
+            <span class="card-title" id="dynTblTitle"></span>
+          </div>
+          <table class="rank-tbl">
+            <thead id="dynTblHead"></thead>
+            <tbody id="dynTblBody"></tbody>
+          </table>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ══ TAB 1: 知识掌握学情 ══ -->
+    <div class="tab-panel" id="panel1">
+      <div class="kg-wrap">
+        <div class="kg-filter">
+          <div class="kg-tabs">
+            <div class="kg-tab" data-grade="all">2019级</div>
+            <div class="kg-tab" data-grade="all">中科大少年班</div>
+            <div class="kg-tab" data-grade="all">22级生物走班（1-4班23人）</div>
+            <div class="kg-tab" data-grade="g1">高一1班</div>
+            <div class="kg-tab" data-grade="all">高三1班</div>
+            <div class="kg-tab act" data-grade="g3">高三19班 ▾</div>
+          </div>
+          <div class="date-sel">2022-05-24 — 2023-05-24 □</div>
+        </div>
+        <div class="kg-subfilter">
+          <select><option>数学</option><option>物理</option><option>化学</option></select>
+          <div class="vb"><div class="vbtn act">A</div><div class="vbtn">≡</div><div class="vbtn">⊞</div></div>
+          <div class="ftag">作业/测验/考试</div>
+          <div class="ftag">全部任务得分率</div>
+          <div class="ftag">全部题型</div>
+        </div>
+        <div class="kg-main">
+          <div class="kg-left">
+            <div id="treeChart"></div>
+            <div class="tree-badge" id="treeLabel">高中数学 · 全体系</div>
+          </div>
+          <div class="kg-right">
+            <div class="detail-card" id="detailPanel">
+              <div class="ph"><div class="ph-icon">🎯</div><div>点击左侧图谱中的知识点查看详情</div></div>
+            </div>
+            <div class="scatter-card">
+              <div id="scatterChart"></div>
+              <div class="sl">
+                <div class="sli"><div class="slbox" style="background:#52c41a"></div>绿色区减少打扰</div>
+                <div class="sli"><div class="slbox" style="background:#faad14"></div>黄色区错题重练</div>
+                <div class="sli"><div class="slbox" style="background:#1890ff"></div>蓝色区多做新题</div>
+                <div class="sli"><div class="slbox" style="background:#ff4d4f"></div>红色区思想工作</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ TAB 2: 考试学情 ══ -->
+    <div class="tab-panel" id="panel2">
+      <div class="filter-bar">
+        <select><option>523班</option><option>高三19班</option></select>
+        <select><option>数学</option><option>英语</option><option>物理</option></select>
+        <div class="date-sel">2026-04-01 → 2026-07-01 □</div>
+      </div>
+      <div class="ks-wrap">
+        <div class="ks-row">
+          <!-- 趋势图 -->
+          <div class="ks-trend">
+            <div class="card-hd">
+              <span class="card-title">📈 历史成绩趋势</span>
+              <span style="font-size:11px;color:#888">
+                <span style="display:inline-block;width:10px;height:2px;background:#00b3d4;vertical-align:middle;margin-right:4px"></span>班级平均分
+                <span style="display:inline-block;width:10px;height:2px;background:#f5a623;vertical-align:middle;margin:0 4px 0 10px"></span>年级平均分
+              </span>
+            </div>
+            <div id="ksChart"></div>
+          </div>
+          <!-- 分布图 -->
+          <div class="ks-dist">
+            <div class="card-hd"><span class="card-title">📊 最近一次成绩分布</span></div>
+            <div id="distChart"></div>
+          </div>
+        </div>
+        <!-- 考试列表 -->
+        <div class="exam-card">
+          <div class="card-hd"><span class="card-title">📝 考试报告</span></div>
+          <table class="exam-tbl">
+            <thead><tr>
+              <th>考试名称</th><th>考试时间</th>
+              <th>班级均分</th><th>年级均分</th>
+              <th>班级排名</th><th>排名变化</th><th>操作</th>
+            </tr></thead>
+            <tbody>
+              <tr>
+                <td>2026年4月协同班月考</td><td style="color:#aaa">2026-04-28 07:05</td>
+                <td><div class="score-bar"><span class="score-val">100.7</span><div class="score-track"><div class="score-fill" style="width:72%"></div></div></div></td>
+                <td>102.7</td><td>2</td>
+                <td><span class="rank-delta same">— 持平</span></td>
+                <td><span class="action-link">查看报告</span></td>
+              </tr>
+              <tr>
+                <td>2026年6月模拟靠</td><td style="color:#aaa">2026-06-23 07:00</td>
+                <td><div class="score-bar"><span class="score-val">119.2</span><div class="score-track"><div class="score-fill" style="width:85%"></div></div></div></td>
+                <td>115.5</td><td>2</td>
+                <td><span class="rank-delta up">▲ 进步 +18.5分</span></td>
+                <td><span class="action-link">查看报告</span></td>
+              </tr>
+              <tr>
+                <td>6月模拟考二</td><td style="color:#aaa">2026-06-25 09:00</td>
+                <td><div class="score-bar"><span class="score-val">120.7</span><div class="score-track"><div class="score-fill" style="width:86%"></div></div></div></td>
+                <td>116.7</td><td>2</td>
+                <td><span class="rank-delta up">▲ 进步 +1.5分</span></td>
+                <td><span class="action-link">查看报告</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+</div>
+
+<script>
+// ── helpers ──
+function toggleSub(el){
+  const sub=el.nextElementSibling;
+  if(!sub) return;
+  const open=sub.style.display!=='none';
+  sub.style.display=open?'none':'';
+  const arr=el.querySelector('.arrow');
+  if(arr) arr.style.transform=open?'':'rotate(180deg)';
+}
+function switchTab(i){
+  document.querySelectorAll('.page-tab').forEach((t,j)=>t.classList.toggle('active',j===i));
+  document.querySelectorAll('.tab-panel').forEach((p,j)=>p.classList.toggle('active',j===i));
+  if(i===0){ setTimeout(()=>{ trendChart0 && trendChart0.resize(); donutCh && donutCh.resize(); },50); }
+  if(i===1){ setTimeout(()=>{ treeChart && treeChart.resize(); scatterChart && scatterChart.resize(); },50); }
+  if(i===2){ setTimeout(()=>{ ksChart && ksChart.resize(); distChart && distChart.resize(); },50); }
+}
+
+// ════════════════════════════════
+// TAB 0 — CHARTS
+// ════════════════════════════════
+const days=['06-22','06-23','06-24','06-25','06-26','06-27','06-28','06-29'];
+const classRate=[80,82,84,85,86,85,87,86.4];
+const gradeRate=[81,81.5,82,82,83,82.5,83,83.5];
+
+const trendChart0=echarts.init(document.getElementById('trendChart0'));
+trendChart0.setOption({
+  backgroundColor:'#fff',
+  grid:{top:10,right:16,bottom:28,left:44},
+  xAxis:{type:'category',data:days.map(d=>'2026-'+d),axisLine:{lineStyle:{color:'#eee'}},axisLabel:{color:'#aaa',fontSize:11},splitLine:{show:false}},
+  yAxis:{type:'value',min:60,max:100,axisLabel:{formatter:v=>v+'%',color:'#aaa',fontSize:11},splitLine:{lineStyle:{color:'#f5f5f5'}},axisLine:{show:false}},
+  tooltip:{trigger:'axis',formatter:p=>`${p[0].axisValue}<br/>${p.map(s=>`<span style="color:${s.color}">●</span> ${s.seriesName}: ${s.value}%`).join('<br/>')}`},
+  series:[
+    {name:'班级正确率',type:'line',data:classRate,smooth:true,symbol:'circle',symbolSize:5,
+     lineStyle:{color:'#00b3d4',width:2.5},
+     areaStyle:{color:{type:'linear',x:0,y:0,x2:0,y2:1,colorStops:[{offset:0,color:'rgba(0,179,212,.15)'},{offset:1,color:'rgba(0,179,212,.01)'}]}},
+     itemStyle:{color:'#00b3d4'},
+     markPoint:{data:[{type:'max',name:'最高',label:{fontSize:10}}],symbol:'pin',symbolSize:28,itemStyle:{color:'#00b3d4'}}},
+    {name:'年级正确率',type:'line',data:gradeRate,smooth:true,symbol:'circle',symbolSize:4,
+     lineStyle:{color:'#ddd',width:1.5,type:'dashed'},itemStyle:{color:'#bbb'}}
+  ]
+});
+
+const donutCh=echarts.init(document.getElementById('donutChart'));
+donutCh.setOption({
+  series:[{type:'gauge',startAngle:90,endAngle:-270,min:0,max:100,radius:'100%',center:['50%','50%'],
+    axisLine:{lineStyle:{width:8,color:[[0.864,'#00b3d4'],[1,'#f0f0f0']]}},
+    pointer:{show:false},axisTick:{show:false},splitLine:{show:false},axisLabel:{show:false},
+    detail:{show:false},data:[{value:86.4}]
+  }]
+});
+
+// ────────── TAB 0 — CARD INTERACTION ──────────
+const CARD_DATA={
+  tasks:{
+    title:'任务列表',
+    tags:[
+      {name:'完成率',val:'63.5%',trend:'up',vs:'年级49.2%'},
+      {name:'正确率',val:'62.6%',trend:'up',vs:'年级60.2%'},
+      {name:'日均',val:'10次',vs:'年级602次'},
+      {name:'班级占比',val:'28.9%'},
+    ],
+    head:['排名','任务名称','班级完成率','班级正确率','年级正确率','班级排名','操作'],
+    rows:[
+      ['1','6月30日词汇组图','100.0%','96.4%','96.4%','1 —','详情'],
+      ['2','6月28日语法填空专项','92.3%','84.2%','79.5%','2 ↑','详情'],
+      ['3','6月25日阅读理解训练','78.6%','72.1%','76.3%','3 ↓','详情'],
+      ['4','【作文2】6月25日周末作业','81.8%','100.0%','100.0%','1 —','详情'],
+      ['5','【作文1】6月25日周末作业','86.4%','100.0%','100.0%','1 —','详情'],
+    ]
+  },
+  self:{
+    title:'自学数据',
+    tags:[
+      {name:'做题量',val:'6062题',vs:'年级15357题'},
+      {name:'正确率',val:'55.1%',trend:'up',vs:'年级50.3%'},
+      {name:'日均人数',val:'8人',vs:'年级136人'},
+      {name:'占比',val:'32.4%'},
+    ],
+    head:['学生姓名','自学做题总量','个性化学练','举一反三','错题重练','正确率','操作'],
+    rows:[
+      ['杨牧然','466题','211题','18题','4题','65.2%','进入学生主页'],
+      ['李炸魏','604题','204题','69题','29题','64.9%','进入学生主页'],
+      ['李春雷','406题','159题','9题','35题','54.7%','进入学生主页'],
+      ['许家铭','198题','92题','0题','7题','67.7%','进入学生主页'],
+      ['欧阳雨欢','382题','129题','55题','7题','59.2%','进入学生主页'],
+      ['李江涛','380题','160题','12题','18题','57.4%','进入学生主页'],
+      ['夏云翔','126题','60题','3题','0题','61.9%','进入学生主页'],
+    ]
+  },
+  interact:{
+    title:'课堂互动数据',
+    tags:[
+      {name:'参与率',val:'35.7%',trend:'up',vs:'年级35.3%'},
+      {name:'正确率',val:'0.0%',trend:'dn',vs:'年级93.0%'},
+      {name:'日均次数',val:'8次',vs:'年级105次'},
+      {name:'占比',val:'60.0%'},
+    ],
+    head:['学生姓名','互动次数','参与率','正确率','操作'],
+    rows:[
+      ['杨牧然','18次','72%','0.0%','进入学生主页'],
+      ['李炸魏','12次','48%','0.0%','进入学生主页'],
+      ['李春雷','8次','32%','0.0%','进入学生主页'],
+      ['许家铭','5次','20%','0.0%','进入学生主页'],
+      ['欧阳雨欢','10次','40%','0.0%','进入学生主页'],
+    ]
+  },
+  video:{
+    title:'视频播放数据',
+    tags:[
+      {name:'观看时长',val:'85h16m',vs:'年级202h46m'},
+      {name:'视频数量',val:'306个',vs:'年级510个'},
+      {name:'日均人数',val:'0.48人',vs:'年级138人'},
+      {name:'占比',val:'31.9%'},
+    ],
+    head:['学生姓名','观看视频数','观看时长','日均时长','操作'],
+    rows:[
+      ['杨牧然','28个','6h12m','55m','进入学生主页'],
+      ['李炸魏','35个','8h40m','1h10m','进入学生主页'],
+      ['李春雷','22个','5h5m','45m','进入学生主页'],
+      ['许家铭','18个','4h20m','40m','进入学生主页'],
+      ['欧阳雨欢','31个','7h30m','65m','进入学生主页'],
+    ]
+  },
+  ai:{
+    title:'AI讲题数据',
+    tags:[
+      {name:'讲题数量',val:'942题',vs:'年级2731题'},
+      {name:'日均人数',val:'0.5人',vs:'年级136人'},
+      {name:'日均题数',val:'10.2题'},
+      {name:'占比',val:'34.5%'},
+    ],
+    head:['学生姓名','AI讲题数','日均题数','操作'],
+    rows:[
+      ['杨牧然','120题','10.9题','进入学生主页'],
+      ['李炸魏','158题','14.4题','进入学生主页'],
+      ['李春雷','95题','8.6题','进入学生主页'],
+      ['许家铭','76题','6.9题','进入学生主页'],
+      ['欧阳雨欢','112题','10.2题','进入学生主页'],
+    ]
+  }
+};
+
+function renderCardDetail(key){
+  const d=CARD_DATA[key];
+  document.getElementById('detailTagsRow').innerHTML=
+    '<span style="font-size:11px;color:#bbb;margin-right:4px;flex-shrink:0">详情</span>'+
+    d.tags.map(t=>`<span class="dtag-grp">
+      <span class="dtag-name">${t.name}</span>
+      <span class="dtag-val">${t.val}</span>
+      ${t.trend?`<span class="dtag-${t.trend}">${t.trend==='up'?'↑':'↓'}</span>`:''}
+      ${t.vs?`<span class="dtag-vs">${t.vs}</span>`:''}
+    </span>`).join('');
+  document.getElementById('dynTblTitle').textContent=d.title;
+  document.getElementById('dynTblHead').innerHTML='<tr>'+d.head.map(h=>`<th>${h}</th>`).join('')+'</tr>';
+  document.getElementById('dynTblBody').innerHTML=d.rows.map(r=>'<tr>'+r.map((cell,ci)=>{
+    const isAction=ci===r.length-1&&(cell==='详情'||cell==='进入学生主页');
+    if(isAction) return `<td><span class="action-link">${cell}</span></td>`;
+    if(ci===0&&key==='tasks'){const n=parseInt(cell);return `<td style="text-align:center">${n<=3?`<span class="rank-badge rank-${n}">${n}</span>`:`<span class="rank-n">${n}</span>`}</td>`;}
+    return `<td>${cell}</td>`;
+  }).join('')+'</tr>').join('');
+}
+function selectCard(el){
+  document.querySelectorAll('.data-card').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  renderCardDetail(el.dataset.card);
+}
+renderCardDetail('tasks');
+
+// ════════════════════════════════
+// TAB 1 — KNOWLEDGE GRAPH
+// ════════════════════════════════
+const TREES={
+  g3:{"name": "高中数学知识点", "children": [{"name": "集合", "children": [{"name": "集合的概念与表示方法", "children": [{"name": "集合的含义、元素与集合", "children": [{"name": "集合的概念"}, {"name": "集合的概念辨析问题"}, {"name": "集合中元素的性质", "children": [{"name": "互异性、确定性、无序性"}]}, {"name": "空集"}, {"name": "元素与集合之间的关系", "children": [{"name": "集合中元素的个数"}, {"name": "元素与集合的关系判断"}, {"name": "由元素与集合的关系求参数"}]}]}, {"name": "集合的表示方法", "children": [{"name": "列举法"}, {"name": "描述法"}, {"name": "维恩图"}, {"name": "区间表示法"}, {"name": "集合不同表示法的转化问题"}]}, {"name": "常用数集的符号"}]}, {"name": "集合的基本关系", "children": [{"name": "子集"}, {"name": "相等集合"}, {"name": "真子集"}, {"name": "集合之间关系的判断"}, {"name": "子集个数的计算"}, {"name": "集合关系中的含参问题", "children": [{"name": "离散型集合关系中的含参问题"}, {"name": "连续性集合关系中的含参问题"}]}]}, {"name": "集合的基本运算", "children": [{"name": "并集"}, {"name": "交集"}, {"name": "补集"}, {"name": "集合运算的维恩图表示"}, {"name": "交、并、补集混合运算"}, {"name": "集合运算中的含参问题", "children": [{"name": "离散型集合运算中的含参问题"}, {"name": "连续性集合运算中的含参问题"}]}, {"name": "集合运算与集合关系的转化"}]}, {"name": "容斥原理"}, {"name": "集合的新定义问题"}]}, {"name": "常用逻辑用语", "children": [{"name": "命题", "children": [{"name": "命题的概念", "children": [{"name": "命题的判断"}, {"name": "命题的真假判断"}, {"name": "根据命题真假求参数的范围"}]}, {"name": "四种命题"}, {"name": "逻辑联结词"}, {"name": "复合命题问题"}, {"name": "全称量词与存在量词"}, {"name": "全称量词命题与存在量词命题的否定"}]}, {"name": "充分条件与必要条件", "children": [{"name": "充分不必要条件"}, {"name": "必要不充分条件"}, {"name": "充要条件"}, {"name": "既不充分也不必要"}, {"name": "已知充要条件求参数范围"}, {"name": "充要条件与集合结合"}, {"name": "充要条件与不等式结合"}, {"name": "充要条件与向量结合"}, {"name": "充要条件与复数结合"}, {"name": "充要条件与立体几何结合"}, {"name": "充要条件与三角函数结合"}, {"name": "充要条件与函数结合"}, {"name": "充要条件与解析几何结合"}, {"name": "充要条件与数列结合"}, {"name": "充要条件与其他知识点结合"}]}]}, {"name": "等式与不等式", "children": [{"name": "等式", "children": [{"name": "等式的性质与方程的解集"}, {"name": "代数式化简求值"}, {"name": "一元二次方程的解集及其根与系数的关系", "children": [{"name": "因式分解"}, {"name": "韦达定理"}, {"name": "一元二次方程根的分布"}, {"name": "解类二次方程"}]}, {"name": "方程组的解集"}]}, {"name": "不等式", "children": [{"name": "不等式的性质", "children": [{"name": "同号不等式的运算"}, {"name": "针对不等式变形判断正误"}, {"name": "作差法比较大小"}, {"name": "作商法比较大小"}, {"name": "利用不等式性质求代数式范围或最值"}]}, {"name": "解不等式", "children": [{"name": "一元二次不等式"}, {"name": "分式不等式"}, {"name": "含绝对值的不等式"}, {"name": "其它不等式", "children": [{"name": "高次不等式"}, {"name": "无理不等式"}, {"name": "含字母系数的不等式"}]}, {"name": "已知解集求参问题"}, {"name": "解不等式中的分类讨论"}, {"name": "不等式中的恒成立与能成立问题"}, {"name": "转换主元法求参数范围"}, {"name": "不等式相关的整数解问题"}]}, {"name": "基本不等式", "children": [{"name": "基本不等式的概念"}, {"name": "基本不等式成立的条件"}, {"name": "基本不等式与恒成立问题"}, {"name": "利用基本不等式求最值"}, {"name": "利用两次基本不等式求最值"}, {"name": "设k法求最值"}, {"name": "二元不等式链的应用"}, {"name": "配凑法求最值"}, {"name": "倒数和形式"}, {"name": "已知等式关系求最值"}, {"name": "利用基本不等式证明其它不等式"}, {"name": "多元均值不等式的应用"}, {"name": "基本不等式的实际应用"}]}, {"name": "线性规划", "children": [{"name": "二元一次不等式组的概念"}, {"name": "简单线性规划", "children": [{"name": "画出二元一次不等式（组）所表示的平面区域"}, {"name": "线性规划求最值"}, {"name": "截距型目标函数"}, {"name": "斜率型目标函数"}, {"name": "距离型目标函数"}]}, {"name": "含参线性规划相关问题", "children": [{"name": "参数与可行域面积"}, {"name": "参数对最优解的影响"}, {"name": "线性规划与动点结合"}]}, {"name": "线性规划的实际应用"}]}, {"name": "绝对值不等式", "children": [{"name": "绝对值三角不等式"}, {"name": "解绝对值不等式"}]}, {"name": "柯西不等式"}, {"name": "排序不等式"}, {"name": "证明不等式的基本方法", "children": [{"name": "比较法"}, {"name": "综合法"}, {"name": "分析法"}, {"name": "放缩法"}]}]}]}, {"name": "函数的概念与性质", "children": [{"name": "函数的概念及其表示", "children": [{"name": "函数的概念", "children": [{"name": "映射"}, {"name": "确定映射数量"}, {"name": "函数的定义"}, {"name": "判定是否为函数"}, {"name": "相同函数"}, {"name": "分式函数"}, {"name": "对勾函数"}, {"name": "绝对值函数"}, {"name": "分段函数"}, {"name": "max函数"}, {"name": "min函数"}, {"name": "取整函数（高斯函数）"}, {"name": "复合函数"}, {"name": "抽象函数"}, {"name": "函数求值问题"}, {"name": "已知函数值求参数"}, {"name": "函数相关的整数解问题"}, {"name": "解函数方程"}, {"name": "解函数不等式"}]}, {"name": "函数的定义域", "children": [{"name": "求具体函数（包括复合函数）的定义域"}, {"name": "求抽象函数的定义域"}, {"name": "实际应用中的函数求定义域"}, {"name": "已知定义域求参数的取值范围"}]}, {"name": "函数的表示方法", "children": [{"name": "列表法"}, {"name": "图象法"}, {"name": "解析法"}, {"name": "求函数的解析式", "children": [{"name": "用直接带入法求解析式"}, {"name": "用配凑法求解析式"}, {"name": "用换元法求解析式"}, {"name": "用利用函数性质法求解析式"}, {"name": "用待定系数法求解析式"}, {"name": "用联立方程组法求解析式"}, {"name": "用赋值消元法求解析式"}]}]}, {"name": "函数的值域", "children": [{"name": "求函数的值域", "children": [{"name": "用图象法求值域"}, {"name": "用配方法求值域"}, {"name": "用分离常数法求值域"}, {"name": "用换元法求值域"}, {"name": "用单调性观察法求值域"}, {"name": "数形结合求值域"}, {"name": "用反解法求值域"}, {"name": "用判别式法求值域"}]}, {"name": "求复合函数的值域"}, {"name": "已知函数值域求参数"}, {"name": "等式的能成立或恒成立问题"}]}]}, {"name": "二次函数", "children": [{"name": "二次函数的概念"}, {"name": "二次函数的图象及性质", "children": [{"name": "定轴定区间求值域"}, {"name": "定轴动区间求值域"}, {"name": "动轴定区间求值域"}, {"name": "动轴动区间求值域"}, {"name": "二次函数的单调性"}, {"name": "含参二次函数的图象及性质"}, {"name": "二次函数相关的恒成立问题"}]}]}, {"name": "函数的性质", "children": [{"name": "单调性", "children": [{"name": "单调性的概念"}, {"name": "函数单调性的判定", "children": [{"name": "用定义法证明函数的单调性"}, {"name": "直接判断函数的单调性"}, {"name": "判断复合函数单调性"}, {"name": "抽象函数单调性"}, {"name": "分段函数单调性"}, {"name": "求单调区间"}, {"name": "利用四则运算判断函数单调性"}, {"name": "已知函数单调性求参数范围"}]}, {"name": "函数单调性的应用", "children": [{"name": "利用单调性求函数最值"}, {"name": "利用函数单调性解不等式"}, {"name": "用单调性比较大小"}]}]}, {"name": "最值", "children": [{"name": "求函数的最值", "children": [{"name": "求具体函数的最值"}, {"name": "求分段函数的最值"}, {"name": "求复合函数的最值"}, {"name": "求抽象函数的最值"}]}, {"name": "已知函数的最值求参数"}]}, {"name": "奇偶性", "children": [{"name": "奇偶性的概念"}, {"name": "函数奇偶性的判定", "children": [{"name": "利用定义判断函数奇偶性"}, {"name": "判断抽象函数奇偶性"}, {"name": "函数奇偶性的运算"}, {"name": "利用函数奇偶性求参数"}]}, {"name": "函数奇偶性的应用", "children": [{"name": "利用函数奇偶性求函数解析式"}, {"name": "根据奇偶性确定图象"}, {"name": "利用奇偶性求值"}, {"name": "把一个函数拆成奇函数+偶函数及其应用"}, {"name": "函数单调性与奇偶性综合问题"}]}]}, {"name": "对称性", "children": [{"name": "一个函数的自对称问题"}, {"name": "两个函数的互对称问题"}, {"name": "利用对称性求函数值"}, {"name": "利用对称性求参数"}, {"name": "对称性与零点相结合"}, {"name": "函数对称性与奇偶性综合问题"}, {"name": "函数对称性与单调性综合问题"}]}, {"name": "周期性", "children": [{"name": "函数周期性判断", "children": [{"name": "周期性的概念及直接判断周期"}, {"name": "迭代法判断周期"}]}, {"name": "利用函数周期性求函数值"}, {"name": "函数周期性与奇偶性综合问题"}, {"name": "函数对称性与周期性综合问题"}]}, {"name": "凹凸性", "children": [{"name": "利用定义判定函数凹凸性"}, {"name": "函数凹凸性的应用"}]}]}, {"name": "函数的新定义问题"}]}, {"name": "基本初等函数", "children": [{"name": "实数指数幂运算"}, {"name": "幂函数", "children": [{"name": "幂函数的概念"}, {"name": "幂函数的图象及性质"}, {"name": "幂函数恒过定点问题"}, {"name": "指数a对幂函数图象的影响"}, {"name": "解幂函数不等式"}]}, {"name": "指数函数", "children": [{"name": "指数函数的概念"}, {"name": "指数函数的图象及性质"}, {"name": "幂值比大小"}, {"name": "指数函数恒过定点问题"}, {"name": "利用指数函数性质求最值"}, {"name": "指数方程和指数不等式", "children": [{"name": "解指数方程"}, {"name": "解指数不等式"}]}, {"name": "指数型复合函数的性质", "children": [{"name": "指数函数与二次函数复合"}, {"name": "指数函数与分式函数复合"}, {"name": "指数型函数的其他类型"}]}]}, {"name": "对数的概念及其运算", "children": [{"name": "对数的概念"}, {"name": "对数的运算"}, {"name": "指对互化"}, {"name": "指对化简求值"}, {"name": "换底公式及其变形运用", "children": [{"name": "利用换底公式求值"}, {"name": "利用换底公式表示对数式"}, {"name": "换底公式综合运用"}]}]}, {"name": "对数函数", "children": [{"name": "对数函数的概念"}, {"name": "指数函数与对数函数的关系"}, {"name": "对数函数的图象及性质"}, {"name": "对数比大小"}, {"name": "对数函数恒过定点问题"}, {"name": "利用对数函数性质求最值"}, {"name": "对数方程和对数不等式", "children": [{"name": "解对数方程"}, {"name": "解对数不等式"}]}, {"name": "对数型复合函数的性质", "children": [{"name": "对数函数与二次函数复合"}, {"name": "对数函数与分式函数复合"}, {"name": "对数型函数的其它类型"}]}]}, {"name": "反函数", "children": [{"name": "反函数的概念"}, {"name": "反函数的定义域"}, {"name": "求反函数"}, {"name": "反函数法确定图象"}]}, {"name": "指对幂比较大小"}, {"name": "指对幂函数综合"}]}, {"name": "函数的应用", "children": [{"name": "函数的零点", "children": [{"name": "函数零点的概念"}, {"name": "函数零点存在定理"}, {"name": "零点的个数问题", "children": [{"name": "直接求函数的零点"}, {"name": "求零点个数问题（不含参）"}, {"name": "求零点个数问题（含参）"}, {"name": "零点、交点、根的等价转化"}, {"name": "利用函数图象研究方程根的分布问题（图象与零点综合）"}, {"name": "已知零点情况求参数的取值范围"}]}, {"name": "求零点所在区间的问题", "children": [{"name": "利用二分法求函数零点近似值"}, {"name": "判定函数零点所在区间（存在性定理）"}, {"name": "求零点和或积的范围"}]}]}, {"name": "函数与方程", "children": [{"name": "确定函数图象问题", "children": [{"name": "函数图象的识别问题"}, {"name": "利用函数性质画简图"}]}, {"name": "函数的图象变换问题", "children": [{"name": "平移变换问题"}, {"name": "对称变换问题"}, {"name": "翻折变换问题"}, {"name": "伸缩变换问题"}]}]}, {"name": "函数的实际应用", "children": [{"name": "指数、对数和幂函数增长差异的比较"}, {"name": "一次函数模型"}, {"name": "二次函数模型"}, {"name": "指数函数模型"}, {"name": "对数函数模型"}, {"name": "幂函数模型"}, {"name": "分式函数模型"}, {"name": "分段函数模型"}]}]}, {"name": "三角函数", "children": [{"name": "三角函数的概念", "children": [{"name": "任意角与弧度制", "children": [{"name": "角的定义和分类", "children": [{"name": "任意角的表示"}, {"name": "终边相同的角的表示"}, {"name": "象限角与轴线角"}, {"name": "α/n角所在象限的确定"}, {"name": "根据终边位置描述角的范围"}]}, {"name": "弧度制"}, {"name": "弧度制与角度制的互化问题"}, {"name": "弧长公式与扇形面积"}]}, {"name": "任意角的三角函数", "children": [{"name": "三角函数的定义", "children": [{"name": "计算任意角的三角函数值"}, {"name": "判断各象限三角函数值的正负"}]}, {"name": "三角函数线"}, {"name": "单位圆与三角函数线的运用"}, {"name": "同角三角函数的基本关系式", "children": [{"name": "已知正弦余弦正切或其关系求值"}, {"name": "正余弦和差积相互转化求值"}, {"name": "同角关系齐次式化简求值"}, {"name": "同角关系构造齐次式化简求值"}]}, {"name": "同角三角函数的基本关系式的化简和求值"}, {"name": "诱导公式"}, {"name": "利用诱导公式化简"}, {"name": "利用诱导公式直接求值"}, {"name": "利用诱导公式配凑求值"}]}]}, {"name": "三角函数的图象与性质", "children": [{"name": "正弦函数的图象和性质"}, {"name": "余弦函数的图象和性质"}, {"name": "正切函数的图象和性质"}, {"name": "正余弦、正切函数的图象性质综合考察"}, {"name": "正余弦型、正切型函数图象变换"}, {"name": "正弦型函数的图象与性质", "children": [{"name": "利用五点法作正、余弦型函数图象"}, {"name": "已知正弦型函数判定结论正误"}, {"name": "已知正弦型函数图象或性质求参数值"}, {"name": "求固定区间正弦型函数值域"}, {"name": "已知正弦型函数性质求解析式"}, {"name": "求正弦型函数的周期"}, {"name": "求正弦型函数的对称中心"}, {"name": "求正弦型函数的对称轴"}, {"name": "求正弦型函数的单调区间"}, {"name": "正弦型函数ω求最值问题"}, {"name": "正弦型函数与零点综合问题"}]}, {"name": "余弦型三角函数的图象与性质", "children": [{"name": "已知余弦型函数判定结论正误"}, {"name": "已知余弦型函数图象求参数值"}, {"name": "求固定区间余弦型函数值域"}, {"name": "已知余弦型函数性质求解析式"}, {"name": "求余弦型函数的周期"}, {"name": "求余弦型函数的对称中心"}, {"name": "求余弦型函数的对称轴"}, {"name": "求余弦型函数的单调区间"}, {"name": "余弦型函数ω求最值问题"}, {"name": "余弦型函数与零点综合问题"}]}, {"name": "正切型三角函数的图象与性质"}, {"name": "三角函数不等式"}]}, {"name": "三角恒等变换", "children": [{"name": "和差角公式", "children": [{"name": "两角和与差的余弦", "children": [{"name": "利用余弦和差角公式凑角求值"}, {"name": "利用余弦和差角公式直接求值"}, {"name": "余弦和差角公式其他应用"}]}, {"name": "两角和与差的正弦", "children": [{"name": "利用正弦和差角公式凑角求值"}, {"name": "利用正弦和差角公式直接求值"}, {"name": "利用正弦角公式其他应用"}]}, {"name": "两角和与差的正切", "children": [{"name": "利用正切和差角公式凑角求值"}, {"name": "利用正切和差角公式直接求值"}, {"name": "利用正切角公式其他应用"}]}, {"name": "降幂公式"}, {"name": "辅助角公式"}, {"name": "和差角公式化简求值综合运用"}]}, {"name": "二倍角公式", "children": [{"name": "二倍角的正弦"}, {"name": "二倍角的余弦"}, {"name": "二倍角的正切"}, {"name": "半角公式"}, {"name": "二倍角公式化简求值综合运用"}, {"name": "类二次三角函数问题"}]}, {"name": "积化和差与和差化积"}, {"name": "倍角、和差角公式综合"}, {"name": "利用三角恒等变换判断三角形形状"}]}, {"name": "反三角函数"}, {"name": "最简三角方程"}, {"name": "三角函数综合"}, {"name": "三角函数与向量综合问题"}, {"name": "三角函数在平面几何中的应用"}, {"name": "三角函数的实际应用"}]}, {"name": "解三角形", "children": [{"name": "正弦定理", "children": [{"name": "利用正弦定理判断三角形形状"}, {"name": "利用正弦定理求解边角", "children": [{"name": "边角互化（利用正弦定理）"}, {"name": "AAS类三角形（利用正弦定理）"}, {"name": "ASA类三角形（利用正弦定理）"}, {"name": "SSA类三角形（利用正弦定理）"}, {"name": "正弦定理的其他应用"}]}, {"name": "三角形解的个数判断"}, {"name": "三角形外接圆相关问题"}]}, {"name": "三角形面积公式"}, {"name": "余弦定理", "children": [{"name": "利用余弦定理判断三角形形状"}, {"name": "利用余弦定理求解边角", "children": [{"name": "边角互化（利用余弦定理）"}, {"name": "SAS类三角形（利用余弦定理）"}, {"name": "SSS类三角形（利用余弦定理）"}, {"name": "SSA类三角形（利用余弦定理）"}, {"name": "余弦定理的其他应用"}]}]}, {"name": "解三角形中的最值或范围问题", "children": [{"name": "求面积最值或范围问题"}, {"name": "求边长相关最值或范围问题"}, {"name": "求角相关的最值或范围问题"}, {"name": "求比值最值或范围问题"}]}, {"name": "正余弦定理的综合应用", "children": [{"name": "多个三角形拼接的解三角形问题"}, {"name": "正余弦定理综合求解边角"}, {"name": "正余弦定理综合判断三角形形状"}]}, {"name": "解三角形的实际应用", "children": [{"name": "测量距离的问题"}, {"name": "测量高度的问题"}, {"name": "测量角度的问题"}]}]}, {"name": "导数", "children": [{"name": "原函数类型", "children": [{"name": "三次函数类型"}, {"name": "幂函数类型"}, {"name": "指数函数类型"}, {"name": "对数函数类型"}, {"name": "三角函数类型"}]}, {"name": "极限", "children": [{"name": "函数的极限"}, {"name": "两个重要极限"}, {"name": "利用极限判断函数图象"}]}, {"name": "导数的概念及其意义", "children": [{"name": "函数的平均变化率、瞬时速度与瞬时变化率"}, {"name": "求平均变化率"}, {"name": "导数的定义及其应用"}, {"name": "导数的几何意义及应用", "children": [{"name": "导数的几何意义"}, {"name": "求在某点处的切线方程"}, {"name": "求过某点的切线方程"}, {"name": "已知斜率求切线方程"}, {"name": "已知切线方程求参数"}, {"name": "利用切线求最值"}, {"name": "求公切线", "children": [{"name": "公切线的计算"}, {"name": "公切线条数问题"}, {"name": "公切线存在性问题"}]}, {"name": "导数的几何意义的实际应用"}]}]}, {"name": "导数的运算", "children": [{"name": "利用公式和四则运算法则求导"}, {"name": "复合函数的求导法则"}, {"name": "根据导数构造抽象函数", "children": [{"name": "幂函数型导数构造"}, {"name": "指对型导数构造"}, {"name": "三角型导数构造"}]}, {"name": "导数与奇偶性结合"}, {"name": "含某点导数的问题"}]}, {"name": "导数的应用", "children": [{"name": "导数与单调性", "children": [{"name": "利用导数确定函数的图象", "children": [{"name": "已知原函数确认导数图函象"}, {"name": "已知导函数确认原函数图象"}]}, {"name": "利用导数求函数的单调性、单调区间", "children": [{"name": "直接求函数的单调性（不含参）"}, {"name": "求函数单调区间（含参一次型导函数）"}, {"name": "求函数单调区间（含参二次型导函数）"}, {"name": "求函数单调区间（含参三角型导函数）"}, {"name": "求函数单调区间（含参指对型导函数）"}]}, {"name": "已知单调性求参数的取值范围", "children": [{"name": "存在单调增（减）区间"}, {"name": "区间上恒单调"}, {"name": "区间上不单调"}]}]}, {"name": "导数与极值", "children": [{"name": "函数极值的概念"}, {"name": "求解函数极值", "children": [{"name": "直接求函数的极值（不含参）"}, {"name": "求函数极值（含参一次型导函数）"}, {"name": "求函数极值（含参二次型导函数）"}, {"name": "求函数极值（含参三角型导函数）"}, {"name": "求函数极值（含参指对型导函数）"}]}, {"name": "已知极值情况求参数范围"}, {"name": "已知极值情况求参数值"}, {"name": "已知极值情况求函数解析式"}]}, {"name": "导数与最值", "children": [{"name": "利用导数求函数的最值", "children": [{"name": "直接求函数的最值（不含参）"}, {"name": "求函数最值（含参一次型导函数）"}, {"name": "求函数最值（含参二次型导函数）"}, {"name": "求函数最值（含参三角型导函数）"}, {"name": "求函数最值（含参指对型导函数）"}]}, {"name": "最值与极值的辨析"}, {"name": "已知最值情况求参数范围"}, {"name": "已知最值情况求参数值或解析式"}]}, {"name": "导数与零点", "children": [{"name": "利用导数求函数的零点及个数", "children": [{"name": "直接求函数的零点（不含参）"}, {"name": "求函数零点（含参一次型导函数）"}, {"name": "求函数零点（含参二次型导函数）"}, {"name": "求函数零点（含参三角型导函数）"}, {"name": "求函数零点（含参指对型导函数）"}, {"name": "参变分离法求零点个数"}]}, {"name": "渐近线问题"}, {"name": "已知零点或根情况求参数范围", "children": [{"name": "求参数范围（含参一次型导函数）"}, {"name": "求参数范围（含参二次型导函数）"}, {"name": "求参数范围（含参三角型导函数）"}, {"name": "求参数范围（含参指对型导函数）"}, {"name": "求参数范围（不含参型导函数）"}]}, {"name": "隐零点问题"}, {"name": "含参导数的零点（涉及找点）"}, {"name": "含参导数的零点（利用极限判断）"}, {"name": "求切线条数问题"}]}, {"name": "综合问题", "children": [{"name": "利用导数解决不等式恒成立问题"}, {"name": "利用导数解决不等式能成立问题"}, {"name": "利用导数解决不等式恒成立与能成立综合问题"}, {"name": "利用导数解决等式能成立或恒成立问题"}, {"name": "利用导数求单调性证不等式"}, {"name": "通过构造函数证明不等式"}, {"name": "整数点问题"}, {"name": "极值点偏移问题"}, {"name": "双变量问题"}, {"name": "双参数问题"}, {"name": "二阶导问题"}, {"name": "利用韦达定理解决双变量问题"}, {"name": "导数与数列综合"}]}, {"name": "导数的实际应用"}]}, {"name": "定积分", "children": [{"name": "定积分的概念"}, {"name": "定积分计算"}, {"name": "定积分的几何意义", "children": [{"name": "用定积分求简单几何体的体积"}, {"name": "用定积分求面积"}]}, {"name": "微积分基本定理"}, {"name": "不定积分"}]}]}, {"name": "数列", "children": [{"name": "数列的概念", "children": [{"name": "数列的定义"}, {"name": "数列的表示方法", "children": [{"name": "列表"}, {"name": "通项公式", "children": [{"name": "观察数列的项求通项公式"}, {"name": "利用Sn与an的关系求通项"}, {"name": "常见数列的通项公式"}, {"name": "利用累加法求数列通项公式问题"}, {"name": "利用累乘法求数列通项公式问题"}, {"name": "利用待定系数法求数列通项公式问题"}, {"name": "构造数列求通项"}]}]}, {"name": "递推数列与递推方法", "children": [{"name": "根据递推关系求数列的某一项（非周期类）"}, {"name": "构造等差数列求通项"}, {"name": "构造等比数列求通项"}, {"name": "倒数型递推求通项"}, {"name": "对数型递推求通项"}, {"name": "指数型递推求通项"}, {"name": "二阶递推求通项"}, {"name": "利用Sn与an的递推关系求通项", "children": [{"name": "消去Sn构造an递推关系"}, {"name": "消去an构造Sn递推关系"}]}]}, {"name": "数列的前n项和", "children": [{"name": "分组法求和"}, {"name": "倒序相加法求和"}, {"name": "错位相减法求和"}, {"name": "并项求和"}, {"name": "裂项相消法求和"}, {"name": "绝对值型数列求和"}]}, {"name": "数列的函数特性", "children": [{"name": "数列中最大项与最小项的求解问题"}, {"name": "数列单调性问题"}, {"name": "数列的周期性问题"}, {"name": "分段数列问题"}, {"name": "数列的极限"}]}]}, {"name": "等差数列", "children": [{"name": "等差数列的概念与通项公式", "children": [{"name": "等差数列的判定与证明问题", "children": [{"name": "等差数列的判定（不涉及新数列构造）"}, {"name": "等差数列的判定（涉及新数列构造）"}]}, {"name": "利用方程组求等差数列"}, {"name": "等差数列求通项问题"}, {"name": "求等差数列的基本量"}]}, {"name": "等差数列的前n项和", "children": [{"name": "等差数列求和问题"}, {"name": "等差数列前n项和的性质"}, {"name": "求等差数列前n项和的最值  "}]}, {"name": "等差数列的性质及应用", "children": [{"name": "等差数列角标和性质的应用"}, {"name": "等差中项"}, {"name": "等差数列中最值问题"}]}, {"name": "等差数列的函数特性"}]}, {"name": "等比数列", "children": [{"name": "等比数列的概念与通项公式", "children": [{"name": "等比数列的判定与证明"}, {"name": "利用方程组求等比数列"}, {"name": "等比数列求通项问题"}, {"name": "求等比数列的基本量"}]}, {"name": "等比数列前n项和公式", "children": [{"name": "等比数列求和问题"}, {"name": "等比数列前n项和的性质"}]}, {"name": "等比数列的性质及应用", "children": [{"name": "等比中项"}, {"name": "等比数列角标和性质的应用"}, {"name": "等比数列的求积问题"}, {"name": "等比数列中最值问题"}]}, {"name": "等比数列的函数特性"}]}, {"name": "等差数列与等比数列综合"}, {"name": "数列与不等式综合", "children": [{"name": "数列中的恒成立问题"}, {"name": "数列中的存在性问题"}, {"name": "放缩法证明数列不等式"}, {"name": "数列与不等式其他问题"}]}, {"name": "数列与函数综合"}, {"name": "数列与其他知识点综合"}, {"name": "数列的实际应用"}, {"name": "数列的新定义问题"}]}, {"name": "平面向量", "children": [{"name": "平面向量的基本概念", "children": [{"name": "向量的概念", "children": [{"name": "平面向量概念辨析问题"}, {"name": "向量的夹角的判断"}]}, {"name": "向量的模"}, {"name": "单位向量"}, {"name": "零向量"}, {"name": "相等向量与相反向量"}, {"name": "共线向量"}]}, {"name": "平面向量的运算", "children": [{"name": "平面向量的线性运算", "children": [{"name": "平面向量的加法运算及运算规则"}, {"name": "平面向量的减法运算及运算规则"}, {"name": "平面向量的数乘运算及运算规则"}, {"name": "平面向量线性运算综合（非坐标）"}, {"name": "平面向量中的三点共线问题"}, {"name": "等和线定理"}, {"name": "平面向量与三角形的“心”"}, {"name": "求向量的模的范围（不涉及数量积）"}]}, {"name": "数量积", "children": [{"name": "向量的数量积的定义"}, {"name": "向量的投影"}, {"name": "平面向量数量积运算（非坐标）"}, {"name": "用基底法求向量的数量积"}, {"name": "数量积的坐标表达式"}, {"name": "建系法求平面向量的数量积"}, {"name": "平面向量数量积的运算律"}, {"name": "平面向量运算律辨析问题"}, {"name": "数量积的最值问题"}, {"name": "利用投影解决平面向量的数量积"}, {"name": "利用数量积解决向量垂直问题（非坐标运算）"}, {"name": "利用向量数量积求模长"}, {"name": "求向量的模的范围（涉及数量积）"}, {"name": "利用向量数量积求夹角"}, {"name": "利用向量的数量积求面积"}, {"name": "线性运算和数量积综合问题"}]}]}, {"name": "平面向量基本定理及其坐标表示", "children": [{"name": "平面向量基本定理及其意义"}, {"name": "基底的判断"}, {"name": "向量系数求值问题"}, {"name": "向量分解中的待定系数法"}, {"name": "向量系数求最值或范围问题"}, {"name": "平面向量的正交分解及坐标表示"}, {"name": "平面向量加、减、数乘的坐标运算"}, {"name": "直线的方向向量"}, {"name": "利用平面向量求解坐标"}, {"name": "坐标表示平面向量的共线"}, {"name": "平面向量数量积的坐标运算"}, {"name": "坐标表示平面向量的垂直"}]}, {"name": "向量应用", "children": [{"name": "线段的定比分点公式"}, {"name": "平面几何中的向量方法"}, {"name": "向量在物理中的应用举例"}]}]}, {"name": "复数", "children": [{"name": "复数的概念及几何意义", "children": [{"name": "复数的基本概念", "children": [{"name": "实数、虚数、纯虚数"}, {"name": "实部与虚部"}]}, {"name": "复数相等"}, {"name": "复数的代数表示法"}, {"name": "复平面", "children": [{"name": "复平面内求点所在象限"}, {"name": "复平面内求点坐标"}, {"name": "复数相关的轨迹问题"}]}, {"name": "复数的模"}, {"name": "共轭复数"}, {"name": "在复数集内解方程"}]}, {"name": "复数的运算", "children": [{"name": "复数的加法和减法"}, {"name": "复数的乘法和除法"}, {"name": "复数的四则运算综合"}, {"name": "复数中的周期问题"}, {"name": "求复数的模的最值"}]}, {"name": "复数的三角形式", "children": [{"name": "复数的三角形式的概念"}, {"name": "复数三角形式的乘除法及其应用"}]}, {"name": "复数的综合应用", "children": [{"name": "解复数相关的二次方程"}, {"name": "复数相关的最值与范围问题"}]}]}, {"name": "立体几何初步", "children": [{"name": "基本立体图形", "children": [{"name": "空间几何体的概念", "children": [{"name": "棱柱、棱锥、棱台的结构特征"}, {"name": "空间几何体概念辨析问题"}, {"name": "多面体"}, {"name": "组合体"}, {"name": "截面问题（非球类）"}, {"name": "圆柱、圆锥、圆台和球的结构特征"}, {"name": "球的截面问题"}, {"name": "球面距离"}, {"name": "空间几何体的内切球、外接球问题"}, {"name": "计算多面体和旋转体表面上的最短距离"}]}, {"name": "空间几何体的体积、表面积", "children": [{"name": "空间几何体的表面积"}, {"name": "空间几何体的体积"}, {"name": "组合体求体积、表面积问题"}, {"name": "表面积与体积的最值问题"}, {"name": "三棱锥体积问题", "children": [{"name": "求三棱锥的体积"}, {"name": "等体积法"}, {"name": "平移顶点法"}]}]}, {"name": "中心投影与平行投影"}, {"name": "斜二测画法"}, {"name": "平面图形、空间几何体的直观图认识"}, {"name": "三视图", "children": [{"name": "三视图的识别"}, {"name": "三视图与几何体转化问题"}, {"name": "利用三视图求体积"}, {"name": "利用三视图求棱长"}, {"name": "利用三视图求面积"}]}]}, {"name": "基本图形位置关系", "children": [{"name": "空间中的基本事实与定理", "children": [{"name": "三个公理、三个推论"}, {"name": "平面的概念、画法及表示"}, {"name": "点、直线、平面之间的位置关系", "children": [{"name": "平面的基本性质"}, {"name": "相交直线的交点坐标"}]}, {"name": "异面直线判定及其夹角"}, {"name": "已知线面位置关系判定结论的问题"}]}, {"name": "空间中的平行", "children": [{"name": "直线和平面平行的判定"}, {"name": "直线和平面平行的性质"}, {"name": "平面和平面平行的判定"}, {"name": "平面和平面平行的性质"}, {"name": "线线平行的证明问题"}, {"name": "线面平行的证明问题"}, {"name": "面面平行的证明问题"}]}, {"name": "空间中的垂直", "children": [{"name": "直线和平面垂直的判定"}, {"name": "直线和平面垂直的性质", "children": [{"name": "线面角"}, {"name": "点面距离"}, {"name": "线面距离"}, {"name": "面面距离"}, {"name": "二面角的概念及求解"}]}, {"name": "平面和平面垂直的判定"}, {"name": "平面和平面垂直的性质"}, {"name": "三垂线定理"}, {"name": "等角定理"}, {"name": "线线垂直的证明问题"}, {"name": "线面垂直的证明问题"}, {"name": "面面垂直的证明问题"}]}, {"name": "探索性问题", "children": [{"name": "截面的探索问题"}, {"name": "折叠问题"}, {"name": "平行的探索性问题"}, {"name": "垂直的探索性问题"}, {"name": "动点轨迹问题"}, {"name": "动点体积相关问题"}, {"name": "动点类线、面位置关系"}, {"name": "立体几何与函数、导数综合"}, {"name": "几何法求空间角"}, {"name": "几何法求空间中的距离"}, {"name": "实际问题中的立体几何"}]}]}]}, {"name": "空间向量与立体几何", "children": [{"name": "空间直角坐标系", "children": [{"name": "建立空间直角坐标系"}, {"name": "空间中两点间的距离"}, {"name": "空间直角坐标系点的坐标运算"}]}, {"name": "空间向量及其运算", "children": [{"name": "空间向量的概念"}, {"name": "空间向量的模长与夹角"}, {"name": "空间向量基本定理"}, {"name": "空间向量的正交分解及其坐标表示"}, {"name": "空间向量的线性运算（非坐标）"}, {"name": "空间向量线性运算的坐标表示"}, {"name": "空间向量的数量积（非坐标）"}, {"name": "空间向量的数量积及其坐标表示"}, {"name": "空间向量的平行与垂直"}, {"name": "空间向量共面问题"}]}, {"name": "空间向量的应用", "children": [{"name": "直线的方向向量与平面的法向量"}, {"name": "向量法解决空间中的平行问题"}, {"name": "向量法解决空间中的垂直问题"}, {"name": "向量法解决异面直线所成角问题"}, {"name": "向量法解决线面角问题"}, {"name": "向量法解决二面角问题"}, {"name": "向量法求空间距离"}]}]}, {"name": "直线和圆的方程", "children": [{"name": "直线与方程", "children": [{"name": "中点公式"}, {"name": "倾斜角和斜率的概念", "children": [{"name": "斜率计算"}, {"name": "求斜率的范围"}, {"name": "倾斜角计算"}, {"name": "求倾斜角的范围"}, {"name": "斜率随倾斜角的变化规律"}]}, {"name": "直线方程的五种形式", "children": [{"name": "直线的点斜式方程"}, {"name": "直线的斜截式方程"}, {"name": "直线的两点式方程"}, {"name": "直线的截距式方程"}, {"name": "直线的一般式方程"}, {"name": "求直线的方程"}, {"name": "直线方程的五种形式的联系和使用范围的区别"}, {"name": "直线过定点问题"}]}, {"name": "直线的位置关系", "children": [{"name": "直线的平行"}, {"name": "直线的垂直"}, {"name": "判定两条直线的位置关系"}, {"name": "根据直线的位置关系求参数"}, {"name": "根据直线的位置关系求直线的方程"}, {"name": "两直线交点坐标"}, {"name": "点或直线的对称问题", "children": [{"name": "点关于直线的对称点"}, {"name": "直线关于点的对称直线"}, {"name": "直线关于直线的对称直线"}, {"name": "反射问题"}]}]}, {"name": "平面中的距离", "children": [{"name": "两点间距离公式"}, {"name": "点到直线的距离公式"}, {"name": "两平行直线之间的距离"}, {"name": "利用距离的几何意义求最值"}]}]}, {"name": "圆与方程", "children": [{"name": "圆的标准方程与一般方程", "children": [{"name": "圆的标准方程问题"}, {"name": "圆的一般方程问题"}, {"name": "圆的方程的判定"}, {"name": "圆的几何性质", "children": [{"name": "圆的弧长、面积、圆心角计算"}]}]}, {"name": "点与圆的位置关系问题"}, {"name": "直线与圆的位置关系", "children": [{"name": "直线与圆的位置判断"}, {"name": "圆的弦长的相关问题"}, {"name": "圆的切线的相关问题"}, {"name": "直线与圆的相离问题"}, {"name": "直线与圆的对称问题"}, {"name": "直线与圆相关的最值问题"}, {"name": "已知直线和圆的位置关系求直线的方程"}, {"name": "已知直线和圆的位置关系求圆的方程"}, {"name": "已知直线和圆的位置关系求参数"}, {"name": "联立方程解决直线与圆的相关问题"}, {"name": "设点法解决直线与圆的相关问题"}, {"name": "圆的切线方程"}, {"name": "圆的弦长和弦心距"}]}, {"name": "圆与圆的位置关系", "children": [{"name": "圆与圆的位置判断"}, {"name": "两圆的公切线条数及方程"}, {"name": "相交弦所在直线方程"}, {"name": "圆方程的综合应用"}]}, {"name": "圆的轨迹相关问题"}]}]}, {"name": "圆锥曲线", "children": [{"name": "曲线与方程", "children": [{"name": "轨迹问题"}, {"name": "曲线与方程的概念"}, {"name": "求曲线方程的问题"}, {"name": "由曲线的方程研究曲线的性质"}, {"name": "曲线的交点问题"}, {"name": "求点的轨迹"}]}, {"name": "椭圆", "children": [{"name": "椭圆的定义、标准方程", "children": [{"name": "椭圆的定义"}, {"name": "椭圆的焦点、焦距"}, {"name": "椭圆的标准方程"}, {"name": "椭圆的基本量求解"}, {"name": "利用椭圆定义求线段最值"}, {"name": "椭圆中其他最值问题"}, {"name": "设参数解决椭圆相关问题"}]}, {"name": "椭圆的简单几何性质", "children": [{"name": "椭圆坐标的取值范围"}, {"name": "椭圆的对称性"}, {"name": "椭圆的顶点与轴"}, {"name": "椭圆的离心率", "children": [{"name": "已知椭圆的离心率求其他参数"}, {"name": "求椭圆的离心率"}, {"name": "求椭圆的离心率范围"}]}, {"name": "椭圆的焦点弦问题（小题）"}, {"name": "椭圆的焦点三角形问题（小题）"}, {"name": "椭圆中向量相关问题（小题）"}]}, {"name": "直线和椭圆的位置关系"}]}, {"name": "双曲线", "children": [{"name": "双曲线的定义、标准方程", "children": [{"name": "双曲线的定义"}, {"name": "双曲线的焦点、焦距"}, {"name": "双曲线的标准方程"}, {"name": "双曲线的范围"}, {"name": "双曲线的基本量求解"}, {"name": "利用双曲线定义求线段最值"}, {"name": "双曲线中其他最值问题"}, {"name": "设参数解决双曲线相关问题"}]}, {"name": "双曲线的几何性质", "children": [{"name": "双曲线坐标的取值范围"}, {"name": "双曲线的对称性"}, {"name": "双曲线的顶点与轴"}, {"name": "双曲线的渐近线", "children": [{"name": "已知双曲线的渐近线求其他参数"}, {"name": "求双曲线的渐近线"}, {"name": "双曲线共渐近线问题"}, {"name": "直线与双曲线的交点个数"}]}, {"name": "双曲线的离心率", "children": [{"name": "已知双曲线的离心率求其他参数"}, {"name": "求双曲线的离心率"}, {"name": "求双曲线的离心率范围"}]}, {"name": "双曲线的焦点弦问题（小题）"}, {"name": "双曲线的焦点三角形问题（小题）"}, {"name": "双曲线中向量相关问题（小题）"}]}, {"name": "直线和双曲线的位置关系"}]}, {"name": "抛物线", "children": [{"name": "抛物线的定义、标准方程", "children": [{"name": "抛物线的定义"}, {"name": "抛物线的标准方程"}, {"name": "抛物线的基本量求解"}, {"name": "利用抛物线定义求线段最值"}, {"name": "抛物线中其他最值问题"}, {"name": "抛物线的切线问题"}]}, {"name": "抛物线的几何性质", "children": [{"name": "抛物线坐标的取值范围"}, {"name": "抛物线的对称性"}, {"name": "抛物线的顶点"}, {"name": "抛物线的焦点弦问题（小题）"}, {"name": "抛物线中向量相关问题（小题）"}]}, {"name": "抛物线的实际应用"}, {"name": "直线和抛物线的位置关系"}]}, {"name": "圆锥曲线的第二定义", "children": [{"name": "椭圆的第二定义"}, {"name": "双曲线的第二定义"}]}, {"name": "多曲线方程考察问题", "children": [{"name": "椭圆与圆结合"}, {"name": "双曲线与圆结合"}, {"name": "抛物线与圆结合"}, {"name": "椭圆与双曲线结合"}, {"name": "椭圆与抛物线结合"}, {"name": "抛物线与双曲线结合"}]}, {"name": "直线与圆锥曲线问题", "children": [{"name": "圆锥曲线解法分类", "children": [{"name": "联立方程韦达定理"}, {"name": "设点型问题（不用韦达）"}, {"name": "设点与韦达综合问题"}, {"name": "既可设点又可韦达类问题"}]}, {"name": "直线与圆锥曲线的位置关系判断"}, {"name": "弦长求解问题"}, {"name": "中点弦问题"}, {"name": "焦点弦问题"}, {"name": "焦点三角形问题"}, {"name": "面积问题"}, {"name": "定点问题"}, {"name": "定值问题（证明、探究）"}, {"name": "最值问题"}, {"name": "对称问题"}, {"name": "向量问题"}, {"name": "角度问题"}, {"name": "切线综合问题"}, {"name": "设点法"}, {"name": "共线比例问题"}]}]}, {"name": "统计与概率", "children": [{"name": "统计", "children": [{"name": "获取数据的基本途径与概念", "children": [{"name": "获取数据的基本途径"}, {"name": "总体、样本、样本容量"}]}, {"name": "随机抽样", "children": [{"name": "简单随机抽样"}, {"name": "分层随机抽样"}, {"name": "系统抽样"}, {"name": "抽样方法选择"}]}, {"name": "统计图表", "children": [{"name": "频数与频率"}, {"name": "频率分布表"}, {"name": "频率分布直方图"}, {"name": "折线图、总体密度曲线"}, {"name": "茎叶图"}, {"name": "扇形统计图"}]}, {"name": "用样本估计总体", "children": [{"name": "众数、中位数、平均数"}, {"name": "百分位数"}, {"name": "极差、方差与标准差"}, {"name": "用样本的数字特征估计总体的数字特征问题"}, {"name": "平均值、方差、标准差的大小比较"}]}, {"name": "两个变量的线性相关", "children": [{"name": "变量间的相关关系"}, {"name": "散点图"}, {"name": "回归分析"}, {"name": "回归直线方程", "children": [{"name": "线性回归方程的其他应用"}, {"name": "线性回归方程过平均数点"}]}, {"name": "最小二乘法"}, {"name": "相关系数问题"}, {"name": "选择回归模型问题"}]}, {"name": "统计案例", "children": [{"name": "独立性检验"}, {"name": "列联表、卡方计算"}, {"name": "残差分析"}]}]}, {"name": "概率", "children": [{"name": "事件与概率", "children": [{"name": "事件与基本事件空间", "children": [{"name": "不可能事件、必然事件、随机事件"}, {"name": "基本事件与基本事件空间"}]}, {"name": "概率的概念", "children": [{"name": "概率的基本性质"}, {"name": "频率与概率问题"}]}, {"name": "互斥事件", "children": [{"name": "互斥事件与对立事件"}, {"name": "互斥事件的概率加法公式"}, {"name": "互斥事件与对立事件的概念辨析"}, {"name": "对立事件的概率和为1"}]}, {"name": "古典概型", "children": [{"name": "古典概型的概率计算（不涉及计数原理）"}, {"name": "古典概型的概率计算（涉及计数原理）"}]}, {"name": "几何概型", "children": [{"name": "与长度有关的几何概率的计算"}, {"name": "与角度有关的几何概率的计算"}, {"name": "与面积有关的几何概率的计算"}, {"name": "与体积有关的几何概率的计算"}]}, {"name": "事件的独立性", "children": [{"name": "相互独立事件"}, {"name": "相互独立事件的辨析"}, {"name": "相互独立事件的概率乘法公式"}]}, {"name": "条件概率"}, {"name": "全概率公式"}]}, {"name": "随机变量及其分布", "children": [{"name": "离散型随机变量的概念"}, {"name": "离散型随机变量的分布列"}, {"name": "离散型变量常见的几种分布", "children": [{"name": "超几何分布"}, {"name": "两点分布"}, {"name": "n次独立重复试验与二项分布"}, {"name": "几何分布"}]}, {"name": "离散型随机变量的数字特征", "children": [{"name": "离散型随机变量的数学期望"}, {"name": "离散型随机变量的方差"}, {"name": "期望与方差的性质"}, {"name": "利用期望、方差作决策"}]}, {"name": "正态分布"}]}]}]}, {"name": "计数原理", "children": [{"name": "两个基本计数原理", "children": [{"name": "分类加法计数原理"}, {"name": "分步乘法计数原理"}, {"name": "加法原理与乘法原理的综合运用"}, {"name": "数字问题"}, {"name": "染色问题"}]}, {"name": "排列与组合", "children": [{"name": "排列", "children": [{"name": "排列数计算"}, {"name": "简单的排列问题"}, {"name": "特殊元素优先法"}, {"name": "特殊位置优先法"}, {"name": "捆绑法"}, {"name": "插空法"}, {"name": "倍缩法"}]}, {"name": "组合", "children": [{"name": "组合数计算"}, {"name": "简单的组合问题"}, {"name": "分组分配法"}, {"name": "隔板法"}, {"name": "错位法"}]}, {"name": "排列组合综合"}, {"name": "排除法"}, {"name": "枚举法"}]}, {"name": "计数原理综合"}, {"name": "二项式定理", "children": [{"name": "二项式定理的展开式"}, {"name": "求二项式展开式的特定项"}, {"name": "求项的系数或二项式系数"}, {"name": "二项式展开式系数的最值"}, {"name": "二项式系数的性质"}, {"name": "赋值问题"}, {"name": "整除问题"}]}]}, {"name": "坐标系与参数方程", "children": [{"name": "坐标轴的旋转变换"}, {"name": "极坐标", "children": [{"name": "极坐标系与直角坐标系"}, {"name": "极坐标与直角坐标的关系"}, {"name": "曲线的极坐标方程（直线、圆）"}, {"name": "极坐标与普通方程互化问题"}, {"name": "圆锥曲线的极坐标方程"}]}, {"name": "参数方程", "children": [{"name": "参数方程的概念"}, {"name": "直线的参数方程"}, {"name": "圆的参数方程"}, {"name": "圆锥曲线的参数方程"}, {"name": "其他曲线的参数方程"}, {"name": "参数方程与普通方程互化"}, {"name": "极坐标与参数方程互化问题"}, {"name": "参数方程几何意义的运用"}]}]}, {"name": "几何证明选讲", "children": [{"name": "相似三角形"}, {"name": "圆", "children": [{"name": "圆周角定理"}, {"name": "圆的切线的性质与判定"}, {"name": "弦切角定理"}, {"name": "圆幂定理", "children": [{"name": "相交弦定理"}, {"name": "切割线定理"}, {"name": "割线定理"}]}, {"name": "圆的内接四边形的性质与判定"}]}]}, {"name": "算法与框图", "children": [{"name": "算法及其程序框图", "children": [{"name": "算法的概念"}, {"name": "程序框图"}, {"name": "结构图"}]}, {"name": "基本算法语句"}, {"name": "算法案例", "children": [{"name": "辗转相除法与更相减损术"}, {"name": "秦九韶算法"}, {"name": "进位制"}, {"name": "割圆术"}]}]}, {"name": "推理与证明", "children": [{"name": "数学归纳法"}, {"name": "合情推理与演绎推理", "children": [{"name": "合情推理", "children": [{"name": "归纳推理"}, {"name": "类比推理"}]}, {"name": "演绎推理"}]}, {"name": "直接证明与间接证明", "children": [{"name": "综合法与分析法"}, {"name": "反证法"}]}, {"name": "逻辑推理题"}]}, {"name": "矩阵与变换", "children": [{"name": "矩阵的定义及其运算"}, {"name": "矩阵变换求解线性方程"}, {"name": "特征值与特征向量"}, {"name": "二阶行列式与二元线性方程组"}, {"name": "三阶行列式"}, {"name": "二阶矩阵与平面图形的变换"}, {"name": "逆矩阵及其应用"}]}]},
+  g1:{"name": "高一数学知识点", "children": [{"name": "一、集合与常用逻辑用语", "children": [{"name": "1.1 集合的概念"}, {"name": "1.2 集合间的基本关系"}, {"name": "1.3 集合的基本运算"}, {"name": "1.4 充分条件与必要条件"}, {"name": "1.5 全称量词与存在量词"}]}, {"name": "二、一元二次函数、方程和不等式", "children": [{"name": "2.1 等式性质与不等式性质"}, {"name": "2.2 基本不等式"}, {"name": "2.3 二次函数与一元二次方程、不等式"}]}, {"name": "三、函数的概念与性质", "children": [{"name": "3.1 函数的概念及其表示"}, {"name": "3.2 函数的基本性质"}, {"name": "3.3 幂函数"}, {"name": "3.4 函数的应用（一）"}]}, {"name": "四、指数函数与对数函数", "children": [{"name": "4.1 指数"}, {"name": "4.2 指数函数"}, {"name": "4.3 对数"}, {"name": "4.4 对数函数"}, {"name": "4.5 函数的应用(二)"}]}, {"name": "五、三角函数", "children": [{"name": "5.1 任意角和弧度制"}, {"name": "5.2 三角函数的概念"}, {"name": "5.3 诱导公式"}, {"name": "5.4 三角函数的图象与性质"}, {"name": "5.5 三角恒等变换"}, {"name": "5.6 函数y=Asin(ωx＋φ)"}, {"name": "5.7 三角函数的应用"}]}]}
+};
+const STYLES={
+  g3:{colors:['#4a90d9','#5cb85c','#7ec87e','#f0a500','#e05c4b'],sizes:[16,10,7,6,5]},
+  g1:{colors:['#722ed1','#2f54eb','#13c2c2','#52c41a'],sizes:[18,12,8,6]}
+};
+const TREE_LABELS={g3:'高中数学 · 全体系',g1:'高一数学 · 必修1'};
+function styleNodes(n,d,s){
+  n.symbol='circle';n.symbolSize=s.sizes[Math.min(d,s.sizes.length-1)];
+  n.itemStyle={color:s.colors[Math.min(d,s.colors.length-1)],borderWidth:0};n.label={show:false};
+  if(n.children) n.children.forEach(c=>styleNodes(c,d+1,s));return n;
+}
+let gaugeChart=null;
+const treeChart=echarts.init(document.getElementById('treeChart'));
+const scatterChart=echarts.init(document.getElementById('scatterChart'));
+scatterChart.setOption({
+  backgroundColor:'#fff',
+  grid:{top:24,right:8,bottom:36,left:42},
+  xAxis:{type:'value',min:0,max:100,name:'得分率',nameLocation:'middle',nameGap:22,nameTextStyle:{fontSize:11},axisLine:{lineStyle:{color:'#eee'}},splitLine:{show:false},axisLabel:{fontSize:10}},
+  yAxis:{type:'value',min:0,max:100,name:'练习次数',nameLocation:'middle',nameGap:26,nameTextStyle:{fontSize:11},axisLine:{lineStyle:{color:'#eee'}},splitLine:{show:false},axisLabel:{fontSize:10}},
+  graphic:[
+    {type:'rect',z:0,left:'42px',top:'24px',shape:{width:'50%',height:'50%'},style:{fill:'rgba(255,77,79,.05)',stroke:'#ff4d4f',lineWidth:1}},
+    {type:'rect',z:0,right:'8px',top:'24px',shape:{width:'50%',height:'50%'},style:{fill:'rgba(24,144,255,.05)',stroke:'#1890ff',lineWidth:1}},
+    {type:'rect',z:0,left:'42px',bottom:'36px',shape:{width:'50%',height:'50%'},style:{fill:'rgba(250,173,20,.05)',stroke:'#faad14',lineWidth:1}},
+    {type:'rect',z:0,right:'8px',bottom:'36px',shape:{width:'50%',height:'50%'},style:{fill:'rgba(82,196,26,.05)',stroke:'#52c41a',lineWidth:1}},
+  ],
+  series:[{type:'scatter',data:[],symbolSize:8}]
+});
+function loadTree(grade){
+  const key=grade==='g1'?'g1':'g3';
+  const data=styleNodes(JSON.parse(JSON.stringify(TREES[key])),0,STYLES[key]);
+  document.getElementById('treeLabel').textContent=TREE_LABELS[key];
+  treeChart.clear();
+  treeChart.setOption({
+    backgroundColor:'#fff',
+    tooltip:{trigger:'item',formatter:p=>'<b>'+p.data.name+'</b>'},
+    series:[{type:'tree',layout:'radial',data:[data],top:'1%',left:'1%',bottom:'1%',right:'1%',
+      initialTreeDepth:-1,roam:true,label:{show:false},leaves:{label:{show:false}},
+      lineStyle:{color:'#ddd',width:0.6,curveness:0},
+      emphasis:{focus:'ancestor',lineStyle:{color:'#aaa',width:1.2}},
+      expandAndCollapse:false,animationDuration:700}]
+  });
+  document.getElementById('detailPanel').innerHTML='<div class="ph"><div class="ph-icon">🎯</div><div>点击左侧图谱中的知识点查看详情</div></div>';
+  if(gaugeChart){gaugeChart.dispose();gaugeChart=null;}
+  scatterChart.setOption({series:[{type:'scatter',data:[]}]});
+}
+loadTree('g3');
+document.querySelectorAll('.kg-tab').forEach(tab=>{
+  tab.addEventListener('click',function(){
+    document.querySelectorAll('.kg-tab').forEach(t=>t.classList.remove('act'));
+    this.classList.add('act');
+    const lp=document.querySelector('.kg-left');
+    lp.style.opacity='.3';
+    setTimeout(()=>{loadTree(this.dataset.grade);lp.style.opacity='1';},180);
+  });
+});
+const sNames=['赵佳宁','宋卓','陈梓木','赵子豪','陈小倩','王天宇','李颖','李颖鑫','高俊豪','关国臻','刘嘉豪'];
+function rand(a,b){return Math.floor(Math.random()*(b-a+1))+a;}
+function genStudents(seed){return sNames.map((name,i)=>{
+  const base=((seed.charCodeAt(0)||60)+i*13)%50;
+  const score=Math.min(95,Math.max(20,base+rand(20,45)));
+  const gaokao=Math.min(95,Math.max(15,score+rand(-15,10)));
+  const drill=rand(10,60),hw=rand(20,50);
+  const tag=score>=75?'tg':score>=50?'to':'tr';
+  const tagText=score>=75?'良好':score>=50?'一般':'需加强';
+  return{name,score,gaokao,drill,hw,tag,tagText};
+});}
+function genScatter(s){return s.map(st=>{
+  const x=Math.min(100,Math.max(0,st.score+rand(-8,8)));
+  const y=Math.min(100,Math.max(0,st.drill+rand(-5,5)));
+  const c=(x>=75&&y>=50)?'#52c41a':(x<75&&y>=50)?'#faad14':(x>=75&&y<50)?'#1890ff':'#ff4d4f';
+  return{value:[x,y],name:st.name,itemStyle:{color:c}};
+});}
+treeChart.on('click',function(params){
+  const roots=['高中数学知识点','高一数学知识点'];
+  if(roots.includes(params.data.name)) return;
+  const name=params.data.name;
+  const sts=genStudents(name);
+  const avg=Math.round(sts.reduce((a,s)=>a+s.score,0)/sts.length);
+  const gk=Math.round(sts.reduce((a,s)=>a+s.gaokao,0)/sts.length);
+  document.getElementById('detailPanel').innerHTML=`
+    <div class="rdt-title">${name}</div>
+    <div class="rdt-sub"><b>${avg}%</b> 班级平均得分率 &nbsp; <b>${gk}%</b> 高考题得分率 &nbsp; 共${sts.length}名学生</div>
+    <div class="rdt-body">
+      <div class="gauge-col">
+        <div id="gaugeChart"></div>
+        <div class="glabels">
+          <div class="glabel"><div class="gdot" style="background:#5470c6"></div>考试 ${rand(5,15)}题</div>
+          <div class="glabel"><div class="gdot" style="background:#91cc75"></div>作业 ${rand(20,40)}题</div>
+          <div class="glabel"><div class="gdot" style="background:#fac858"></div>课练 ${rand(8,20)}题</div>
+          <div class="glabel"><div class="gdot" style="background:#ee6666"></div>学习 ${rand(3,12)}题</div>
+        </div>
+      </div>
+      <div class="table-col">
+        <div class="dtabs">
+          <div class="dtab act">学生详情</div><div class="dtab">共性题目</div>
+          <div class="dtab">高考真题</div><div class="dtab">题库选题</div>
+        </div>
+        <div class="frow">
+          <input placeholder="搜索学生" style="width:70px">
+          <select><option>得分率于...</option></select>
+          <input placeholder="最低" style="width:30px"><span style="color:#bbb">~</span>
+          <input placeholder="最高" style="width:30px">
+          <select><option>习题量于...</option></select>
+          <button class="sbtn">搜索</button>
+        </div>
+        <div class="tbl-wrap"><table class="stbl">
+          <thead><tr><th>学生</th><th>综合</th><th>高考题</th><th>%</th><th>刷题</th><th>作业</th></tr></thead>
+          <tbody>${sts.map(s=>`<tr>
+            <td>${s.name}</td>
+            <td>${s.score}% <span style="color:#ccc;font-size:10px">${rand(30,60)}题</span></td>
+            <td>${s.gaokao}%</td>
+            <td><span class="tag ${s.tag}">${s.tagText}</span></td>
+            <td>${s.drill}%</td><td>${s.hw}题</td>
+          </tr>`).join('')}</tbody>
+        </table></div>
+      </div>
+    </div>`;
+  document.querySelectorAll('.dtab').forEach(t=>{
+    t.onclick=()=>{document.querySelectorAll('.dtab').forEach(x=>x.classList.remove('act'));t.classList.add('act');};
+  });
+  if(gaugeChart) gaugeChart.dispose();
+  gaugeChart=echarts.init(document.getElementById('gaugeChart'));
+  gaugeChart.setOption({series:[{type:'gauge',startAngle:200,endAngle:-20,min:0,max:100,
+    radius:'88%',center:['50%','62%'],
+    axisLine:{lineStyle:{width:9,color:[[0.5,'#ff4d4f'],[0.75,'#faad14'],[1,'#52c41a']]}},
+    pointer:{length:'58%',width:3},axisTick:{show:false},splitLine:{show:false},axisLabel:{show:false},
+    detail:{fontSize:16,fontWeight:'bold',color:'#333',offsetCenter:[0,'22%'],formatter:'{value}%'},
+    data:[{value:avg}]
+  }]});
+  scatterChart.setOption({series:[{type:'scatter',data:genScatter(sts),symbolSize:8,
+    tooltip:{trigger:'item',formatter:p=>`${p.data.name}<br/>得分率:${p.data.value[0]}%<br/>练习:${p.data.value[1]}次`}
+  }]});
+});
+
+// ════════════════════════════════
+// TAB 2 — 考试学情
+// ════════════════════════════════
+const ksChart=echarts.init(document.getElementById('ksChart'));
+ksChart.setOption({
+  backgroundColor:'#fff',
+  grid:{top:16,right:16,bottom:28,left:44},
+  xAxis:{type:'category',data:['04-28','06-23','06-25'],
+    axisLine:{lineStyle:{color:'#eee'}},axisLabel:{color:'#aaa',fontSize:11},splitLine:{show:false}},
+  yAxis:{type:'value',min:80,max:140,
+    axisLabel:{color:'#aaa',fontSize:11},splitLine:{lineStyle:{color:'#f5f5f5'}},axisLine:{show:false}},
+  tooltip:{trigger:'axis'},
+  series:[
+    {name:'班级平均分',type:'line',data:[100.7,119.2,120.7],smooth:true,
+     symbol:'circle',symbolSize:7,lineStyle:{color:'#00b3d4',width:2.5},
+     itemStyle:{color:'#00b3d4'},
+     label:{show:true,position:'top',fontSize:11,color:'#00b3d4',formatter:'{c}'},
+     markArea:{data:[[{xAxis:'04-28'},{xAxis:'06-25'}]],itemStyle:{color:'rgba(0,179,212,.04)'}}},
+    {name:'年级平均分',type:'line',data:[102.7,115.5,116.7],smooth:true,
+     symbol:'circle',symbolSize:5,lineStyle:{color:'#f5a623',width:2,type:'dashed'},
+     itemStyle:{color:'#f5a623'},label:{show:true,position:'bottom',fontSize:10,color:'#f5a623',formatter:'{c}'}}
+  ]
+});
+
+const distChart=echarts.init(document.getElementById('distChart'));
+distChart.setOption({
+  backgroundColor:'#fff',
+  grid:{top:8,right:12,bottom:28,left:56},
+  tooltip:{trigger:'axis',axisPointer:{type:'shadow'}},
+  xAxis:{type:'value',axisLabel:{fontSize:10,color:'#aaa'},splitLine:{lineStyle:{color:'#f5f5f5'}}},
+  yAxis:{type:'category',data:['<60','60-80','80-100','100-120','120+'],
+    axisLabel:{fontSize:11,color:'#555'},axisLine:{show:false},axisTick:{show:false}},
+  series:[{
+    type:'bar',barWidth:14,
+    data:[
+      {value:1,itemStyle:{color:'#ff4d4f'}},
+      {value:2,itemStyle:{color:'#faad14'}},
+      {value:8,itemStyle:{color:'#ffd666'}},
+      {value:18,itemStyle:{color:'#52c41a'}},
+      {value:11,itemStyle:{color:'#00b3d4'}}
+    ],
+    label:{show:true,position:'right',fontSize:10,color:'#666',formatter:p=>p.value+'人'}
+  }]
+});
+
+window.addEventListener('resize',()=>{
+  trendChart0.resize(); donutCh.resize();
+  treeChart.resize(); scatterChart.resize();
+  ksChart.resize(); distChart.resize();
+  if(gaugeChart) gaugeChart.resize();
+});
+</script>
+</body>
+</html>
