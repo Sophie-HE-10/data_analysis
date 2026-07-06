@@ -56,10 +56,10 @@ body{font-family:'Microsoft YaHei',Arial,sans-serif;font-size:13px;background:#f
 
 /* Hero row */
 .hero-row{display:flex;background:#fff;border-radius:6px;overflow:hidden;}
-.hero-left{width:26%;flex-shrink:0;padding:18px 14px;display:flex;flex-direction:column;align-items:center;justify-content:center;border-right:1px solid #f5f5f5;text-align:center;gap:4px;}
+.hero-left{width:26%;flex-shrink:0;padding:14px 16px;display:flex;flex-direction:row;align-items:center;border-right:1px solid #f5f5f5;gap:14px;}
 .hero-right{flex:1;padding:14px 18px;display:flex;flex-direction:column;}
-#donutChart{width:72px;height:72px;}
-.big-rate{font-size:44px;font-weight:700;color:#00b3d4;line-height:1;margin-top:2px;}
+#donutChart{width:72px;height:72px;flex-shrink:0;}
+.big-rate{font-size:36px;font-weight:700;color:#00b3d4;line-height:1;}
 .rate-compare{margin-top:8px;display:flex;flex-direction:column;gap:4px;}
 .rate-vs{font-size:12px;color:#888;}
 .rate-up{color:#52c41a;font-weight:600;}
@@ -189,6 +189,116 @@ body{font-family:'Microsoft YaHei',Arial,sans-serif;font-size:13px;background:#f
 .score-val{font-weight:700;color:#00b3d4;min-width:36px;}
 .score-track{flex:1;height:6px;background:#f0f0f0;border-radius:3px;overflow:hidden;}
 .score-fill{height:100%;background:linear-gradient(90deg,#00c6d4,#0099e0);border-radius:3px;}
+
+/* ═══════════════════════════════
+   STUDENT ANALYTICS
+═══════════════════════════════ */
+.stu-page{flex:1;display:none;flex-direction:column;min-height:0;overflow:hidden;}
+.stu-page-tab{padding:12px 14px;font-size:13px;color:#666;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;}
+.stu-page-tab:hover{color:#00b3d4;}
+.stu-page-tab.active{color:#00b3d4;border-bottom-color:#00b3d4;font-weight:500;}
+.stu-tab-panel{display:none;flex:1;flex-direction:column;min-height:0;overflow:hidden;}
+.stu-tab-panel.active{display:flex;}
+.stu-list-wrap{flex:1;overflow-y:auto;padding:14px 20px;}
+.stu-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+.stu-card{background:#fff;border-radius:8px;padding:16px;cursor:pointer;border:1px solid #eee;transition:box-shadow .15s,border-color .15s;position:relative;}
+.stu-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#00b3d4,#0099e0);border-radius:8px 8px 0 0;}
+.stu-card:hover{box-shadow:0 2px 12px rgba(0,179,212,.14);border-color:#b3e8f0;}
+.stu-card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;}
+.stu-cname{font-size:15px;font-weight:600;color:#222;}
+.stu-rate-big{font-size:26px;font-weight:700;color:#00b3d4;line-height:1;text-align:right;}
+.stu-rate-big span{font-size:13px;font-weight:400;color:#888;}
+.stu-rate-label{font-size:11px;color:#aaa;text-align:right;}
+.stu-sep{border:none;border-top:1px solid #f5f5f5;margin:10px 0;}
+.stu-foot{display:flex;justify-content:space-between;align-items:center;}
+.stu-foot-info{font-size:12px;color:#555;}
+.stu-foot-info b{color:#00b3d4;}
+.stu-foot-delta{font-size:11px;font-weight:600;}
+.stu-foot-delta.up{color:#52c41a;}
+.stu-foot-delta.dn{color:#ff4d4f;}
+.stu-foot-btn{width:26px;height:26px;border-radius:50%;background:#e8f7fb;display:flex;align-items:center;justify-content:center;color:#00b3d4;font-size:14px;flex-shrink:0;}
+#sDonCh{width:72px;height:72px;flex-shrink:0;}
+#sTrendCh0{width:100%;height:140px;}
+
+/* ── Student knowledge panel (spanel1) ── */
+.stu-kg-tab{padding:3px 10px;border-radius:4px;cursor:pointer;font-size:12px;color:#555;border:1px solid #ddd;background:#fff;transition:all .15s;}
+.stu-kg-tab:hover{border-color:#00b3d4;color:#00b3d4;}
+.stu-kg-tab.act{background:#00b3d4;color:#fff;border-color:#00b3d4;}
+.kgd-badge{display:inline-flex;align-items:center;gap:3px;font-size:11px;padding:2px 9px;border-radius:10px;margin-bottom:8px;}
+.kgd-badge.good{background:#f6ffed;color:#52c41a;border:1px solid #b7eb8f;}
+.kgd-badge.warn{background:#fff7e6;color:#fa8c16;border:1px solid #ffd591;}
+.kgd-badge.bad{background:#fff1f0;color:#ff4d4f;border:1px solid #ffa39e;}
+.kgd-gauge-row{display:flex;gap:12px;margin-bottom:10px;align-items:center;}
+#stuKgGauge{width:90px;height:76px;flex-shrink:0;}
+.kgd-bars{flex:1;}
+.kgd-bar-row{margin-bottom:7px;}
+.kgd-bar-lbl{font-size:10px;color:#888;display:flex;justify-content:space-between;margin-bottom:2px;}
+.kgd-bar-track{height:6px;background:#f0f0f0;border-radius:3px;overflow:hidden;}
+.kgd-bar-fill{height:100%;border-radius:3px;transition:width .4s;}
+.kgd-ex-hdr{font-size:10px;color:#bbb;letter-spacing:.5px;margin-bottom:5px;margin-top:4px;}
+.kgd-ex{display:flex;align-items:center;gap:6px;padding:5px 0;border-bottom:1px solid #f0f0f0;font-size:11px;}
+.kgd-ex:last-child{border:none;}
+/* Student exam tab (spanel2) */
+#stuScoreCh{width:100%;height:200px;}
+
+/* ═══════════════════════════════
+   SCHOOL / GRADE PAGE
+═══════════════════════════════ */
+.school-wrap{flex:1;overflow-y:auto;padding:14px 20px;display:flex;flex-direction:column;}
+.school-sec-hd{font-size:11px;font-weight:700;color:#aaa;letter-spacing:1.5px;text-transform:uppercase;margin:14px 0 10px;padding-left:8px;border-left:3px solid #00b3d4;}
+#schoolGaugeCh{width:72px;height:72px;flex-shrink:0;}
+#schoolTrendCh{width:100%;height:140px;}
+#schoolRankCh{width:100%;height:200px;}
+.school-kg-wrap{height:380px;display:flex;flex-direction:column;overflow:hidden;margin-bottom:12px;background:#fff;border-radius:6px;}
+.school-act-detail{background:#fff;border-radius:6px;padding:14px 18px;margin-bottom:12px;}
+#schoolActCh{width:100%;height:200px;}
+#schoolKgGauge{width:90px;height:76px;flex-shrink:0;}
+#schoolTreeCh{width:100%;height:300px;}
+.sort-th{cursor:pointer;user-select:none;}
+.sort-th:hover{color:#00b3d4;}
+.school-tbl-low td{background:#fff8f8;}
+/* Compact activity chips */
+.school-act-row{display:flex;gap:8px;background:#fff;border-radius:6px;padding:12px 16px;margin-bottom:8px;flex-wrap:wrap;}
+.school-act-chip{display:flex;align-items:center;gap:6px;padding:7px 16px;border-radius:20px;cursor:pointer;border:1px solid #eee;background:#fafafa;transition:all .15s;}
+.school-act-chip:hover{border-color:#00b3d4;background:#f0fbfc;}
+.school-act-chip.active{background:#00b3d4;border-color:#00b3d4;}
+.sac-label{font-size:12px;color:#666;}
+.sac-num{font-size:16px;font-weight:700;color:#333;margin-left:2px;}
+.sac-unit{font-size:11px;color:#aaa;}
+.sac-arr{font-size:11px;color:#ccc;}
+.school-act-chip.active .sac-label,.school-act-chip.active .sac-num,
+.school-act-chip.active .sac-unit,.school-act-chip.active .sac-arr{color:#fff;}
+
+/* ── AI洞察条 ── */
+.ai-insight-bar{background:#f0fbfc;border:1px solid #b3e8f0;border-left:3px solid #00b3d4;border-radius:6px;padding:10px 16px;margin-bottom:12px;display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.ai-insight-text{flex:1;font-size:12px;color:#444;line-height:1.5;}
+.ai-insight-text b{color:#0099b8;}
+/* ── 年级KPI卡片 ── */
+.grade-kpi-row{display:flex;gap:10px;margin-bottom:12px;}
+.grade-kpi-card{flex:1;background:#fff;border-radius:6px;padding:14px 16px;cursor:pointer;border:2px solid transparent;transition:border-color .15s,box-shadow .15s;}
+.grade-kpi-card:hover{border-color:#b3e8f0;box-shadow:0 2px 8px rgba(0,179,212,.08);}
+.grade-kpi-name{font-size:11px;color:#aaa;margin-bottom:4px;}
+.grade-kpi-val{font-size:26px;font-weight:700;color:#00b3d4;line-height:1;}
+.grade-kpi-delta{font-size:11px;margin-top:4px;}
+/* ── 进步/关注学生列表 ── */
+.stu-lists-row{display:flex;gap:10px;}
+.stu-list-card{flex:1;background:#fff;border-radius:6px;padding:12px 14px;}
+.stu-list-title{font-size:12px;font-weight:600;color:#333;margin-bottom:8px;display:flex;align-items:center;gap:6px;}
+.stu-list-tag{padding:1px 7px;border-radius:10px;font-size:10px;}
+.stu-list-tag.up{background:#f6ffed;color:#52c41a;border:1px solid #b7eb8f;}
+.stu-list-tag.warn{background:#fff1f0;color:#ff4d4f;border:1px solid #ffa39e;}
+.stu-list-item{display:flex;align-items:center;justify-content:space-between;padding:5px 0;border-bottom:1px solid #f5f5f5;font-size:12px;cursor:pointer;}
+.stu-list-item:hover{background:#f8fdfe;}
+.stu-list-item:last-child{border:none;}
+.stu-list-name{color:#333;font-weight:500;}
+.stu-list-rate{font-weight:700;}
+.stu-list-delta{font-size:11px;margin-left:4px;}
+/* ── 知识图谱AI建议条 ── */
+.kg-ai-bar{background:#fffbe6;border:1px solid #ffe58f;border-left:3px solid #faad14;border-radius:6px;padding:8px 14px;margin:8px 8px 0;display:flex;align-items:flex-start;gap:8px;flex-shrink:0;}
+.kg-ai-bar-icon{font-size:14px;flex-shrink:0;margin-top:1px;}
+.kg-ai-bar-text{font-size:12px;color:#555;line-height:1.5;flex:1;}
+.kg-ai-tag{display:inline-block;padding:1px 8px;border-radius:10px;font-size:11px;font-weight:600;margin:0 3px;background:#fff1f0;color:#ff4d4f;border:1px solid #ffa39e;cursor:pointer;}
+.kg-ai-tag:hover{background:#ff4d4f;color:#fff;}
 </style>
 </head>
 <body>
@@ -235,10 +345,10 @@ body{font-family:'Microsoft YaHei',Arial,sans-serif;font-size:13px;background:#f
       </div>
       <div class="nav-sub">
         <div class="nav-item">考试分析</div>
-        <div class="nav-item">校级学情</div>
-        <div class="nav-item">年级学情</div>
-        <div class="nav-item active">班级学情</div>
-        <div class="nav-item">学生学情</div>
+        <div class="nav-item" id="navSchoolXQ" onclick="showSchoolPage('校')">校级学情</div>
+        <div class="nav-item" id="navGradeXQ" onclick="showSchoolPage('年级')">年级学情</div>
+        <div class="nav-item active" id="navBanjiXQ" onclick="showClassPage()">班级学情</div>
+        <div class="nav-item" id="navStudentXQ" onclick="showStudentPage()">学生学情</div>
       </div>
     </div>
     <div>
@@ -259,7 +369,7 @@ body{font-family:'Microsoft YaHei',Arial,sans-serif;font-size:13px;background:#f
     <span class="topbar-icon">↻</span>
     <div class="topbar-right"><span>丽江市第一高级中学 ∨</span>&nbsp;|&nbsp;<span>何依翎 ∨</span></div>
   </div>
-  <div class="content-area">
+  <div class="content-area" id="classPage">
     <div class="breadcrumb">
       <a href="#">🏠 首页</a><span class="sep">/</span>
       <a href="#">学情中心</a><span class="sep">/</span>
@@ -286,12 +396,14 @@ body{font-family:'Microsoft YaHei',Arial,sans-serif;font-size:13px;background:#f
         <div class="hero-row">
           <div class="hero-left">
             <div id="donutChart"></div>
-            <div class="big-rate">86.4%</div>
-            <div style="font-size:12px;color:#888;margin-top:2px">班级综合正确率</div>
-            <div class="rate-compare">
-              <div class="rate-vs">年级平均 <span style="color:#333;font-weight:600">83.5%</span></div>
-              <div class="rate-vs">超年级 <span class="rate-up">↑ 2.9%</span></div>
-              <div class="rate-vs">近7天 <span class="rate-up">↑ 1.2%</span></div>
+            <div>
+              <div class="big-rate">86.4%</div>
+              <div style="font-size:12px;color:#888;margin-top:2px">班级综合正确率</div>
+              <div class="rate-compare">
+                <div class="rate-vs">年级平均 <span style="color:#333;font-weight:600">83.5%</span></div>
+                <div class="rate-vs">超年级 <span class="rate-up">↑ 2.9%</span></div>
+                <div class="rate-vs">近7天 <span class="rate-up">↑ 1.2%</span></div>
+              </div>
             </div>
           </div>
           <div class="hero-right">
@@ -309,6 +421,56 @@ body{font-family:'Microsoft YaHei',Arial,sans-serif;font-size:13px;background:#f
               </div>
             </div>
             <div id="trendChart0"></div>
+          </div>
+        </div>
+
+        <!-- 进步学生 & 重点关注学生 -->
+        <div class="stu-lists-row">
+          <div class="stu-list-card">
+            <div class="stu-list-title">📈 进步学生 <span class="stu-list-tag up">最近7天</span></div>
+            <div class="stu-list-item" onclick="openStuDetail('张永丽',82,369,1)">
+              <span class="stu-list-name">张永丽</span>
+              <span><span class="stu-list-rate" style="color:#52c41a">82%</span><span class="stu-list-delta" style="color:#52c41a">↑ 4.2%</span></span>
+            </div>
+            <div class="stu-list-item" onclick="openStuDetail('李炸魏',71,135,4)">
+              <span class="stu-list-name">李炸魏</span>
+              <span><span class="stu-list-rate" style="color:#52c41a">71%</span><span class="stu-list-delta" style="color:#52c41a">↑ 3.5%</span></span>
+            </div>
+            <div class="stu-list-item" onclick="openStuDetail('陈楹文',70,114,6)">
+              <span class="stu-list-name">陈楹文</span>
+              <span><span class="stu-list-rate" style="color:#52c41a">70%</span><span class="stu-list-delta" style="color:#52c41a">↑ 2.8%</span></span>
+            </div>
+            <div class="stu-list-item" onclick="openStuDetail('廖志晶',70,56,9)">
+              <span class="stu-list-name">廖志晶</span>
+              <span><span class="stu-list-rate" style="color:#52c41a">70%</span><span class="stu-list-delta" style="color:#52c41a">↑ 2.1%</span></span>
+            </div>
+            <div class="stu-list-item" onclick="openStuDetail('熊心怡',79,102,2)">
+              <span class="stu-list-name">熊心怡</span>
+              <span><span class="stu-list-rate" style="color:#52c41a">79%</span><span class="stu-list-delta" style="color:#52c41a">↑ 1.7%</span></span>
+            </div>
+          </div>
+          <div class="stu-list-card">
+            <div class="stu-list-title">⚠️ 重点关注 <span class="stu-list-tag warn">需干预</span></div>
+            <div class="stu-list-item" onclick="openStuDetail('马睿欣',63,56,16)">
+              <span class="stu-list-name">马睿欣</span>
+              <span><span class="stu-list-rate" style="color:#ff4d4f">63%</span><span class="stu-list-delta" style="color:#ff4d4f">↓ 3.1%</span></span>
+            </div>
+            <div class="stu-list-item" onclick="openStuDetail('邱银',64,72,15)">
+              <span class="stu-list-name">邱银</span>
+              <span><span class="stu-list-rate" style="color:#ff4d4f">64%</span><span class="stu-list-delta" style="color:#ff4d4f">↓ 2.4%</span></span>
+            </div>
+            <div class="stu-list-item" onclick="openStuDetail('朱大媛',64,88,14)">
+              <span class="stu-list-name">朱大媛</span>
+              <span><span class="stu-list-rate" style="color:#ff4d4f">64%</span><span class="stu-list-delta" style="color:#ff4d4f">↓ 1.8%</span></span>
+            </div>
+            <div class="stu-list-item" onclick="openStuDetail('毛瑞澜',66,45,13)">
+              <span class="stu-list-name">毛瑞澜</span>
+              <span><span class="stu-list-rate" style="color:#fa8c16">66%</span><span class="stu-list-delta" style="color:#888">— 持平</span></span>
+            </div>
+            <div class="stu-list-item" onclick="openStuDetail('和义翔',67,36,11)">
+              <span class="stu-list-name">和义翔</span>
+              <span><span class="stu-list-rate" style="color:#fa8c16">67%</span><span class="stu-list-delta" style="color:#888">— 持平</span></span>
+            </div>
           </div>
         </div>
 
@@ -371,6 +533,10 @@ body{font-family:'Microsoft YaHei',Arial,sans-serif;font-size:13px;background:#f
             <div class="kg-tab act" data-grade="g3">高三19班 ▾</div>
           </div>
           <div class="date-sel">2022-05-24 — 2023-05-24 □</div>
+        </div>
+        <div class="kg-ai-bar">
+          <span class="kg-ai-bar-icon">🎯</span>
+          <span class="kg-ai-bar-text">AI建议本周重点攻克：<span class="kg-ai-tag">三角函数恒等变换</span><span class="kg-ai-tag">导数综合应用</span>，这两个知识点全班均值低于 <b>60%</b>，建议重点讲评。</span>
         </div>
         <div class="kg-subfilter">
           <select><option>数学</option><option>物理</option><option>化学</option></select>
@@ -466,6 +632,389 @@ body{font-family:'Microsoft YaHei',Arial,sans-serif;font-size:13px;background:#f
     </div>
 
   </div>
+
+  <!-- ════════════════════════════════
+       STUDENT PAGE
+  ════════════════════════════════ -->
+  <div class="stu-page" id="stuPage">
+
+    <!-- LIST VIEW -->
+    <div id="stuListView" style="display:flex;flex:1;flex-direction:column;min-height:0;overflow:hidden;">
+      <div class="breadcrumb">
+        <a href="#">🏠 首页</a><span class="sep">/</span>
+        <a href="#">学情中心</a><span class="sep">/</span>
+        <span class="cur">学生学情</span>
+      </div>
+      <div class="filter-bar">
+        <select><option>523班</option><option>高三19班</option></select>
+        <select><option>数学</option><option>英语</option><option>物理</option></select>
+        <div class="date-sel">2026-06-01 → 2026-06-30 □</div>
+        <div class="date-sel" style="color:#bbb">搜索学生姓名</div>
+        <button class="btn-export">导出数据</button>
+      </div>
+      <div class="stu-list-wrap">
+        <div class="stu-grid" id="stuGrid"></div>
+      </div>
+    </div>
+
+    <!-- DETAIL VIEW -->
+    <div id="stuDetailView" style="display:none;flex:1;flex-direction:column;min-height:0;overflow:hidden;">
+      <div class="breadcrumb">
+        <a href="#">🏠 首页</a><span class="sep">/</span>
+        <a href="#">学情中心</a><span class="sep">/</span>
+        <a href="#" onclick="backToStuList();return false;" style="color:#999">学生学情</a><span class="sep">/</span>
+        <span class="cur" id="stuNameBread"></span>
+      </div>
+      <div class="page-tabs">
+        <div class="stu-page-tab active" onclick="switchStuTab(0)">学情总览</div>
+        <div class="stu-page-tab" onclick="switchStuTab(1)">知识图谱</div>
+        <div class="stu-page-tab" onclick="switchStuTab(2)">考试学情</div>
+      </div>
+
+      <!-- TAB 0 -->
+      <div class="stu-tab-panel active" id="spanel0">
+        <div class="filter-bar">
+          <select><option>数学</option><option>英语</option><option>物理</option></select>
+          <div class="date-sel">2026-06-01 → 2026-06-30 □</div>
+          <select style="width:110px"><option>选择任务类型</option><option>作业</option><option>测验</option></select>
+          <button class="btn-export">导出数据</button>
+        </div>
+        <div class="zt-wrap">
+          <div class="hero-row">
+            <div class="hero-left">
+              <div id="sDonCh"></div>
+              <div>
+                <div class="big-rate" id="sBigRate">82.4%</div>
+                <div style="font-size:12px;color:#888;margin-top:2px">个人综合正确率</div>
+                <div class="rate-compare" id="sStuCompare"></div>
+              </div>
+            </div>
+            <div class="hero-right">
+              <div class="card-hd">
+                <span class="card-title">正确率趋势</span>
+                <div style="display:flex;align-items:center;gap:16px;">
+                  <span style="font-size:11px;color:#888">
+                    <span style="display:inline-block;width:10px;height:2px;background:#00b3d4;border-radius:1px;vertical-align:middle;margin-right:4px"></span>个人正确率
+                    <span style="display:inline-block;width:10px;height:2px;background:#ddd;border-radius:1px;vertical-align:middle;margin:0 4px 0 10px"></span>班级正确率
+                  </span>
+                  <div class="toggle-btns">
+                    <div class="toggle-btn act">按周</div>
+                    <div class="toggle-btn">按月</div>
+                  </div>
+                </div>
+              </div>
+              <div id="sTrendCh0"></div>
+            </div>
+          </div>
+
+          <div class="data-cards" id="stuDataCards">
+            <div class="data-card active" data-card="tasks" onclick="selectStuCard(this)">
+              <div class="dc-hd"><span>任务数据</span><span class="dc-arrow">›</span></div>
+              <div class="dc-main"><span class="dc-num" id="sDC_task">8</span><span class="dc-unit">次</span></div>
+              <div class="dc-sub">任务次数</div>
+            </div>
+            <div class="data-card" data-card="self" onclick="selectStuCard(this)">
+              <div class="dc-hd"><span>自学数据</span><span class="dc-arrow">›</span></div>
+              <div class="dc-main"><span class="dc-num" id="sDC_self">268</span><span class="dc-unit">题</span></div>
+              <div class="dc-sub">做题总量</div>
+            </div>
+            <div class="data-card" data-card="interact" onclick="selectStuCard(this)">
+              <div class="dc-hd"><span>课堂互动</span><span class="dc-arrow">›</span></div>
+              <div class="dc-main"><span class="dc-num" id="sDC_interact">0</span><span class="dc-unit">次</span></div>
+              <div class="dc-sub">互动次数</div>
+            </div>
+            <div class="data-card" data-card="video" onclick="selectStuCard(this)">
+              <div class="dc-hd"><span>观看视频</span><span class="dc-arrow">›</span></div>
+              <div class="dc-main"><span class="dc-num" id="sDC_video">0</span><span class="dc-unit">个</span></div>
+              <div class="dc-sub">观看视频</div>
+            </div>
+            <div class="data-card" data-card="ai" onclick="selectStuCard(this)">
+              <div class="dc-hd"><span>AI讲题</span><span class="dc-arrow">›</span></div>
+              <div class="dc-main"><span class="dc-num" id="sDC_ai">8</span><span class="dc-unit">题</span></div>
+              <div class="dc-sub">讲题数量</div>
+            </div>
+          </div>
+
+          <div class="detail-tags-row" id="sStuTagsRow"></div>
+
+          <div class="ranking-card">
+            <div class="card-hd"><span class="card-title" id="sStuTblTitle"></span></div>
+            <table class="rank-tbl">
+              <thead id="sStuTblHead"></thead>
+              <tbody id="sStuTblBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 1 -->
+      <div class="stu-tab-panel" id="spanel1">
+        <div class="kg-wrap">
+          <div class="kg-filter">
+            <div class="kg-tabs">
+              <div class="stu-kg-tab act" data-sgrade="g3" onclick="switchStuKgGrade(this)">高中全体系</div>
+              <div class="stu-kg-tab" data-sgrade="g1" onclick="switchStuKgGrade(this)">高一必修1</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;font-size:11px;color:#888;">
+              <span style="color:#aaa">得分率：</span>
+              <span><i style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#52c41a;vertical-align:middle;margin-right:3px"></i>≥85%</span>
+              <span><i style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#95de64;vertical-align:middle;margin-right:3px"></i>70–84%</span>
+              <span><i style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#ffc53d;vertical-align:middle;margin-right:3px"></i>55–69%</span>
+              <span><i style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#fa8c16;vertical-align:middle;margin-right:3px"></i>40–54%</span>
+              <span><i style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#ff4d4f;vertical-align:middle;margin-right:3px"></i>&lt;40%</span>
+            </div>
+            <div class="date-sel">2026-06-01 — 2026-06-30 □</div>
+          </div>
+          <div class="kg-ai-bar" id="stuKgAiBar">
+            <span class="kg-ai-bar-icon">🎯</span>
+            <span class="kg-ai-bar-text" id="stuKgAiText">点击左侧知识图谱查看 AI 学情建议</span>
+          </div>
+          <div class="kg-main">
+            <div class="kg-left">
+              <div id="stuTreeCh" style="width:100%;height:100%"></div>
+              <div class="tree-badge" id="stuTreeLabel">高中数学 · 全体系</div>
+            </div>
+            <div class="kg-right">
+              <div class="detail-card" id="stuDetailPnl" style="overflow-y:auto;">
+                <div class="ph"><div class="ph-icon">🎯</div><div>点击左侧图谱中的知识点查看掌握详情</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 2 -->
+      <div class="stu-tab-panel" id="spanel2">
+        <div class="filter-bar">
+          <select><option>数学</option><option>英语</option><option>物理</option></select>
+          <div class="date-sel">2026-06-26 → 2026-07-03 □</div>
+        </div>
+        <div class="ks-wrap">
+          <div class="ks-row">
+            <div class="ks-trend" style="flex:1;">
+              <div class="card-hd">
+                <span class="card-title">成绩趋势图</span>
+                <span style="font-size:11px;color:#888">
+                  <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#00b3d4;vertical-align:middle;margin-right:3px"></span>个人得分
+                  <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#52c41a;vertical-align:middle;margin:0 3px 0 10px"></span>班级平均分
+                  <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#f5a623;vertical-align:middle;margin:0 3px 0 10px"></span>年级平均分
+                </span>
+              </div>
+              <div id="stuScoreCh"></div>
+            </div>
+          </div>
+          <div class="exam-card">
+            <div class="card-hd"><span class="card-title">📝 考试报告</span></div>
+            <table class="exam-tbl">
+              <thead><tr>
+                <th>考试名称</th><th>考试时间</th><th>考试成绩</th>
+                <th>班级平均分</th><th>年级平均分</th>
+                <th>班级排名</th><th>年级排名</th><th>操作</th>
+              </tr></thead>
+              <tbody id="stuExamBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- end stuDetailView -->
+  </div><!-- end stuPage -->
+
+  <!-- ════════════════════════════════
+       SCHOOL / GRADE PAGE
+  ════════════════════════════════ -->
+  <div class="stu-page" id="schoolPage">
+    <div class="breadcrumb">
+      <a href="#">🏠 首页</a><span class="sep">/</span>
+      <a href="#">学情中心</a><span class="sep">/</span>
+      <span class="cur" id="schoolBreadTitle">校级学情</span>
+    </div>
+    <div class="filter-bar">
+      <select><option>丽江市第一高级中学</option></select>
+      <select id="schoolGradeSel"><option>全部年级</option><option>高三年级</option><option>高二年级</option><option>高一年级</option></select>
+      <select><option>数学</option><option>英语</option><option>物理</option></select>
+      <div class="date-sel">2026-06-01 — 2026-06-30 □</div>
+      <button class="btn-export">导出数据</button>
+    </div>
+    <div class="school-wrap">
+
+      <!-- AI洞察条 (校级/年级共用) -->
+      <div class="ai-insight-bar">
+        <span class="ai-insight-text" id="schoolAiText">📊 AI正在分析学情数据…</span>
+      </div>
+
+      <!-- §校级专属：年级横向对比 -->
+      <div id="secSchoolOnly">
+        <div class="school-sec-hd">年级正确率 &amp; 任务量对比</div>
+        <div class="grade-kpi-row">
+          <div class="grade-kpi-card" onclick="drillToGrade('高一')">
+            <div class="grade-kpi-name">高一年级</div>
+            <div class="grade-kpi-val">81.2%</div>
+            <div class="grade-kpi-delta" style="color:#fa8c16">▼ 低于全校 2.3%</div>
+          </div>
+          <div class="grade-kpi-card" onclick="drillToGrade('高二')">
+            <div class="grade-kpi-name">高二年级</div>
+            <div class="grade-kpi-val">83.8%</div>
+            <div class="grade-kpi-delta" style="color:#52c41a">▲ 高于全校 0.3%</div>
+          </div>
+          <div class="grade-kpi-card" onclick="drillToGrade('高三')">
+            <div class="grade-kpi-name">高三年级</div>
+            <div class="grade-kpi-val">85.5%</div>
+            <div class="grade-kpi-delta" style="color:#52c41a">▲ 高于全校 2.0%</div>
+          </div>
+          <div class="grade-kpi-card" style="cursor:default;border-color:#eee">
+            <div class="grade-kpi-name">全校均值</div>
+            <div class="grade-kpi-val" style="color:#333;font-size:20px;font-weight:500">83.5%</div>
+            <div class="grade-kpi-delta" style="color:#aaa">基准线</div>
+          </div>
+        </div>
+        <div style="background:#fff;border-radius:6px;padding:14px 18px;margin-bottom:12px">
+          <div class="card-hd" style="margin-bottom:8px">
+            <span class="card-title">各年级正确率 &amp; 任务完成率对比</span>
+            <span style="font-size:11px;color:#888">点击年级卡片可进入年级学情</span>
+          </div>
+          <div id="schoolGradeBarCh" style="width:100%;height:180px"></div>
+        </div>
+      </div><!-- end secSchoolOnly -->
+
+      <!-- §年级专属：正确率概览 + 班级趋势 -->
+      <div id="secGradeOnly" style="display:none">
+        <div class="school-sec-hd">正确率概览</div>
+        <div style="display:flex;gap:12px;margin-bottom:12px">
+          <div style="background:#fff;border-radius:6px;padding:16px 20px;display:flex;align-items:center;gap:16px;flex-shrink:0">
+            <div>
+              <div class="big-rate" id="schoolBigRate">84.2%</div>
+              <div style="font-size:12px;color:#888;margin-top:2px" id="schoolRateLabel">年级综合正确率</div>
+              <div class="rate-compare" style="margin-top:6px">
+                <div class="rate-vs">较上月 <span class="rate-up">↑ 1.2%</span></div>
+                <div class="rate-vs">全校均值 <span style="color:#333;font-weight:600">83.5%</span></div>
+              </div>
+            </div>
+          </div>
+          <div style="flex:1;background:#fff;border-radius:6px;padding:14px 18px;min-width:0">
+            <div class="card-hd" style="margin-bottom:8px">
+              <span class="card-title">各班级正确率变化趋势</span>
+              <span style="font-size:11px;color:#888">
+                <span style="display:inline-block;width:14px;height:3px;background:#00b3d4;border-radius:2px;vertical-align:middle;margin-right:4px"></span>年级整体
+                <span style="display:inline-block;width:14px;height:1px;background:#b8d8e8;vertical-align:middle;margin:0 4px 0 10px"></span>各班级
+              </span>
+            </div>
+            <div id="schoolMultiTrendCh" style="width:100%;height:160px"></div>
+          </div>
+        </div>
+      </div><!-- end secGradeOnly -->
+
+      <!-- §2 知识图谱 (共用) -->
+      <div class="school-sec-hd">知识图谱</div>
+      <div class="ranking-card" style="margin-bottom:12px;padding-bottom:14px">
+        <div class="card-hd" style="margin-bottom:10px">
+          <div style="display:flex;align-items:center;gap:14px">
+            <div class="kg-tabs" style="display:flex;gap:6px">
+              <div class="kg-tab act" data-sgrade="g3" onclick="switchSchoolKgGrade(this)">高中全体系</div>
+              <div class="kg-tab" data-sgrade="g1" onclick="switchSchoolKgGrade(this)">高一必修1</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;font-size:11px;color:#888">
+              <span><i style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#52c41a;vertical-align:middle;margin-right:3px"></i>≥85%</span>
+              <span><i style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#95de64;vertical-align:middle;margin-right:3px"></i>70–84%</span>
+              <span><i style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#ffc53d;vertical-align:middle;margin-right:3px"></i>55–69%</span>
+              <span><i style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#fa8c16;vertical-align:middle;margin-right:3px"></i>40–54%</span>
+              <span><i style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#ff4d4f;vertical-align:middle;margin-right:3px"></i>&lt;40%</span>
+            </div>
+          </div>
+          <div class="date-sel">2026-06-01 — 2026-06-30 □</div>
+        </div>
+        <div style="display:flex;gap:8px;height:380px">
+          <div style="flex:0 0 56%;position:relative;background:#fafafa;border-radius:4px;overflow:hidden">
+            <div id="schoolTreeCh" style="width:100%;height:380px"></div>
+            <div class="tree-badge" id="schoolTreeLabel">高中数学 · 全体系</div>
+          </div>
+          <div style="flex:1;overflow-y:auto">
+            <div class="detail-card" id="schoolKgDetailPnl" style="height:100%;overflow-y:auto">
+              <div class="ph"><div class="ph-icon">🎯</div><div>点击左侧图谱中的知识点查看详情</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- §3 活动数据 -->
+      <div class="school-sec-hd">活动数据</div>
+      <div class="data-cards" id="schoolActCards" style="margin-bottom:12px">
+        <div class="data-card active" data-act="tasks" onclick="selectSchoolAct(this)">
+          <div class="dc-hd"><span>任务数据</span><span class="dc-arrow">›</span></div>
+          <div class="dc-main"><span class="dc-num">2840</span><span class="dc-unit">次</span></div>
+          <div class="dc-sub">全校任务次数</div>
+        </div>
+        <div class="data-card" data-act="self" onclick="selectSchoolAct(this)">
+          <div class="dc-hd"><span>自学数据</span><span class="dc-arrow">›</span></div>
+          <div class="dc-main"><span class="dc-num">682</span><span class="dc-unit">人</span></div>
+          <div class="dc-sub">自学人数</div>
+        </div>
+        <div class="data-card" data-act="interact" onclick="selectSchoolAct(this)">
+          <div class="dc-hd"><span>课堂互动</span><span class="dc-arrow">›</span></div>
+          <div class="dc-main"><span class="dc-num">1024</span><span class="dc-unit">次</span></div>
+          <div class="dc-sub">互动次数</div>
+        </div>
+        <div class="data-card" data-act="video" onclick="selectSchoolAct(this)">
+          <div class="dc-hd"><span>观看视频</span><span class="dc-arrow">›</span></div>
+          <div class="dc-main"><span class="dc-num">516</span><span class="dc-unit">人</span></div>
+          <div class="dc-sub">观看人数</div>
+        </div>
+        <div class="data-card" data-act="ai" onclick="selectSchoolAct(this)">
+          <div class="dc-hd"><span>AI讲题</span><span class="dc-arrow">›</span></div>
+          <div class="dc-main"><span class="dc-num">489</span><span class="dc-unit">人</span></div>
+          <div class="dc-sub">使用人数</div>
+        </div>
+      </div>
+      <div class="school-act-detail" id="schoolActDetail" style="display:none">
+        <div class="card-hd"><span class="card-title" id="schoolActDetailTitle"></span></div>
+        <div id="schoolActCh"></div>
+      </div>
+
+      <!-- §4 明细表 (条件渲染) -->
+      <!-- 校级: 年级明细表 -->
+      <div id="secSchoolTbl">
+        <div class="school-sec-hd">年级明细表</div>
+        <div class="exam-card" style="margin-bottom:20px">
+          <div class="card-hd">
+            <span class="card-title">年级数据明细</span>
+            <span style="font-size:11px;color:#888">点击年级名称进入年级学情</span>
+          </div>
+          <table class="exam-tbl">
+            <thead><tr>
+              <th>年级</th><th>正确率</th><th>较全校均值</th>
+              <th>任务完成率</th><th>班级数</th><th>操作</th>
+            </tr></thead>
+            <tbody id="schoolGradeBody"></tbody>
+          </table>
+        </div>
+      </div>
+      <!-- 年级: 班级明细表 -->
+      <div id="secGradeTbl" style="display:none">
+        <div class="school-sec-hd">班级明细表</div>
+        <div class="exam-card" style="margin-bottom:20px">
+          <div class="card-hd">
+            <span class="card-title">各班级数据明细</span>
+            <span style="font-size:11px;color:#ff4d4f">● 正确率低于70%的班级需重点关注</span>
+          </div>
+          <table class="exam-tbl">
+            <thead><tr>
+              <th class="sort-th" onclick="sortSchoolTbl('name')">班级</th>
+              <th class="sort-th" onclick="sortSchoolTbl('rate')">正确率 ↕</th>
+              <th class="sort-th" onclick="sortSchoolTbl('taskRate')">任务完成率 ↕</th>
+              <th class="sort-th" onclick="sortSchoolTbl('selfCount')">自学题数 ↕</th>
+              <th class="sort-th" onclick="sortSchoolTbl('interact')">互动次数 ↕</th>
+              <th class="sort-th" onclick="sortSchoolTbl('video')">视频人数 ↕</th>
+              <th class="sort-th" onclick="sortSchoolTbl('ai')">AI讲题 ↕</th>
+              <th>操作</th>
+            </tr></thead>
+            <tbody id="schoolClassBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </div><!-- end school-wrap -->
+  </div><!-- end schoolPage -->
+
 </div>
 </div>
 
@@ -480,8 +1029,8 @@ function toggleSub(el){
   if(arr) arr.style.transform=open?'':'rotate(180deg)';
 }
 function switchTab(i){
-  document.querySelectorAll('.page-tab').forEach((t,j)=>t.classList.toggle('active',j===i));
-  document.querySelectorAll('.tab-panel').forEach((p,j)=>p.classList.toggle('active',j===i));
+  document.querySelectorAll('#classPage .page-tab').forEach((t,j)=>t.classList.toggle('active',j===i));
+  document.querySelectorAll('#classPage .tab-panel').forEach((p,j)=>p.classList.toggle('active',j===i));
   if(i===0){ setTimeout(()=>{ trendChart0 && trendChart0.resize(); donutCh && donutCh.resize(); },50); }
   if(i===1){ setTimeout(()=>{ treeChart && treeChart.resize(); scatterChart && scatterChart.resize(); },50); }
   if(i===2){ setTimeout(()=>{ ksChart && ksChart.resize(); distChart && distChart.resize(); },50); }
@@ -828,7 +1377,723 @@ window.addEventListener('resize',()=>{
   treeChart.resize(); scatterChart.resize();
   ksChart.resize(); distChart.resize();
   if(gaugeChart) gaugeChart.resize();
+  if(sDonChart) sDonChart.resize();
+  if(sTrendChart) sTrendChart.resize();
+  if(stuKgTreeChart) stuKgTreeChart.resize();
+  if(stuKgGaugeChart) stuKgGaugeChart.resize();
+  if(stuScoreChart) stuScoreChart.resize();
+  if(schoolGradeBarChart) schoolGradeBarChart.resize();
+  if(schoolMultiTrendChart) schoolMultiTrendChart.resize();
+  if(schoolTreeChart) schoolTreeChart.resize();
+  if(schoolActChart) schoolActChart.resize();
 });
+
+// ════════════════════════════════
+// STUDENT ANALYTICS
+// ════════════════════════════════
+const STUDENTS=[
+  {name:'张永丽',rate:82,count:369,rank:1},{name:'熊心怡',rate:79,count:102,rank:2},
+  {name:'王紫钰',rate:71,count:101,rank:3},{name:'李炸魏',rate:71,count:135,rank:4},
+  {name:'李春雷',rate:70,count:108,rank:5},{name:'陈楹文',rate:70,count:114,rank:6},
+  {name:'何锡瑾',rate:70,count:114,rank:7},{name:'杨曦',rate:70,count:89,rank:8},
+  {name:'廖志晶',rate:70,count:56,rank:9},{name:'李雨静',rate:69,count:209,rank:10},
+  {name:'和义翔',rate:67,count:36,rank:11},{name:'李江涛',rate:66,count:145,rank:12},
+  {name:'毛瑞澜',rate:66,count:45,rank:13},{name:'朱大媛',rate:64,count:88,rank:14},
+  {name:'邱银',rate:64,count:72,rank:15},{name:'马睿欣',rate:63,count:56,rank:16},
+];
+const CLASS_AVG=71.5;
+
+function stuSparkline(rate,idx){
+  const pts=[];
+  let v=rate+(((idx*7)%10)-5);
+  for(let i=0;i<6;i++){
+    const jitter=((idx*13+i*17)%20)-10;
+    v=Math.min(95,Math.max(40,rate+jitter*(1-i/8)));
+    pts.push(Math.round(v));
+  }
+  pts.push(rate);
+  const w=72,h=24,mn=Math.min(...pts),mx=Math.max(...pts),rng=mx-mn||4;
+  const coords=pts.map((p,i)=>`${(i*w/(pts.length-1)).toFixed(1)},${(h-2-(p-mn)/rng*(h-4)).toFixed(1)}`).join(' ');
+  const trend=pts[pts.length-1]>=pts[0];
+  const col=trend?'#52c41a':'#ff4d4f';
+  return `<svg width="${w}" height="${h}" style="display:block;flex-shrink:0"><polyline points="${coords}" fill="none" stroke="${col}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+}
+
+function renderStuGrid(){
+  document.getElementById('stuGrid').innerHTML=STUDENTS.map((s,i)=>{
+    const diff=(s.rate-CLASS_AVG).toFixed(1);
+    const isUp=diff>=0;
+    return `<div class="stu-card" onclick="openStuDetail('${s.name}',${s.rate},${s.count},${s.rank})">
+      <div class="stu-card-top">
+        <div class="stu-cname">${s.name}</div>
+        <div>
+          <div class="stu-rate-big">${s.rate}<span>%</span></div>
+          <div class="stu-rate-label">正确率</div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin:8px 0 2px;">
+        ${stuSparkline(s.rate,i)}
+        <span style="font-size:10px;color:#bbb;align-self:flex-end">近期趋势</span>
+      </div>
+      <hr class="stu-sep">
+      <div class="stu-foot">
+        <span class="stu-foot-info">做题数量：<b>${s.count}</b></span>
+        <span class="stu-foot-delta ${isUp?'up':'dn'}">${isUp?'↑':'↓'} ${Math.abs(diff)}% vs班级</span>
+        <div class="stu-foot-btn">›</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+let sDonChart=null,sTrendChart=null;
+function openStuDetail(name,rate,count,rank){
+  document.getElementById('stuNameBread').textContent=name;
+  document.getElementById('sBigRate').textContent=rate+'%';
+  const diff=(rate-CLASS_AVG).toFixed(1);
+  const isUp=diff>=0;
+  document.getElementById('sStuCompare').innerHTML=`
+    <div class="rate-vs">班级平均 <span style="color:#333;font-weight:600">${CLASS_AVG}%</span></div>
+    <div class="rate-vs">${isUp?'超班级':'低于班级'} <span class="${isUp?'rate-up':'rate-dn'}">${isUp?'↑':'↓'} ${Math.abs(diff)}%</span></div>
+    <div class="rate-vs">班级排名 <span style="color:#333;font-weight:600">第${rank}名</span> <span style="color:#ccc">/ ${STUDENTS.length}人</span></div>`;
+  document.getElementById('stuListView').style.display='none';
+  document.getElementById('stuDetailView').style.display='flex';
+  switchStuTab(0);
+  document.querySelectorAll('#stuDataCards .data-card').forEach((c,i)=>c.classList.toggle('active',i===0));
+  renderStuCardDetail('tasks');
+  setTimeout(()=>{
+    if(sDonChart) sDonChart.dispose();
+    if(sTrendChart) sTrendChart.dispose();
+    sDonChart=echarts.init(document.getElementById('sDonCh'));
+    sDonChart.setOption({series:[{type:'gauge',startAngle:90,endAngle:-270,min:0,max:100,radius:'100%',center:['50%','50%'],
+      axisLine:{lineStyle:{width:8,color:[[rate/100,'#00b3d4'],[1,'#f0f0f0']]}},
+      pointer:{show:false},axisTick:{show:false},splitLine:{show:false},axisLabel:{show:false},detail:{show:false},data:[{value:rate}]
+    }]});
+    const stuTrend=days.map(()=>Math.min(99,Math.max(40,rate+Math.round((Math.random()-0.5)*10))));
+    sTrendChart=echarts.init(document.getElementById('sTrendCh0'));
+    sTrendChart.setOption({
+      backgroundColor:'#fff',
+      grid:{top:10,right:16,bottom:28,left:44},
+      xAxis:{type:'category',data:days.map(d=>'2026-'+d),axisLine:{lineStyle:{color:'#eee'}},axisLabel:{color:'#aaa',fontSize:11},splitLine:{show:false}},
+      yAxis:{type:'value',min:40,max:100,axisLabel:{formatter:v=>v+'%',color:'#aaa',fontSize:11},splitLine:{lineStyle:{color:'#f5f5f5'}},axisLine:{show:false}},
+      tooltip:{trigger:'axis',formatter:p=>`${p[0].axisValue}<br/>${p.map(s=>`<span style="color:${s.color}">●</span> ${s.seriesName}: ${s.value}%`).join('<br/>')}`},
+      series:[
+        {name:'个人正确率',type:'line',data:stuTrend,smooth:true,symbol:'circle',symbolSize:5,
+         lineStyle:{color:'#00b3d4',width:2.5},
+         areaStyle:{color:{type:'linear',x:0,y:0,x2:0,y2:1,colorStops:[{offset:0,color:'rgba(0,179,212,.15)'},{offset:1,color:'rgba(0,179,212,.01)'}]}},
+         itemStyle:{color:'#00b3d4'},
+         markPoint:{data:[{type:'max',label:{fontSize:10}}],symbol:'pin',symbolSize:28,itemStyle:{color:'#00b3d4'}}},
+        {name:'班级正确率',type:'line',data:classRate,smooth:true,symbol:'circle',symbolSize:4,
+         lineStyle:{color:'#ddd',width:1.5,type:'dashed'},itemStyle:{color:'#bbb'}}
+      ]
+    });
+  },60);
+}
+
+function backToStuList(){
+  document.getElementById('stuListView').style.display='flex';
+  document.getElementById('stuDetailView').style.display='none';
+  if(stuKgTreeChart){stuKgTreeChart.dispose();stuKgTreeChart=null;}
+  if(stuKgGaugeChart){stuKgGaugeChart.dispose();stuKgGaugeChart=null;}
+  if(stuScoreChart){stuScoreChart.dispose();stuScoreChart=null;}
+}
+
+const STU_CARD_DATA={
+  tasks:{
+    title:'任务列表',
+    tags:[
+      {name:'完成率',val:'87.5%',trend:'up',vs:'班级63.5%'},
+      {name:'正确率',val:'87.1%',trend:'up',vs:'班级62.6%'},
+      {name:'任务次数',val:'8次',vs:'班级14次'},
+    ],
+    head:['排名','任务名称','正确率','班级正确率','班级排名','操作'],
+    rows:[
+      ['1','523班2026-06-23模拟考','100.0%','100.0%','2','详情'],
+      ['2','统计等板块知识点靶向','100.0%','100.0%','1','详情'],
+      ['3','期末模拟卷二(3)','94.7%','94.7%','2','详情'],
+      ['4','昆八A','94.7%','94.7%','2','详情'],
+      ['5','期末模拟卷(四)试卷(1)','89.5%','89.5%','1','详情'],
+    ]
+  },
+  self:{
+    title:'自学数据',
+    tags:[
+      {name:'做题量',val:'268题',vs:'班级6062题'},
+      {name:'正确率',val:'80.6%',trend:'up',vs:'班级52.7%'},
+      {name:'日均',val:'34题',vs:'班级95题'},
+    ],
+    head:['总做题量','个性化学练','举一反三','错题重练','正确率'],
+    rows:[['268题','138题','45题','12题','80.6%']]
+  },
+  interact:{
+    title:'课堂互动数据',
+    tags:[
+      {name:'互动次数',val:'0次',vs:'班级63次'},
+      {name:'参与率',val:'0.0%',trend:'dn',vs:'班级35.7%'},
+      {name:'正确率',val:'0.0%',vs:'班级93.0%'},
+    ],
+    head:['互动次数','参与率','正确率'],
+    rows:[['0次','0.0%','0.0%']]
+  },
+  video:{
+    title:'视频播放数据',
+    tags:[
+      {name:'视频数',val:'0个',vs:'班级306个'},
+      {name:'时长',val:'0m',vs:'班级85h16m'},
+      {name:'日均',val:'0m',vs:'班级55m'},
+    ],
+    head:['观看视频数','观看时长','日均时长'],
+    rows:[['0个','0m','0m']]
+  },
+  ai:{
+    title:'AI讲题数据',
+    tags:[
+      {name:'讲题数',val:'8题',vs:'班级942题'},
+      {name:'日均',val:'0.3题',vs:'班级10.2题'},
+      {name:'占比',val:'4.2%'},
+    ],
+    head:['AI讲题数','日均题数'],
+    rows:[['8题','0.3题']]
+  }
+};
+
+function renderStuCardDetail(key){
+  const d=STU_CARD_DATA[key];
+  document.getElementById('sStuTagsRow').innerHTML=
+    '<span style="font-size:11px;color:#bbb;margin-right:4px;flex-shrink:0">详情</span>'+
+    d.tags.map(t=>`<span class="dtag-grp"><span class="dtag-name">${t.name}</span><span class="dtag-val">${t.val}</span>${t.trend?`<span class="dtag-${t.trend}">${t.trend==='up'?'↑':'↓'}</span>`:''}${t.vs?`<span class="dtag-vs">${t.vs}</span>`:''}</span>`).join('');
+  document.getElementById('sStuTblTitle').textContent=d.title;
+  document.getElementById('sStuTblHead').innerHTML='<tr>'+d.head.map(h=>`<th>${h}</th>`).join('')+'</tr>';
+  document.getElementById('sStuTblBody').innerHTML=d.rows.map(r=>'<tr>'+r.map((cell,ci)=>{
+    if(ci===0&&key==='tasks'){const n=parseInt(cell);return `<td style="text-align:center">${n<=3?`<span class="rank-badge rank-${n}">${n}</span>`:`<span class="rank-n">${n}</span>`}</td>`;}
+    if(cell==='详情') return `<td><span class="action-link">详情</span></td>`;
+    return `<td>${cell}</td>`;
+  }).join('')+'</tr>').join('');
+}
+
+function selectStuCard(el){
+  document.querySelectorAll('#stuDataCards .data-card').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  renderStuCardDetail(el.dataset.card);
+}
+
+function switchStuTab(i){
+  document.querySelectorAll('#stuDetailView .stu-page-tab').forEach((t,j)=>t.classList.toggle('active',j===i));
+  document.querySelectorAll('#stuDetailView .stu-tab-panel').forEach((p,j)=>p.classList.toggle('active',j===i));
+  if(i===0) setTimeout(()=>{if(sDonChart)sDonChart.resize();if(sTrendChart)sTrendChart.resize();},50);
+  if(i===1){ initStuKgTab(); setTimeout(()=>{if(stuKgTreeChart)stuKgTreeChart.resize();},50); }
+  if(i===2){ initStuExamTab(); setTimeout(()=>{if(stuScoreChart)stuScoreChart.resize();},50); }
+}
+
+function showClassPage(){
+  document.getElementById('classPage').style.display='flex';
+  document.getElementById('stuPage').style.display='none';
+  document.getElementById('schoolPage').style.display='none';
+  document.querySelectorAll('.nav-sub .nav-item').forEach(t=>t.classList.toggle('active',t.id==='navBanjiXQ'));
+}
+
+function showStudentPage(){
+  document.getElementById('classPage').style.display='none';
+  document.getElementById('stuPage').style.display='flex';
+  document.getElementById('schoolPage').style.display='none';
+  document.getElementById('stuListView').style.display='flex';
+  document.getElementById('stuDetailView').style.display='none';
+  document.querySelectorAll('.nav-sub .nav-item').forEach(t=>t.classList.toggle('active',t.id==='navStudentXQ'));
+  renderStuGrid();
+}
+
+// ════════════════════════════════
+// SCHOOL / GRADE PAGE
+// ════════════════════════════════
+const SCHOOL_CLASSES=(()=>{
+  const names=['高三1班','高三2班','高三3班','高三4班','高三5班','高三6班','高三7班','高三8班','高三9班','高三10班',
+               '高三11班','高三12班','高三13班','高三14班','高三15班','高三16班','高三17班','高三18班','高三19班','高三20班',
+               '高三21班','高三22班'];
+  return names.map((n,i)=>{
+    const seed=(n.charCodeAt(2)+i*7)%20;
+    return{
+      name:n,
+      rate:+(Math.max(63,Math.min(93,88-i*1.1+seed*0.4-4)).toFixed(1)),
+      taskRate:+(Math.max(50,Math.min(96,85-i*1.4+seed*0.5-3)).toFixed(1)),
+      selfCount:Math.max(1800,Math.round(8500-i*250+seed*60)),
+      interact:Math.max(75,Math.round(320-i*9+seed*3)),
+      video:Math.max(10,Math.round(40-i+seed)),
+      ai:Math.max(38,Math.round(160-i*4+seed*3))
+    };
+  });
+})();
+
+const SCHOOL_MONTHS=['2025-09','2025-10','2025-11','2025-12','2026-01','2026-03','2026-04','2026-05','2026-06'];
+const SCHOOL_RATE_CUR=[76,77,78,80,79,80,81,82,83.5];
+const SCHOOL_RATE_PRE=[73,74,75,76,75,76,77,78,79.2];
+
+const GRADES=[
+  {name:'高一',rate:81.2,taskRate:78.4,classes:8,delta:-2.3},
+  {name:'高二',rate:83.8,taskRate:82.1,classes:8,delta:+0.3},
+  {name:'高三',rate:85.5,taskRate:84.7,classes:6,delta:+2.0}
+];
+
+let schoolGradeBarChart=null,schoolMultiTrendChart=null;
+let schoolTreeChart=null,schoolActChart=null;
+let _schoolBarInited=false,_gradeInited=false;
+
+function _nodeScoreSchool(name){
+  const seed=(name.charCodeAt(0)*13+name.length*7+name.charCodeAt(name.length-1)*3)%40;
+  return Math.min(93,Math.max(35,72+seed-20));
+}
+function _styleBySchool(n,d,sizes){
+  n.symbol='circle';
+  n.symbolSize=sizes[Math.min(d,sizes.length-1)];
+  const score=_nodeScoreSchool(n.name);
+  n.itemStyle={color:_scoreColor(score),borderWidth:0};
+  n.label={show:false};
+  if(n.children) n.children.forEach(c=>_styleBySchool(c,d+1,sizes));
+  return n;
+}
+
+function showSchoolPage(level){
+  if(level==='年级') level='高三'; // nav默认高三
+  document.getElementById('classPage').style.display='none';
+  document.getElementById('stuPage').style.display='none';
+  document.getElementById('schoolPage').style.display='flex';
+  const isGrade=level!=='校';
+  document.getElementById('schoolBreadTitle').textContent=isGrade?level+'学情':'校级学情';
+  document.getElementById('secSchoolOnly').style.display=isGrade?'none':'block';
+  document.getElementById('secGradeOnly').style.display=isGrade?'block':'none';
+  document.getElementById('secSchoolTbl').style.display=isGrade?'none':'block';
+  document.getElementById('secGradeTbl').style.display=isGrade?'block':'none';
+  document.querySelectorAll('.nav-sub .nav-item').forEach(t=>t.classList.toggle('active',
+    (!isGrade&&t.id==='navSchoolXQ')||(isGrade&&t.id==='navGradeXQ')));
+  // AI洞察条
+  const aiTexts={
+    '校':'高一年级正确率 <b>低于全校均值 2.3%</b>，建议优先排查高一重点薄弱章节，高三整体表现良好。',
+    '高一':'函数与导数章节均值 <b>仅 67%</b>，高一5、7班连续两月下滑，建议重点干预。',
+    '高二':'整体表现稳定，高二3班任务完成率 <b>本月提升 8%</b>，可作为优秀案例推广。',
+    '高三':'冲刺阶段，<b>统计与概率</b>模块全年级均值 71%，建议本周加练专项。'
+  };
+  document.getElementById('schoolAiText').innerHTML=aiTexts[isGrade?level:'校']||aiTexts['校'];
+  if(isGrade){
+    const g=GRADES.find(x=>x.name===level);
+    document.getElementById('schoolBigRate').textContent=(g?g.rate:'84.2')+'%';
+    document.getElementById('schoolRateLabel').textContent=level+'年级综合正确率';
+    if(!_gradeInited){_gradeInited=true;setTimeout(_initGradePage,80);}
+    else setTimeout(()=>{
+      schoolMultiTrendChart&&schoolMultiTrendChart.resize();
+      schoolTreeChart&&schoolTreeChart.resize();
+    },60);
+  } else {
+    if(!_schoolBarInited){_schoolBarInited=true;setTimeout(_initSchoolBar,80);}
+    else setTimeout(()=>{schoolGradeBarChart&&schoolGradeBarChart.resize();schoolTreeChart&&schoolTreeChart.resize();},60);
+    _renderSchoolGradeTable();
+  }
+}
+
+function drillToGrade(gradeName){ showSchoolPage(gradeName); }
+
+function _initSchoolBar(){
+  _renderSchoolGradeTable();
+  schoolGradeBarChart=echarts.init(document.getElementById('schoolGradeBarCh'));
+  const gradeNames=GRADES.map(g=>g.name+'年级');
+  const rates=GRADES.map(g=>g.rate);
+  const tasks=GRADES.map(g=>g.taskRate);
+  schoolGradeBarChart.setOption({
+    backgroundColor:'#fff',
+    grid:{top:28,right:24,bottom:32,left:44},
+    xAxis:{type:'category',data:gradeNames,axisLabel:{color:'#888',fontSize:12},axisLine:{lineStyle:{color:'#eee'}},splitLine:{show:false}},
+    yAxis:{type:'value',min:70,max:100,axisLabel:{formatter:v=>v+'%',color:'#aaa',fontSize:11},splitLine:{lineStyle:{color:'#f5f5f5'}},axisLine:{show:false}},
+    tooltip:{trigger:'axis',formatter:p=>`${p[0].axisValue}<br/>${p.map(s=>`<span style="color:${s.color}">●</span> ${s.seriesName}: ${s.value}%`).join('<br/>')}`},
+    legend:{top:4,right:0,itemWidth:10,itemHeight:10,textStyle:{fontSize:11,color:'#888'}},
+    series:[
+      {name:'正确率',type:'bar',data:rates,barMaxWidth:28,itemStyle:{color:'#00b3d4',borderRadius:[3,3,0,0]},
+       label:{show:true,position:'top',fontSize:11,color:'#00b3d4',formatter:p=>p.value+'%'}},
+      {name:'任务完成率',type:'bar',data:tasks,barMaxWidth:28,itemStyle:{color:'#95de64',borderRadius:[3,3,0,0]}},
+      {name:'全校正确率均值',type:'line',data:[83.5,83.5,83.5],symbol:'none',
+       lineStyle:{color:'#fa8c16',width:1.5,type:'dashed'},itemStyle:{color:'#fa8c16'}}
+    ]
+  });
+  // 初始化知识图谱 (shared)
+  setTimeout(()=>{
+    if(!schoolTreeChart){
+      schoolTreeChart=echarts.init(document.getElementById('schoolTreeCh'));
+      _loadSchoolTree('g3');
+      schoolTreeChart.on('click',onSchoolKgNodeClick);
+    }
+  },60);
+  setTimeout(()=>_renderSchoolActDetail('tasks'),60);
+}
+
+function _initGradePage(){
+  const classTrends=SCHOOL_CLASSES.map((c,ci)=>({
+    name:c.name,type:'line',
+    data:SCHOOL_MONTHS.map((m,i)=>{
+      const seed=(c.name.charCodeAt(2)*13+ci*7+i*11)%16;
+      return Math.max(50,Math.min(97,+((c.rate-5)+i*0.6+(seed-8)*0.3).toFixed(1)));
+    }),
+    smooth:true,showSymbol:false,legendHoverLink:false,
+    lineStyle:{color:'#b8d8e8',width:1},itemStyle:{color:'#b8d8e8'},tooltip:{show:true}
+  }));
+  schoolMultiTrendChart=echarts.init(document.getElementById('schoolMultiTrendCh'));
+  schoolMultiTrendChart.setOption({
+    backgroundColor:'#fff',
+    grid:{top:16,right:20,bottom:28,left:44},
+    xAxis:{type:'category',data:SCHOOL_MONTHS,axisLine:{lineStyle:{color:'#eee'}},axisLabel:{color:'#aaa',fontSize:11},splitLine:{show:false}},
+    yAxis:{type:'value',min:50,max:100,axisLabel:{formatter:v=>v+'%',color:'#aaa',fontSize:11},splitLine:{lineStyle:{color:'#f5f5f5'}},axisLine:{show:false}},
+    tooltip:{trigger:'axis',formatter:p=>`${p[0].axisValue}<br/><b>年级整体: ${SCHOOL_RATE_CUR[SCHOOL_MONTHS.indexOf(p[0].axisValue)]||'—'}%</b>`},
+    legend:{show:false},
+    series:[...classTrends,{name:'年级整体',type:'line',data:SCHOOL_RATE_CUR,smooth:true,symbol:'circle',symbolSize:6,z:10,lineStyle:{color:'#00b3d4',width:3},itemStyle:{color:'#00b3d4'},label:{show:false}}]
+  });
+  // 知识图谱 (shared element, init once)
+  setTimeout(()=>{
+    if(!schoolTreeChart){
+      schoolTreeChart=echarts.init(document.getElementById('schoolTreeCh'));
+      _loadSchoolTree('g3');
+      schoolTreeChart.on('click',onSchoolKgNodeClick);
+    }
+  },60);
+  _renderSchoolClassTable(SCHOOL_CLASSES);
+  setTimeout(()=>_renderSchoolActDetail('tasks'),60);
+}
+
+function _renderSchoolGradeTable(){
+  document.getElementById('schoolGradeBody').innerHTML=GRADES.map(g=>{
+    const dc=g.delta>=0?'#52c41a':'#fa8c16';
+    const ds=(g.delta>=0?'▲ +':'▼ ')+Math.abs(g.delta)+'%';
+    return `<tr>
+      <td style="font-weight:600;cursor:pointer;color:#00b3d4" onclick="drillToGrade('${g.name}')">${g.name}年级</td>
+      <td>${g.rate}%</td>
+      <td style="color:${dc}">${ds}</td>
+      <td>${g.taskRate}%</td>
+      <td>${g.classes}个班</td>
+      <td><span class="action-link" onclick="drillToGrade('${g.name}')">查看详情</span></td>
+    </tr>`;
+  }).join('');
+}
+
+function _loadSchoolTree(grade){
+  if(!schoolTreeChart) return;
+  const key=grade==='g1'?'g1':'g3';
+  const data=_styleBySchool(JSON.parse(JSON.stringify(TREES[key])),0,STYLES[key].sizes);
+  document.getElementById('schoolTreeLabel').textContent=TREE_LABELS[key];
+  schoolTreeChart.clear();
+  schoolTreeChart.setOption({
+    backgroundColor:'#fff',
+    tooltip:{trigger:'item',formatter:p=>'<b>'+p.data.name+'</b>'},
+    series:[{type:'tree',layout:'radial',data:[data],
+      top:'1%',left:'1%',bottom:'1%',right:'1%',
+      initialTreeDepth:-1,roam:true,label:{show:false},leaves:{label:{show:false}},
+      lineStyle:{color:'#ddd',width:0.6,curveness:0},
+      emphasis:{focus:'ancestor',lineStyle:{color:'#aaa',width:1.2}},
+      expandAndCollapse:false,animationDuration:700}]
+  });
+  document.getElementById('schoolKgDetailPnl').innerHTML='<div class="ph"><div class="ph-icon">🎯</div><div>点击左侧图谱中的知识点查看详情</div></div>';
+}
+
+function switchSchoolKgGrade(el){
+  document.querySelectorAll('#schoolPage .kg-tab').forEach(t=>t.classList.remove('act'));
+  el.classList.add('act');
+  const lp=document.getElementById('schoolTreeCh');
+  lp.style.opacity='.3';
+  setTimeout(()=>{_loadSchoolTree(el.dataset.sgrade);lp.style.opacity='1';},180);
+}
+
+function onSchoolKgNodeClick(params){
+  const roots=['高中数学知识点','高一数学知识点'];
+  if(roots.includes(params.data.name)) return;
+  const node=params.data.name;
+  const seed=(node.charCodeAt(0)*13+node.length*7)%40;
+  const schoolScore=_nodeScoreSchool(node);
+  const prevScore=Math.min(88,Math.max(38,schoolScore-4+(seed%8)-4));
+  const topScore=Math.min(97,Math.max(60,schoolScore+8+(seed%5)));
+  const badgeClass=schoolScore>=70?'good':schoolScore>=55?'warn':'bad';
+  document.getElementById('schoolKgDetailPnl').innerHTML=`
+    <div class="rdt-title">${node}</div>
+    <div><span class="kgd-badge ${badgeClass}">${_scoreRange(schoolScore)}</span></div>
+    <div class="kgd-gauge-row">
+      <div id="schoolKgGauge"></div>
+      <div class="kgd-bars">
+        <div class="kgd-bar-row">
+          <div class="kgd-bar-lbl"><span>全校均值</span><span style="font-weight:600;color:${_scoreColor(schoolScore)}">${schoolScore}%</span></div>
+          <div class="kgd-bar-track"><div class="kgd-bar-fill" style="width:${schoolScore}%;background:${_scoreColor(schoolScore)}"></div></div>
+        </div>
+        <div class="kgd-bar-row">
+          <div class="kgd-bar-lbl"><span>上月均值</span><span>${prevScore}%</span></div>
+          <div class="kgd-bar-track"><div class="kgd-bar-fill" style="width:${prevScore}%;background:#91cc75"></div></div>
+        </div>
+        <div class="kgd-bar-row">
+          <div class="kgd-bar-lbl"><span>最佳班级</span><span>${topScore}%</span></div>
+          <div class="kgd-bar-track"><div class="kgd-bar-fill" style="width:${topScore}%;background:#ddd"></div></div>
+        </div>
+      </div>
+    </div>`;
+  const g=echarts.init(document.getElementById('schoolKgGauge'));
+  g.setOption({series:[{
+    type:'gauge',startAngle:200,endAngle:-20,min:0,max:100,
+    radius:'90%',center:['50%','65%'],
+    axisLine:{lineStyle:{width:8,color:[[0.4,'#ff4d4f'],[0.55,'#fa8c16'],[0.7,'#ffc53d'],[0.85,'#95de64'],[1,'#52c41a']]}},
+    pointer:{length:'55%',width:3},axisTick:{show:false},splitLine:{show:false},axisLabel:{show:false},
+    detail:{fontSize:13,fontWeight:'bold',color:'#333',offsetCenter:[0,'24%'],formatter:'{value}%'},
+    data:[{value:schoolScore}]
+  }]});
+}
+
+const SCHOOL_ACT_DATA={
+  tasks:{title:'任务完成率（各班级）',color:'#00b3d4',key:'taskRate',unit:'%'},
+  self:{title:'自学题数（各班级，百题）',color:'#52c41a',key:'selfCount',unit:'',div:100},
+  interact:{title:'课堂互动次数（各班级）',color:'#faad14',key:'interact',unit:''},
+  video:{title:'视频观看人数（各班级）',color:'#722ed1',key:'video',unit:''},
+  ai:{title:'AI讲题人数（各班级）',color:'#eb2f96',key:'ai',unit:''}
+};
+
+function _renderSchoolActDetail(key){
+  const d=SCHOOL_ACT_DATA[key];
+  const top10=SCHOOL_CLASSES.slice(0,10);
+  const wrap=document.getElementById('schoolActDetail');
+  wrap.style.display='block';
+  document.getElementById('schoolActDetailTitle').textContent=d.title;
+  if(schoolActChart){schoolActChart.dispose();schoolActChart=null;}
+  schoolActChart=echarts.init(document.getElementById('schoolActCh'));
+  schoolActChart.setOption({
+    backgroundColor:'#fff',
+    grid:{top:20,right:16,bottom:68,left:50},
+    xAxis:{type:'category',data:top10.map(c=>c.name),
+      axisLabel:{color:'#aaa',fontSize:10,rotate:40,interval:0},
+      axisLine:{lineStyle:{color:'#eee'}},splitLine:{show:false}},
+    yAxis:{type:'value',axisLabel:{color:'#aaa',fontSize:11},splitLine:{lineStyle:{color:'#f5f5f5'}},axisLine:{show:false}},
+    tooltip:{trigger:'axis'},
+    series:[{type:'bar',data:top10.map(c=>d.div?Math.round(c[d.key]/d.div):c[d.key]),
+      itemStyle:{color:d.color,borderRadius:[3,3,0,0]},barMaxWidth:24,
+      label:{show:true,position:'top',fontSize:10,color:d.color,formatter:p=>p.value+(d.unit||'')}}]
+  });
+}
+
+function selectSchoolAct(el){
+  document.querySelectorAll('#schoolActCards .data-card').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  _renderSchoolActDetail(el.dataset.act);
+}
+
+let _schoolSortKey='rate',_schoolSortAsc=false;
+function sortSchoolTbl(key){
+  if(_schoolSortKey===key) _schoolSortAsc=!_schoolSortAsc;
+  else{_schoolSortKey=key;_schoolSortAsc=false;}
+  const sorted=[...SCHOOL_CLASSES].sort((a,b)=>{
+    const va=a[key],vb=b[key];
+    if(typeof va==='string') return _schoolSortAsc?va.localeCompare(vb):vb.localeCompare(va);
+    return _schoolSortAsc?va-vb:vb-va;
+  });
+  _renderSchoolClassTable(sorted);
+}
+
+function _renderSchoolClassTable(data){
+  document.getElementById('schoolClassBody').innerHTML=data.map(c=>{
+    const low=c.rate<70;
+    const rateColor=c.rate<70?'#ff4d4f':c.rate<80?'#fa8c16':'#00b3d4';
+    const fillStyle=c.rate<70?'#ff4d4f':c.rate<80?'#ffc53d':'linear-gradient(90deg,#00c6d4,#0099e0)';
+    return `<tr${low?' class="school-tbl-low"':''}>
+      <td style="font-weight:600">${c.name}${low?' <span style="color:#ff4d4f;font-size:10px">⚠</span>':''}</td>
+      <td><div class="score-bar"><span class="score-val" style="color:${rateColor}">${c.rate}%</span><div class="score-track"><div class="score-fill" style="width:${c.rate}%;background:${fillStyle}"></div></div></div></td>
+      <td>${c.taskRate}%</td>
+      <td>${c.selfCount.toLocaleString()}</td>
+      <td>${c.interact}</td>
+      <td>${c.video}</td>
+      <td>${c.ai}</td>
+      <td><span class="action-link" onclick="showClassPage()">查看详情</span></td>
+    </tr>`;
+  }).join('');
+}
+
+// ════════════════════════════════
+// STU TAB 1 — 知识图谱
+// ════════════════════════════════
+let stuKgTreeChart=null, stuKgGaugeChart=null;
+
+function initStuKgTab(){
+  if(stuKgTreeChart) return;
+  stuKgTreeChart=echarts.init(document.getElementById('stuTreeCh'));
+  _loadStuTree('g3');
+  stuKgTreeChart.on('click',onStuKgNodeClick);
+}
+
+function _nodeScore(s,name){
+  const seed=(s.name.charCodeAt(0)+name.charCodeAt(0)*7+s.rank*3)%40;
+  return Math.min(97,Math.max(22,s.rate+seed-20));
+}
+function _scoreColor(v){
+  if(v>=85) return '#52c41a';
+  if(v>=70) return '#95de64';
+  if(v>=55) return '#ffc53d';
+  if(v>=40) return '#fa8c16';
+  return '#ff4d4f';
+}
+function _scoreRange(v){
+  if(v>=85) return '≥85%';
+  if(v>=70) return '70–84%';
+  if(v>=55) return '55–69%';
+  if(v>=40) return '40–54%';
+  return '<40%';
+}
+function _styleByStu(n,d,s,sizes){
+  n.symbol='circle';
+  n.symbolSize=sizes[Math.min(d,sizes.length-1)];
+  const score=_nodeScore(s,n.name);
+  n.itemStyle={color:_scoreColor(score),borderWidth:0};
+  n.label={show:false};
+  if(n.children) n.children.forEach(c=>_styleByStu(c,d+1,s,sizes));
+  return n;
+}
+
+function _loadStuTree(grade){
+  if(!stuKgTreeChart) return;
+  const key=grade==='g1'?'g1':'g3';
+  const sName=document.getElementById('stuNameBread').textContent;
+  const s=STUDENTS.find(x=>x.name===sName)||{rate:70,rank:8,name:sName};
+  const data=_styleByStu(JSON.parse(JSON.stringify(TREES[key])),0,s,STYLES[key].sizes);
+  document.getElementById('stuTreeLabel').textContent=TREE_LABELS[key];
+  stuKgTreeChart.clear();
+  stuKgTreeChart.setOption({
+    backgroundColor:'#fff',
+    tooltip:{trigger:'item',formatter:p=>'<b>'+p.data.name+'</b>'},
+    series:[{type:'tree',layout:'radial',data:[data],
+      top:'1%',left:'1%',bottom:'1%',right:'1%',
+      initialTreeDepth:-1,roam:true,label:{show:false},leaves:{label:{show:false}},
+      lineStyle:{color:'#ddd',width:0.6,curveness:0},
+      emphasis:{focus:'ancestor',lineStyle:{color:'#aaa',width:1.2}},
+      expandAndCollapse:false,animationDuration:700}]
+  });
+  document.getElementById('stuDetailPnl').innerHTML='<div class="ph"><div class="ph-icon">🎯</div><div>点击左侧图谱中的知识点查看掌握详情</div></div>';
+  if(stuKgGaugeChart){stuKgGaugeChart.dispose();stuKgGaugeChart=null;}
+}
+
+function switchStuKgGrade(el){
+  document.querySelectorAll('.stu-kg-tab').forEach(t=>t.classList.remove('act'));
+  el.classList.add('act');
+  const lp=document.querySelector('#spanel1 .kg-left');
+  lp.style.opacity='.3';
+  setTimeout(()=>{_loadStuTree(el.dataset.sgrade);lp.style.opacity='1';},180);
+}
+
+function onStuKgNodeClick(params){
+  const roots=['高中数学知识点','高一数学知识点'];
+  if(roots.includes(params.data.name)) return;
+  const sName=document.getElementById('stuNameBread').textContent;
+  const s=STUDENTS.find(x=>x.name===sName)||{rate:70,rank:8,name:sName};
+  const node=params.data.name;
+  const stuScore=_nodeScore(s,node);
+  // 更新AI学情建议条
+  const aiEl=document.getElementById('stuKgAiText');
+  if(aiEl){
+    const tagCls=stuScore<55?'kg-ai-tag':stuScore<70?'kg-ai-tag" style="background:#fff7e6;color:#fa8c16;border-color:#ffd591':'kg-ai-tag" style="background:#f6ffed;color:#52c41a;border-color:#b7eb8f';
+    const advice=stuScore<55
+      ?`<b>${sName}</b> 在「${node}」得分率仅 <b>${stuScore}%</b>，属于薄弱知识点，建议安排<span class="${tagCls}">错题重练</span><span class="kg-ai-tag">专项刷题</span>。`
+      :stuScore<70
+        ?`「${node}」得分率 <b>${stuScore}%</b>，有提升空间，建议完成<span class="${tagCls}">举一反三</span>练习巩固。`
+        :`「${node}」掌握良好（${stuScore}%），可挑战<span class="${tagCls}">高考真题</span>进一步拔高。`;
+    aiEl.innerHTML=advice;
+  }
+  const seed=(s.name.charCodeAt(0)+node.charCodeAt(0)*7+s.rank*3)%40;
+  const clsScore=Math.min(90,Math.max(50,66+(seed%13)-6));
+  const grdScore=Math.min(85,Math.max(45,61+(seed%10)-5));
+  const badgeClass=stuScore>=70?'good':stuScore>=55?'warn':'bad';
+  const badgeText=_scoreRange(stuScore);
+  const exTypes=['考试','作业','课练','刷题','AI'];
+  const exercises=Array.from({length:5},(_,i)=>{
+    const es=s.name.charCodeAt(0)+i*13+node.length;
+    const sc=Math.min(100,Math.max(20,stuScore+(es%20)-10));
+    const tp=exTypes[es%exTypes.length];
+    const day=5+(es%20);
+    const cls=sc>=75?'tg':sc>=55?'to':'tr';
+    return{date:`06-${day.toString().padStart(2,'0')}`,type:tp,score:sc,cls};
+  });
+  document.getElementById('stuDetailPnl').innerHTML=`
+    <div class="rdt-title">${node}</div>
+    <div><span class="kgd-badge ${badgeClass}">${badgeText}</span></div>
+    <div class="kgd-gauge-row">
+      <div id="stuKgGauge"></div>
+      <div class="kgd-bars">
+        <div class="kgd-bar-row">
+          <div class="kgd-bar-lbl"><span>本学生</span><span style="font-weight:600;color:${_scoreColor(stuScore)}">${stuScore}%</span></div>
+          <div class="kgd-bar-track"><div class="kgd-bar-fill" style="width:${stuScore}%;background:${_scoreColor(stuScore)}"></div></div>
+        </div>
+        <div class="kgd-bar-row">
+          <div class="kgd-bar-lbl"><span>班级平均</span><span>${clsScore}%</span></div>
+          <div class="kgd-bar-track"><div class="kgd-bar-fill" style="width:${clsScore}%;background:#91cc75"></div></div>
+        </div>
+        <div class="kgd-bar-row">
+          <div class="kgd-bar-lbl"><span>年级平均</span><span>${grdScore}%</span></div>
+          <div class="kgd-bar-track"><div class="kgd-bar-fill" style="width:${grdScore}%;background:#ddd"></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="kgd-ex-hdr">近期练习</div>
+    ${exercises.map(e=>`<div class="kgd-ex">
+      <span class="tag ${e.cls}">${e.type}</span>
+      <span style="flex:1;color:#888">2026-${e.date}</span>
+      <span style="font-weight:600;color:${_scoreColor(e.score)}">${e.score}%</span>
+    </div>`).join('')}`;
+  if(stuKgGaugeChart) stuKgGaugeChart.dispose();
+  stuKgGaugeChart=echarts.init(document.getElementById('stuKgGauge'));
+  stuKgGaugeChart.setOption({series:[{
+    type:'gauge',startAngle:200,endAngle:-20,min:0,max:100,
+    radius:'90%',center:['50%','65%'],
+    axisLine:{lineStyle:{width:8,color:[[0.4,'#ff4d4f'],[0.55,'#fa8c16'],[0.7,'#ffc53d'],[0.85,'#95de64'],[1,'#52c41a']]}},
+    pointer:{length:'55%',width:3},axisTick:{show:false},splitLine:{show:false},axisLabel:{show:false},
+    detail:{fontSize:13,fontWeight:'bold',color:'#333',offsetCenter:[0,'24%'],formatter:'{value}%'},
+    data:[{value:stuScore}]
+  }]});
+}
+
+// ════════════════════════════════
+// STU TAB 2 — 考试学情
+// ════════════════════════════════
+let stuScoreChart=null;
+
+const EXAM_LIST=[
+  {name:'6月模拟考二',date:'2026-06-25 09:00',classAvg:120.7,gradeAvg:116.7}
+];
+
+function getStuExamData(s){
+  const seed=s.name.charCodeAt(0)%8;
+  const score=Math.min(148,Math.max(50,Math.round(s.rate*1.42+seed-4)));
+  return EXAM_LIST.map(e=>({...e,score,classRank:s.rank,gradeRank:Math.min(280,s.rank*7+seed+2)}));
+}
+
+function initStuExamTab(){
+  const sName=document.getElementById('stuNameBread').textContent;
+  const s=STUDENTS.find(x=>x.name===sName)||{rate:70,rank:8,name:sName};
+  const exams=getStuExamData(s);
+  // Table
+  document.getElementById('stuExamBody').innerHTML=exams.map(e=>`<tr>
+    <td>${e.name}</td>
+    <td style="color:#aaa">${e.date}</td>
+    <td style="font-weight:700;color:#00b3d4">${e.score}</td>
+    <td>${e.classAvg}</td><td>${e.gradeAvg}</td>
+    <td><span class="rank-delta ${e.score>=e.classAvg?'up':'dn'}">${e.classRank}名</span></td>
+    <td>${e.gradeRank}名</td>
+    <td><span class="action-link">查看报告</span></td>
+  </tr>`).join('');
+  // Score chart
+  if(stuScoreChart){stuScoreChart.dispose();stuScoreChart=null;}
+  stuScoreChart=echarts.init(document.getElementById('stuScoreCh'));
+  stuScoreChart.setOption({
+    backgroundColor:'#fff',
+    grid:{top:20,right:16,bottom:28,left:44},
+    xAxis:{type:'category',data:exams.map(e=>e.date.split(' ')[0]),
+      axisLine:{lineStyle:{color:'#eee'}},axisLabel:{color:'#aaa',fontSize:11},splitLine:{show:false}},
+    yAxis:{type:'value',min:0,max:150,
+      axisLabel:{color:'#aaa',fontSize:11},splitLine:{lineStyle:{color:'#f5f5f5'}},axisLine:{show:false}},
+    tooltip:{trigger:'axis'},
+    series:[
+      {name:'个人得分',type:'line',data:exams.map(e=>e.score),smooth:true,symbol:'circle',symbolSize:8,
+       lineStyle:{color:'#00b3d4',width:2.5},itemStyle:{color:'#00b3d4'},
+       label:{show:true,position:'top',fontSize:11,color:'#00b3d4'}},
+      {name:'班级平均分',type:'line',data:exams.map(e=>e.classAvg),smooth:true,symbol:'circle',symbolSize:5,
+       lineStyle:{color:'#52c41a',width:1.8,type:'dashed'},itemStyle:{color:'#52c41a'},
+       label:{show:true,position:'bottom',fontSize:10,color:'#52c41a'}},
+      {name:'年级平均分',type:'line',data:exams.map(e=>e.gradeAvg),smooth:true,symbol:'circle',symbolSize:5,
+       lineStyle:{color:'#f5a623',width:1.8,type:'dashed'},itemStyle:{color:'#f5a623'},
+       label:{show:true,position:'bottom',fontSize:10,color:'#f5a623'}}
+    ]
+  });
+}
 </script>
 </body>
 </html>
