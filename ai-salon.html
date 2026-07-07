@@ -1,0 +1,1154 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>产品新人沙龙 · AI专题</title>
+<style>
+:root {
+  --bg: #f4f6fb;
+  --surface: #ffffff;
+  --surface2: #edf0f9;
+  --surface3: #e2e6f4;
+  --accent: #4476e8;
+  --accent2: #7c5ce8;
+  --success: #0a8a5c;
+  --warning: #c47d0a;
+  --danger: #d63031;
+  --text: #1a1c2e;
+  --muted: #5a6480;
+  --border: rgba(0,0,0,0.08);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 100%; height: 100%; overflow: hidden; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Segoe UI", sans-serif;
+}
+
+/* ─── SLIDE SYSTEM ─── */
+.slide {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 48px 64px 80px;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.35s ease;
+  overflow-y: auto;
+}
+.slide.active { opacity: 1; pointer-events: all; }
+
+/* ─── NAV BAR ─── */
+.nav-bar {
+  position: fixed; bottom: 20px; left: 50%;
+  transform: translateX(-50%);
+  display: flex; align-items: center; gap: 14px;
+  background: rgba(244,246,251,0.92);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border);
+  border-radius: 40px;
+  padding: 8px 20px;
+  z-index: 1000;
+}
+.nav-btn {
+  background: none; border: 1px solid var(--border);
+  color: var(--muted); width: 32px; height: 32px;
+  border-radius: 50%; cursor: pointer; font-size: 14px;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s;
+}
+.nav-btn:hover { border-color: var(--accent); color: var(--accent); background: rgba(91,143,249,0.1); }
+.slide-counter { font-size: 12px; color: var(--muted); min-width: 50px; text-align: center; }
+.dots { display: flex; gap: 5px; }
+.dot {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--muted); cursor: pointer; transition: all 0.2s;
+}
+.dot.active { background: var(--accent); width: 16px; border-radius: 3px; }
+.slide-name {
+  position: fixed; top: 16px; right: 20px;
+  font-size: 11px; color: var(--muted); letter-spacing: 0.06em;
+  z-index: 1000;
+}
+
+/* ─── SHARED COMPONENTS ─── */
+.sec-tag {
+  display: inline-block;
+  background: rgba(91,143,249,0.12);
+  color: var(--accent);
+  border: 1px solid rgba(91,143,249,0.28);
+  padding: 4px 12px; border-radius: 20px;
+  font-size: 11px; letter-spacing: 0.1em;
+  margin-bottom: 10px;
+}
+.sec-title { font-size: 30px; font-weight: 700; margin-bottom: 6px; }
+.sec-sub { font-size: 14px; color: var(--muted); margin-bottom: 28px; }
+.card-base {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px; padding: 20px;
+}
+.btn {
+  padding: 8px 18px; border-radius: 8px; border: none;
+  cursor: pointer; font-size: 13px; font-weight: 600;
+  transition: all 0.2s; font-family: inherit;
+}
+.btn-primary { background: var(--accent); color: white; }
+.btn-primary:hover { background: #4a7ef0; }
+.btn-success { background: var(--success); color: #0c0e1a; }
+.btn-success:hover { background: #28c48a; }
+.btn-ghost { background: var(--surface2); color: var(--muted); border: 1px solid var(--border); }
+.btn-ghost:hover { color: var(--text); border-color: var(--muted); }
+.btn-danger { background: rgba(248,113,113,0.15); color: var(--danger); border: 1px solid rgba(248,113,113,0.3); }
+.btn-danger:hover { background: rgba(248,113,113,0.25); }
+
+/* ─── SLIDE 1: COVER ─── */
+.cover-badge {
+  background: rgba(91,143,249,0.12); color: var(--accent);
+  border: 1px solid rgba(91,143,249,0.3);
+  padding: 6px 18px; border-radius: 20px;
+  font-size: 12px; letter-spacing: 0.12em; margin-bottom: 24px;
+}
+.cover-title {
+  font-size: 58px; font-weight: 800; text-align: center;
+  background: linear-gradient(135deg, #2d4fa8 0%, #4476e8 45%, #7c5ce8 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  line-height: 1.15; margin-bottom: 18px;
+}
+.cover-sub { font-size: 17px; color: var(--muted); text-align: center; max-width: 520px; line-height: 1.7; }
+.cover-flow {
+  display: flex; gap: 0; margin-top: 40px;
+  border: 1px solid var(--border); border-radius: 12px; overflow: hidden;
+}
+.flow-item {
+  padding: 12px 20px; font-size: 13px; color: var(--muted);
+  border-right: 1px solid var(--border); text-align: center; line-height: 1.5;
+}
+.flow-item:last-child { border-right: none; }
+.flow-item .fi-num { font-size: 10px; color: var(--accent); letter-spacing: 0.06em; margin-bottom: 4px; }
+.flow-item .fi-name { font-size: 13px; color: var(--text); font-weight: 500; }
+.flow-item .fi-time { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+/* ─── SLIDE 2: FLIP CARDS ─── */
+.card-grid {
+  display: grid; grid-template-columns: repeat(5, 1fr);
+  gap: 10px; width: 100%; max-width: 880px;
+}
+.flip-wrap {
+  perspective: 900px; height: 88px; cursor: pointer;
+}
+.flip-inner {
+  position: relative; width: 100%; height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.5s cubic-bezier(0.4,0,0.2,1);
+}
+.flip-wrap.flipped .flip-inner { transform: rotateY(180deg); }
+.flip-wrap.used { opacity: 0.28; pointer-events: none; }
+.flip-wrap.active-card .flip-inner { box-shadow: 0 0 0 2px var(--accent), 0 0 16px rgba(91,143,249,0.4); border-radius: 10px; }
+#showDefBtn:not([disabled]) { opacity: 1; }
+.flip-front, .flip-back {
+  position: absolute; inset: 0;
+  backface-visibility: hidden; -webkit-backface-visibility: hidden;
+  border-radius: 10px; display: flex; align-items: center; justify-content: center;
+  border: 1px solid var(--border);
+}
+.flip-back {
+  background: var(--surface2);
+  font-size: 22px; font-weight: 700; color: var(--muted);
+  transition: all 0.2s;
+}
+.flip-wrap:not(.flipped):hover .flip-back {
+  background: var(--surface3); border-color: var(--accent); color: var(--accent);
+}
+.flip-front {
+  background: linear-gradient(135deg, #1a2550, #2a3570);
+  transform: rotateY(180deg); border-color: rgba(91,143,249,0.35);
+  padding: 8px; text-align: center;
+  font-size: 12px; font-weight: 700; color: #93c5fd; line-height: 1.35;
+}
+
+/* Definition panel */
+.def-panel {
+  position: fixed; bottom: 72px; left: 50%; transform: translateX(-50%);
+  background: var(--surface); border: 1px solid rgba(91,143,249,0.4);
+  border-radius: 14px; padding: 16px 22px; max-width: 580px; width: 92%;
+  z-index: 500; box-shadow: 0 24px 64px rgba(0,0,0,0.6);
+  display: none;
+}
+.def-panel.show { display: block; }
+.def-term { font-size: 15px; font-weight: 700; color: var(--accent); margin-bottom: 6px; }
+.def-body { font-size: 13px; color: var(--text); line-height: 1.65; }
+.def-actions { display: flex; gap: 8px; margin-top: 12px; }
+
+.card-controls {
+  display: flex; gap: 10px; justify-content: center; margin-top: 16px;
+}
+
+/* ─── SLIDE 3: FRAMEWORK ─── */
+.layer-grid {
+  display: grid; grid-template-columns: repeat(3,1fr); gap: 16px;
+  max-width: 960px; width: 100%; margin-bottom: 18px;
+}
+.layer-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 14px; padding: 22px;
+}
+.layer-card.lc-model  { border-top: 3px solid var(--accent); }
+.layer-card.lc-prompt { border-top: 3px solid var(--accent2); }
+.layer-card.lc-eng    { border-top: 3px solid var(--success); }
+.layer-icon { font-size: 28px; margin-bottom: 10px; }
+.layer-card h3 { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+.layer-card .layer-en { font-size: 11px; color: var(--muted); letter-spacing: 0.06em; margin-bottom: 10px; }
+.layer-card .layer-desc { font-size: 12px; color: var(--muted); line-height: 1.65; margin-bottom: 14px; }
+.layer-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+.lt-model  { background: rgba(68,118,232,0.1); border: 1px solid rgba(68,118,232,0.22); color: #2d56b0; font-size: 11px; padding: 2px 9px; border-radius: 10px; }
+.lt-prompt { background: rgba(124,92,232,0.1); border: 1px solid rgba(124,92,232,0.22); color: #5b3db8; font-size: 11px; padding: 2px 9px; border-radius: 10px; }
+.lt-eng    { background: rgba(10,138,92,0.1);  border: 1px solid rgba(10,138,92,0.22);  color: #076645; font-size: 11px; padding: 2px 9px; border-radius: 10px; }
+.shortcut-box {
+  max-width: 960px; width: 100%;
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 12px; padding: 16px 22px;
+  display: flex; align-items: center; gap: 14px;
+}
+.shortcut-box .sc-label { font-size: 11px; letter-spacing: 0.08em; color: var(--muted); white-space: nowrap; }
+.shortcut-box .sc-text  { font-size: 14px; color: var(--text); line-height: 1.6; }
+.shortcut-box .sc-text strong { color: var(--accent); }
+
+/* ─── SLIDE 3: AI BASICS ─── */
+.joke-box {
+  background: rgba(251,191,36,0.08); border: 1px solid rgba(251,191,36,0.25);
+  border-radius: 10px; padding: 14px 18px; margin-bottom: 22px; max-width: 840px; width: 100%;
+}
+.joke-box p { color: #92400e; font-size: 14px; line-height: 1.7; }
+.def-box {
+  background: rgba(91,143,249,0.08); border: 1px solid rgba(91,143,249,0.2);
+  border-radius: 10px; padding: 14px 18px; margin-bottom: 22px; max-width: 840px; width: 100%;
+}
+.def-box p { font-size: 15px; line-height: 1.7; }
+.def-box strong { color: var(--accent); }
+.stages-row {
+  display: grid; grid-template-columns: repeat(3,1fr); gap: 12px;
+  max-width: 840px; width: 100%; margin-bottom: 22px;
+}
+.stage-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 12px; padding: 18px;
+}
+.stage-era { font-size: 10px; letter-spacing: 0.08em; color: var(--accent); margin-bottom: 6px; }
+.stage-card h4 { font-size: 15px; margin-bottom: 8px; }
+.stage-card p { font-size: 12px; color: var(--muted); line-height: 1.6; }
+.stage-eg { margin-top: 8px; font-size: 11px; color: var(--success); }
+.stage-weak { margin-top: 6px; font-size: 11px; color: var(--danger); }
+.types-row {
+  display: grid; grid-template-columns: repeat(3,1fr); gap: 12px;
+  max-width: 840px; width: 100%;
+}
+.type-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 12px; padding: 18px;
+}
+.type-card:nth-child(1) { border-top: 2px solid var(--accent); }
+.type-card:nth-child(2) { border-top: 2px solid var(--accent2); }
+.type-card:nth-child(3) { border-top: 2px solid var(--success); }
+.type-label { font-size: 10px; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 6px; }
+.type-card h4 { font-size: 15px; margin-bottom: 8px; }
+.type-card p { font-size: 12px; color: var(--muted); line-height: 1.6; }
+.type-eg { margin-top: 8px; font-size: 11px; color: var(--muted); }
+
+/* ─── PROMPT FRAMEWORKS ─── */
+.fw-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;
+  max-width: 920px; width: 100%; margin-bottom: 14px;
+}
+.fw-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 10px; padding: 11px 13px;
+}
+.fw-name {
+  font-size: 15px; font-weight: 800; color: var(--accent);
+  margin-bottom: 5px; letter-spacing: 0.03em;
+}
+.fw-items { list-style: none; }
+.fw-items li { font-size: 10px; color: var(--muted); line-height: 1.65; }
+.fw-items li b { color: var(--accent); font-weight: 700; }
+
+/* ─── SLIDE 4+5: PROMPT ─── */
+.p5-section-label {
+  font-size: 11px; color: var(--muted); letter-spacing: 0.06em; margin-bottom: 10px;
+}
+.p5-flow {
+  display: flex; align-items: stretch; gap: 6px; margin-bottom: 16px;
+}
+.p5-step {
+  flex: 1; background: var(--surface); border: 1px solid var(--border);
+  border-radius: 10px; padding: 14px 10px; text-align: center;
+}
+.p5-arrow {
+  display: flex; align-items: center; color: var(--muted);
+  font-size: 18px; flex-shrink: 0; padding: 0 2px;
+}
+.p5-num {
+  width: 22px; height: 22px; background: var(--accent); color: white;
+  border-radius: 50%; font-size: 11px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 6px;
+}
+.p5-name { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+.p5-hint { font-size: 11px; color: var(--muted); line-height: 1.5; }
+.p5-example {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 12px; padding: 16px 18px;
+}
+.p5-ex-header {
+  font-size: 11px; color: var(--muted); letter-spacing: 0.04em; margin-bottom: 10px;
+}
+.p5-ex-grid { display: flex; flex-direction: column; gap: 7px; }
+.p5-ex-row {
+  display: flex; align-items: flex-start; gap: 10px; font-size: 12px; line-height: 1.55;
+}
+.p5-tag {
+  flex-shrink: 0; font-size: 10px; font-weight: 700; padding: 2px 8px;
+  border-radius: 6px; margin-top: 1px; white-space: nowrap;
+}
+.t1 { background: rgba(68,118,232,0.1); color: #2d56b0; border: 1px solid rgba(68,118,232,0.2); }
+.t2 { background: rgba(124,92,232,0.1); color: #5b3db8; border: 1px solid rgba(124,92,232,0.2); }
+.t3 { background: rgba(10,138,92,0.1);  color: #076645; border: 1px solid rgba(10,138,92,0.2); }
+.t4 { background: rgba(196,125,10,0.1); color: #92560a; border: 1px solid rgba(196,125,10,0.2); }
+.t5 { background: rgba(214,48,49,0.1);  color: #b91c1c; border: 1px solid rgba(214,48,49,0.2); }
+.p5-ex-text { color: var(--text); flex: 1; }
+.trick-grid {
+  display: grid; grid-template-columns: repeat(3,1fr); gap: 14px;
+  max-width: 960px; width: 100%;
+}
+.trick-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 12px; padding: 20px;
+}
+.trick-num {
+  font-size: 36px; font-weight: 800; color: var(--accent);
+  opacity: 0.25; line-height: 1; margin-bottom: 6px;
+}
+.trick-card h3 { font-size: 14px; font-weight: 700; margin-bottom: 8px; }
+.trick-card > p { font-size: 12px; color: var(--muted); line-height: 1.65; margin-bottom: 12px; }
+.code-block {
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 8px; padding: 10px 12px;
+  font-size: 11px; color: var(--text); font-family: "SF Mono", monospace;
+  line-height: 1.7; white-space: pre-wrap;
+}
+.pbg-pair { display: flex; flex-direction: column; gap: 6px; }
+.pbg-bad, .pbg-good {
+  border-radius: 8px; padding: 8px 10px; font-size: 11px; line-height: 1.6;
+}
+.pbg-bad  { background: rgba(214,48,49,0.05); border: 1px solid rgba(214,48,49,0.15); }
+.pbg-good { background: rgba(10,138,92,0.05); border: 1px solid rgba(10,138,92,0.18); }
+.pbg-label { font-size: 10px; font-weight: 700; margin-bottom: 3px; }
+.pbg-label.bad  { color: var(--danger); }
+.pbg-label.good { color: var(--success); }
+
+/* ─── SLIDE 5: PAIN POINTS ─── */
+.pain-grid {
+  display: grid; grid-template-columns: repeat(3,1fr); gap: 12px;
+  max-width: 960px; width: 100%;
+}
+.pain-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 12px; padding: 18px;
+}
+.pain-num { font-size: 10px; letter-spacing: 0.08em; color: var(--danger); margin-bottom: 6px; }
+.pain-card h4 { font-size: 15px; margin-bottom: 8px; }
+.pain-card p { font-size: 12px; color: var(--muted); line-height: 1.6; }
+.name-row { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 10px; }
+.name-tag {
+  background: rgba(214,48,49,0.08); border: 1px solid rgba(214,48,49,0.18);
+  color: #b91c1c; font-size: 10px; padding: 2px 8px; border-radius: 10px;
+}
+
+/* ─── SLIDE 6: SOLUTIONS ─── */
+.sol-table { width: 100%; max-width: 960px; border-collapse: collapse; }
+.sol-table th {
+  text-align: left; padding: 10px 14px;
+  font-size: 11px; color: var(--muted); letter-spacing: 0.06em;
+  border-bottom: 1px solid var(--border); font-weight: 500;
+}
+.sol-table td {
+  padding: 14px 14px; font-size: 13px;
+  border-bottom: 1px solid var(--border); vertical-align: top; line-height: 1.6;
+}
+.sol-table tr:last-child td { border-bottom: none; }
+.sol-table tr:hover td { background: rgba(255,255,255,0.02); }
+.status-done { color: var(--success); font-size: 12px; white-space: nowrap; }
+.status-part { color: var(--warning); font-size: 12px; white-space: nowrap; }
+.status-no   { color: var(--danger);  font-size: 12px; white-space: nowrap; }
+.tools { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
+.tool {
+  background: rgba(68,118,232,0.1); border: 1px solid rgba(68,118,232,0.22);
+  color: #2d56b0; font-size: 11px; padding: 2px 8px; border-radius: 10px;
+}
+
+/* ─── SLIDE 7: SKILL ─── */
+.concept-row {
+  display: grid; grid-template-columns: repeat(3,1fr); gap: 14px;
+  max-width: 960px; width: 100%; margin-bottom: 20px;
+}
+.concept-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 12px; padding: 22px;
+}
+.concept-icon { font-size: 30px; margin-bottom: 10px; }
+.concept-card h3 { font-size: 17px; margin-bottom: 8px; }
+.concept-card p { font-size: 13px; color: var(--muted); line-height: 1.6; }
+.concept-analogy { margin-top: 10px; font-size: 12px; color: var(--accent); font-style: italic; }
+.skill-map {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 12px; padding: 20px 24px; max-width: 960px; width: 100%;
+}
+.skill-map h4 { font-size: 13px; color: var(--muted); margin-bottom: 14px; letter-spacing: 0.04em; }
+.skill-rows { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 32px; }
+.skill-row {
+  display: flex; align-items: flex-start; gap: 8px;
+  padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 13px;
+}
+.skill-row:nth-child(odd):last-child, .skill-row:nth-child(even):last-child { border-bottom: none; }
+.sr-prob { color: #b91c1c; flex: 1; }
+.sr-arrow { color: var(--muted); flex-shrink: 0; padding-top: 1px; }
+.sr-sol { color: #0a6b47; flex: 1; }
+
+/* ─── SLIDE 8: PRACTICE ─── */
+.practice-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
+  max-width: 900px; width: 100%;
+}
+.prac-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 12px; padding: 22px;
+}
+.prac-card h3 { font-size: 16px; margin-bottom: 16px; }
+.step-list { list-style: none; }
+.step-list li { display: flex; gap: 12px; margin-bottom: 12px; font-size: 13px; line-height: 1.6; }
+.step-n {
+  width: 22px; height: 22px; background: var(--accent); color: white;
+  border-radius: 50%; font-size: 11px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px;
+}
+.criteria-list { list-style: none; }
+.criteria-list li {
+  display: flex; gap: 10px; align-items: flex-start;
+  margin-bottom: 10px; font-size: 13px; line-height: 1.6;
+}
+.criteria-list li::before { content: "→"; color: var(--accent2); flex-shrink: 0; }
+.scenario-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.scenario-tag {
+  background: rgba(68,118,232,0.1); border: 1px solid rgba(68,118,232,0.25);
+  color: #2d56b0; font-size: 12px; padding: 6px 14px; border-radius: 20px;
+}
+.timer-box { text-align: center; padding: 16px; }
+.timer-num {
+  font-size: 60px; font-weight: 800; color: var(--accent);
+  font-variant-numeric: tabular-nums; letter-spacing: -2px; font-family: "SF Mono", monospace;
+}
+.timer-lbl { font-size: 13px; color: var(--muted); margin-top: 4px; }
+.timer-btns { display: flex; gap: 8px; justify-content: center; margin-top: 14px; }
+</style>
+</head>
+<body>
+
+<!-- ══════════════ SLIDE 1: COVER ══════════════ -->
+<div class="slide active" id="s1">
+  <div class="cover-badge">PRODUCT SALON · AI 专题</div>
+  <div class="cover-title">PART 2: AI实战</div>
+  <div class="cover-flow">
+    <div class="flow-item"><div class="fi-num">01</div><div class="fi-name">拽名词</div><div class="fi-time">10 min</div></div>
+    <div class="flow-item"><div class="fi-num">02</div><div class="fi-name">AI认知</div><div class="fi-time">5 min</div></div>
+    <div class="flow-item"><div class="fi-num">03</div><div class="fi-name">Prompt</div><div class="fi-time">15 min</div></div>
+    <div class="flow-item"><div class="fi-num">04</div><div class="fi-name">痛点&解法</div><div class="fi-time">10 min</div></div>
+    <div class="flow-item"><div class="fi-num">05</div><div class="fi-name">Skill</div><div class="fi-time">5 min</div></div>
+    <div class="flow-item"><div class="fi-num">06</div><div class="fi-name">实战</div><div class="fi-time">30 min</div></div>
+  </div>
+</div>
+
+<!-- ══════════════ SLIDE 2: FLIP CARDS ══════════════ -->
+<div class="slide" id="s2">
+  <div class="section-header" style="text-align:center;margin-bottom:20px;">
+    <div class="sec-tag">ROUND 01 · 破冰抢答</div>
+    <div class="sec-title">拽名词大赛</div>
+    <div class="sec-sub">选一张牌 → 翻开看名词 → 点「显示释义」确认答案</div>
+  </div>
+  <div class="card-grid" id="cardGrid"></div>
+  <div class="card-controls">
+    <button class="btn btn-primary" id="showDefBtn" onclick="showDef()" disabled style="opacity:0.4;transition:opacity 0.2s">👁 显示释义</button>
+    <button class="btn btn-ghost" onclick="resetCards()">↺ 重置全部</button>
+  </div>
+</div>
+
+<!-- Definition panel (fixed, shared) -->
+<div class="def-panel" id="defPanel">
+  <div class="def-term" id="defTerm"></div>
+  <div class="def-body" id="defBody"></div>
+  <div class="def-actions">
+    <button class="btn btn-success" onclick="markUsed()">✓ 已答完，标记用过</button>
+    <button class="btn btn-ghost" onclick="closePanel()">关闭</button>
+  </div>
+</div>
+
+<!-- ══════════════ SLIDE 3: FRAMEWORK ══════════════ -->
+<div class="slide" id="s3">
+  <div style="max-width:960px;width:100%;">
+    <div style="text-align:center;margin-bottom:22px;">
+      <div class="sec-tag">ROUND 02 · 认知框架</div>
+      <div class="sec-title">建一张 AI 词汇地图</div>
+      <div class="sec-sub">不是记住所有名词，而是知道"它大概在讲什么层的事"</div>
+    </div>
+    <div class="joke-box" style="max-width:960px;margin-bottom:16px;">
+      <p>😅 <strong>坏消息：</strong>AI 领域 3 天不跟进，你就开始听不懂别人在聊什么。</p>
+      <p style="margin-top:6px;">🙂 <strong>好消息：</strong>3 年后情况可能是一样的——所有人都处于同样的混乱里。</p>
+    </div>
+    <div class="layer-grid">
+      <div class="layer-card lc-model">
+        <div class="layer-icon">🧠</div>
+        <h3>模型层</h3>
+        <div class="layer-en">THE MODEL</div>
+        <div class="layer-desc">AI 的"大脑"本身——经过海量数据训练出来的参数集合。这层的词在描述<strong>大脑是什么、怎么造出来的、运行时发生了什么</strong>。</div>
+        <div class="layer-tags">
+          <span class="lt-model">LLM / 大语言模型</span>
+          <span class="lt-model">基础模型</span>
+          <span class="lt-model">微调 Fine-tuning</span>
+          <span class="lt-model">推理 Inference</span>
+          <span class="lt-model">幻觉 Hallucination</span>
+          <span class="lt-model">多模态</span>
+        </div>
+      </div>
+      <div class="layer-card lc-prompt">
+        <div class="layer-icon">💬</div>
+        <h3>对话层</h3>
+        <div class="layer-en">THE CONVERSATION</div>
+        <div class="layer-desc">你和模型"说话"的方式——怎么给指令、怎么控制输出的质量和风格。这层的词在描述<strong>怎么跟大脑沟通</strong>。</div>
+        <div class="layer-tags">
+          <span class="lt-prompt">Prompt / 提示词</span>
+          <span class="lt-prompt">System Prompt</span>
+          <span class="lt-prompt">Token</span>
+          <span class="lt-prompt">Context Window</span>
+          <span class="lt-prompt">Temperature</span>
+          <span class="lt-prompt">Few-shot</span>
+          <span class="lt-prompt">Zero-shot</span>
+          <span class="lt-prompt">思维链 CoT</span>
+        </div>
+      </div>
+      <div class="layer-card lc-eng">
+        <div class="layer-icon">⚙️</div>
+        <h3>工程层</h3>
+        <div class="layer-en">THE SYSTEM</div>
+        <div class="layer-desc">套在模型外面的系统——让 AI 能连接外部信息、完成多步任务、被工程化复用。这层的词在描述<strong>给大脑加外挂</strong>。</div>
+        <div class="layer-tags">
+          <span class="lt-eng">RAG</span>
+          <span class="lt-eng">Agent / 智能体</span>
+          <span class="lt-eng">Embedding / 向量</span>
+          <span class="lt-eng">Function Calling</span>
+          <span class="lt-eng">MCP</span>
+          <span class="lt-eng">Vibe Coding</span>
+        </div>
+      </div>
+    </div>
+    <div class="shortcut-box">
+      <div class="sc-label">判断口诀</div>
+      <div class="sc-text">听到新词，先问自己三个问题：它在说<strong>大脑本身</strong>（训练、参数、能力）？还是在说<strong>怎么跟大脑说话</strong>（指令、上下文）？还是在说<strong>大脑外挂的系统</strong>（检索、工具调用、自动化）？</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ SLIDE 4: PROMPT 上 ══════════════ -->
+<div class="slide" id="s4">
+  <div style="max-width:920px;width:100%;">
+    <div style="text-align:center;margin-bottom:16px;">
+      <div class="sec-tag">ROUND 03 · 工具方法</div>
+      <div class="sec-title">Prompt 的再认识</div>
+      <div class="sec-sub">好的提示词不是一次写成的——是迭代出来的</div>
+    </div>
+    <div class="def-box" style="margin-bottom:16px;">
+      <p><strong>你写的 Prompt，本质上就是在编程</strong>——大模型把「会不会编程」这道门槛移走了，操控 AI 的语言变成了人话。</p>
+      <p style="margin-top:8px;">正确姿势：<strong>写 → 看模型在哪里翻车 → 补上那里 → 再写</strong>。提示词不是配置项，是你和模型协作的界面。模型裁跟头的地方，恰恰是提示词最该打补丁的地方。</p>
+    </div>
+    <div class="p5-section-label">ANTHROPIC 官方推荐的五段式结构</div>
+    <div class="p5-flow">
+      <div class="p5-step">
+        <div class="p5-num">1</div>
+        <div class="p5-name">任务描述</div>
+        <div class="p5-hint">角色 + 场景<br>告诉模型它是谁</div>
+      </div>
+      <span class="p5-arrow">›</span>
+      <div class="p5-step">
+        <div class="p5-num">2</div>
+        <div class="p5-name">本次内容</div>
+        <div class="p5-hint">这次要处理的具体材料或数据</div>
+      </div>
+      <span class="p5-arrow">›</span>
+      <div class="p5-step">
+        <div class="p5-num">3</div>
+        <div class="p5-name">详细指令</div>
+        <div class="p5-hint">步骤、顺序<br>约束条件</div>
+      </div>
+      <span class="p5-arrow">›</span>
+      <div class="p5-step">
+        <div class="p5-num">4</div>
+        <div class="p5-name">示例</div>
+        <div class="p5-hint">2–3 个例子<br>比规则管用</div>
+      </div>
+      <span class="p5-arrow">›</span>
+      <div class="p5-step">
+        <div class="p5-num">5</div>
+        <div class="p5-name">末尾提醒</div>
+        <div class="p5-hint">最关键的规则<br>放最后</div>
+      </div>
+    </div>
+    <div class="p5-example">
+      <div class="p5-ex-header">套用示例（用户访谈分析场景）</div>
+      <div class="p5-ex-grid">
+        <div class="p5-ex-row"><span class="p5-tag t1">任务描述</span><span class="p5-ex-text">你是一名有 5 年经验的 B 端产品经理，擅长从用户访谈中提炼产品洞察</span></div>
+        <div class="p5-ex-row"><span class="p5-tag t2">本次内容</span><span class="p5-ex-text">以下是 8 条用户访谈记录：[粘贴内容]</span></div>
+        <div class="p5-ex-row"><span class="p5-tag t3">详细指令</span><span class="p5-ex-text">第一步提取核心痛点，第二步按出现频次排序，第三步给出优先级建议及理由</span></div>
+        <div class="p5-ex-row"><span class="p5-tag t4">示例</span><span class="p5-ex-text">痛点①：导出功能找不到 → 频次：5 次 → 优先级：高（影响核心工作流）</span></div>
+        <div class="p5-ex-row"><span class="p5-tag t5">末尾提醒</span><span class="p5-ex-text">每条痛点必须有原文出处，不要总结访谈里没提到的内容</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ SLIDE 5: PROMPT 下 ══════════════ -->
+<div class="slide" id="s5">
+  <div style="max-width:960px;width:100%;">
+    <div style="text-align:center;margin-bottom:14px;">
+      <div class="sec-tag">ROUND 03 · 工具方法 下</div>
+      <div class="sec-title">万变不离其宗</div>
+      <div class="sec-sub">框架可以有很多，让效果跃升的本质只有 3 个</div>
+    </div>
+    <div class="p5-section-label">常见 PROMPT 框架速查</div>
+    <div class="fw-grid" style="margin-bottom:16px;">
+      <div class="fw-card">
+        <div class="fw-name">RTF</div>
+        <ul class="fw-items">
+          <li><b>R</b> Role 角色</li>
+          <li><b>T</b> Task 任务</li>
+          <li><b>F</b> Format 格式</li>
+        </ul>
+      </div>
+      <div class="fw-card">
+        <div class="fw-name">SOLVE</div>
+        <ul class="fw-items">
+          <li><b>S</b> Situation 情境</li>
+          <li><b>O</b> Objective 目标</li>
+          <li><b>L</b> Limitations 约束</li>
+          <li><b>V</b> Vision 愿景</li>
+          <li><b>E</b> Execution 执行步骤</li>
+        </ul>
+      </div>
+      <div class="fw-card">
+        <div class="fw-name">TAG</div>
+        <ul class="fw-items">
+          <li><b>T</b> Task 手头任务</li>
+          <li><b>A</b> Action 行动方式</li>
+          <li><b>G</b> Goal 达成目标</li>
+        </ul>
+      </div>
+      <div class="fw-card">
+        <div class="fw-name">RACE</div>
+        <ul class="fw-items">
+          <li><b>R</b> Role 角色</li>
+          <li><b>A</b> Action 基本任务</li>
+          <li><b>C</b> Context 背景信息</li>
+          <li><b>E</b> Expectation 期望结果</li>
+        </ul>
+      </div>
+      <div class="fw-card">
+        <div class="fw-name">DREAM</div>
+        <ul class="fw-items">
+          <li><b>D</b> Define 定义问题</li>
+          <li><b>R</b> Research 所需研究</li>
+          <li><b>E</b> Execute 执行计划</li>
+          <li><b>A</b> Analyse 分析结果</li>
+          <li><b>M</b> Measure 衡量成果</li>
+        </ul>
+      </div>
+      <div class="fw-card">
+        <div class="fw-name">PACT</div>
+        <ul class="fw-items">
+          <li><b>P</b> Problem 问题</li>
+          <li><b>A</b> Approach 方法</li>
+          <li><b>C</b> Compromise 潜在妥协</li>
+          <li><b>T</b> Test 衡量方式</li>
+        </ul>
+      </div>
+      <div class="fw-card">
+        <div class="fw-name">CARE</div>
+        <ul class="fw-items">
+          <li><b>C</b> Context 背景</li>
+          <li><b>A</b> Action 行动</li>
+          <li><b>R</b> Result 预期结果</li>
+          <li><b>E</b> Example 示例</li>
+        </ul>
+      </div>
+      <div class="fw-card">
+        <div class="fw-name">RISE</div>
+        <ul class="fw-items">
+          <li><b>R</b> Role 角色</li>
+          <li><b>I</b> Input 所需输入</li>
+          <li><b>S</b> Steps 遵循步骤</li>
+          <li><b>E</b> Expectation 期望</li>
+        </ul>
+      </div>
+    </div>
+    <div class="p5-section-label">但跃升效果的本质只有这 3 个</div>
+    <div class="trick-grid">
+      <div class="trick-card">
+        <div class="trick-num">01</div>
+        <h3>结构本身就是信息</h3>
+        <p>一大段文字全堆在一起，模型读着累，理解容易出偏。用标签或括号分段，模型读到每段就知道"这是什么"——不会把背景当任务，也不会把要求当示例。</p>
+        <div class="code-block">【背景】我是做产品评测的创作者，读者是开发者。
+【任务】为一家公司新发布的产品写评测文章。
+【要求】1500字，重点讲实际能不能用，要有判断。
+【注意】不要写官方营销话术。</div>
+      </div>
+      <div class="trick-card">
+        <div class="trick-num">02</div>
+        <h3>顺序错了，前面全白费</h3>
+        <p>不要把所有材料丢给 AI 让它自己想。明确告诉它先做什么、再做什么——顺序本身就是逻辑。让 AI 先看草图后看表单，和先看表单后看草图，结论可能完全不同。</p>
+        <div class="pbg-pair">
+          <div class="pbg-bad"><div class="pbg-label bad">✗ 不好的写法</div>这是 PRD 和用研报告，帮我看看有什么问题。</div>
+          <div class="pbg-good"><div class="pbg-label good">✓ 好的写法</div>第一步：读 PRD，列出所有功能点。第二步：读用研报告，找用户真实诉求。第三步：对比两者，找出设计与需求的矛盾点。</div>
+        </div>
+      </div>
+      <div class="trick-card">
+        <div class="trick-num">03</div>
+        <h3>2–3 个例子 &gt; 一段规则</h3>
+        <p>规则是抽象的，例子是具体的。模型和人一样，靠具体来理解抽象。与其写一长串"语气要专业、要有数据、不能太长"，不如直接给两三个对照示例——剩下的它会照葫芦画瓢。</p>
+        <div class="pbg-pair">
+          <div class="pbg-bad"><div class="pbg-label bad">✗ 抽象规则</div>语气要专业，不要太随意，要有数据支撑，不能太长……</div>
+          <div class="pbg-good"><div class="pbg-label good">✓ 直接给例子</div>这条评论提取 A 和 B，那条评论提取 C 和 D。剩下的照样做。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ SLIDE 6: PAIN POINTS ══════════════ -->
+<div class="slide" id="s6">
+  <div style="max-width:960px;width:100%;">
+    <div style="text-align:center;margin-bottom:22px;">
+      <div class="sec-tag">ROUND 04 · 学员作业洞察</div>
+      <div class="sec-title">AI 不好用的 6 类痛点</div>
+      <div class="sec-sub">大部分人的「AI 不好用」≈ 单一 Prompt 的局限性</div>
+      <div style="font-size:12px;color:var(--muted);margin-top:4px;">19 份作业汇总 · 你可能也遇到过其中几个</div>
+    </div>
+    <div class="pain-grid">
+      <div class="pain-card">
+        <div class="pain-num">痛点 01</div>
+        <h4>记忆太短</h4>
+        <p>每次新对话要重新喂背景；跨天会忘记读过的内容；定时任务会忘记触发。</p>
+        <div class="name-row">
+          <span class="name-tag">毕肖峘</span><span class="name-tag">陈延菲</span><span class="name-tag">刘玉婷</span><span class="name-tag">罗健</span>
+        </div>
+      </div>
+      <div class="pain-card">
+        <div class="pain-num">痛点 02</div>
+        <h4>背景悖论</h4>
+        <p>不喂背景 → 通用废话；喂了背景 → AI 变应声虫，失去批判性，一味顺着你说。</p>
+        <div class="name-row">
+          <span class="name-tag">陈延菲</span><span class="name-tag">许佳宁</span><span class="name-tag">赵一鑫</span>
+        </div>
+      </div>
+      <div class="pain-card">
+        <div class="pain-num">痛点 03</div>
+        <h4>从 0 新建容易，改已有基础很难</h4>
+        <p>已有页面小改、已有代码修改、原型迭代，效率都不如直接重新来。</p>
+        <div class="name-row">
+          <span class="name-tag">高艺烜</span><span class="name-tag">单中信</span><span class="name-tag">黄楚雯</span>
+        </div>
+      </div>
+      <div class="pain-card">
+        <div class="pain-num">痛点 04</div>
+        <h4>质量不稳定，调试是无底洞</h4>
+        <p>同样的输入不一样的输出；越改越差；调好一个问题冒出新问题。</p>
+        <div class="name-row">
+          <span class="name-tag">李知恒</span><span class="name-tag">黄楚雯</span><span class="name-tag">王蕗</span><span class="name-tag">双彩云</span>
+        </div>
+      </div>
+      <div class="pain-card">
+        <div class="pain-num">痛点 05</div>
+        <h4>只能处理标准场景</h4>
+        <p>规则覆盖到的能做，规则没覆盖的直接束手无策，复杂边缘场景只会转人工。</p>
+        <div class="name-row">
+          <span class="name-tag">曹小璐</span><span class="name-tag">姜怡杨</span>
+        </div>
+      </div>
+      <div class="pain-card">
+        <div class="pain-num">痛点 06</div>
+        <h4>输出结果难以验证</h4>
+        <p>AI 说的是对的吗？结论有没有依据？在高敏感场景里无法直接使用。</p>
+        <div class="name-row">
+          <span class="name-tag">王坤</span><span class="name-tag">康艾滢</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ SLIDE 7: SOLUTIONS ══════════════ -->
+<div class="slide" id="s7">
+  <div style="max-width:960px;width:100%;">
+    <div style="text-align:center;margin-bottom:22px;">
+      <div class="sec-tag">ROUND 04 · 行业解法</div>
+      <div class="sec-title">业内在怎么解决这些问题？</div>
+    </div>
+    <table class="sol-table">
+      <thead>
+        <tr>
+          <th style="width:13%">痛点</th>
+          <th style="width:19%">根本原因</th>
+          <th>核心解法</th>
+          <th style="width:20%">代表工具 / 方案</th>
+          <th style="width:10%">现状</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>记忆太短</td>
+          <td style="color:var(--muted);font-size:12px;">模型本质无状态，每次对话独立，没有持久记忆</td>
+          <td>① 超长上下文窗口（Gemini 2.5 Pro 达 100 万 token）<br>② 跨会话记忆产品化（ChatGPT Memory、Claude Projects）<br>③ 专用记忆层库（Mem0）</td>
+          <td><div class="tools"><span class="tool">Gemini 2.5 Pro</span><span class="tool">Claude Projects</span><span class="tool">ChatGPT Memory</span><span class="tool">Mem0</span></div></td>
+          <td><span class="status-done">✅ 基本解决</span></td>
+        </tr>
+        <tr>
+          <td>背景悖论</td>
+          <td style="color:var(--muted);font-size:12px;">模型默认顺从用户预设，缺乏内置批判机制</td>
+          <td>① 多智能体辩论（两个 AI 互相攻击对方方案）<br>② System Prompt 里内置「反对者」角色<br>③ 强制思维链：先列反对理由再给结论</td>
+          <td><div class="tools"><span class="tool">AutoGen</span><span class="tool">CrewAI</span><span class="tool">提示词设计</span></div></td>
+          <td><span class="status-no">❌ 行业未解</span></td>
+        </tr>
+        <tr>
+          <td>在已有基础上改很难</td>
+          <td style="color:var(--muted);font-size:12px;">AI 与你的存量文件隔离，每次对话从零开始</td>
+          <td>① 让 AI 读懂整个代码库而不只是当前文件<br>② 设计稿级别的局部修改工具</td>
+          <td><div class="tools"><span class="tool">Cursor</span><span class="tool">Claude Code</span><span class="tool">Aider</span><span class="tool">Figma AI</span></div></td>
+          <td><span class="status-part">🔶 代码侧进展快</span></td>
+        </tr>
+        <tr>
+          <td>质量不稳定</td>
+          <td style="color:var(--muted);font-size:12px;">概率采样机制，相同输入不保证相同输出</td>
+          <td>① Prompt 自动优化（不需要人工反复调）<br>② Prompt 版本管理（像管代码一样管 Prompt，可回滚）<br>③ 用 AI 评估 AI（LLM-as-Judge）<br>④ 强制结构化输出（JSON 格式固定结果）</td>
+          <td><div class="tools"><span class="tool">DSPy</span><span class="tool">LangSmith</span><span class="tool">PromptLayer</span><span class="tool">LLM-as-Judge</span></div></td>
+          <td><span class="status-part">🔶 有方案，有门槛</span></td>
+        </tr>
+        <tr>
+          <td>边缘场景弱</td>
+          <td style="color:var(--muted);font-size:12px;">单点决策覆盖不了所有分支，不确定时没有降级机制</td>
+          <td>① Function Calling（AI 遇到不确定时调用外部 API 验证）<br>② 置信度输出（低置信度自动降级转人工）<br>③ 混合架构：标准场景走 AI，边缘场景走规则</td>
+          <td><div class="tools"><span class="tool">Function Calling</span><span class="tool">混合架构设计</span></div></td>
+          <td><span class="status-part">🔶 架构层有解法</span></td>
+        </tr>
+        <tr>
+          <td>输出难以验证</td>
+          <td style="color:var(--muted);font-size:12px;">模型不区分"知道"和"猜测"，幻觉无法自我识别</td>
+          <td>① 每条结论附原始来源链接<br>② 把推理链暴露出来供人审查<br>③ 人在回路：每个关键节点需人工确认</td>
+          <td><div class="tools"><span class="tool">Perplexity</span><span class="tool">Claude 扩展思考</span><span class="tool">OpenAI o1</span><span class="tool">HITL 设计</span></div></td>
+          <td><span class="status-part">🔶 溯源有，系统性难</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ══════════════ SLIDE 8: SKILL ══════════════ -->
+<div class="slide" id="s8">
+  <div style="max-width:960px;width:100%;">
+    <div style="text-align:center;margin-bottom:22px;">
+      <div class="sec-tag">ROUND 05 · Agent & Skill</div>
+      <div class="sec-title">把好的 Prompt 沉淀成工具</div>
+    </div>
+    <div class="concept-row">
+      <div class="concept-card">
+        <div class="concept-icon">🤖</div>
+        <h3>Agent · 智能体</h3>
+        <p>不只是「你问它答」，而是给它一个目标，它自己拆解步骤、调用工具、完成任务。</p>
+        <div class="concept-analogy">类比：助理，你说「帮我安排出差」，它自己查机票订酒店</div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-icon">🔧</div>
+        <h3>Harness · 框架</h3>
+        <p>给 Agent 套上规范，让它在你设定的边界内行动，防止它「乱跑」或做你没要求的事。</p>
+        <div class="concept-analogy">类比：工厂 SOP，规定每步怎么做、授权范围是什么、出错了找谁</div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-icon">⚡</div>
+        <h3>Skill · 技能</h3>
+        <p>把反复使用的、经过打磨的 Prompt 包装成一个可以随时调用的「技能卡」，不用每次重写。</p>
+        <div class="concept-analogy">类比：公司的 SOP 手册，个人经验变成可复用工具</div>
+      </div>
+    </div>
+    <div class="skill-map">
+      <h4>SKILL 如何对应你们提到的 AI 痛点</h4>
+      <div class="skill-rows">
+        <div class="skill-row">
+          <span class="sr-prob">每次重新喂背景</span>
+          <span class="sr-arrow">→</span>
+          <span class="sr-sol">背景固化在 System Prompt，一次配置永久生效</span>
+        </div>
+        <div class="skill-row">
+          <span class="sr-prob">Prompt 调试成本高</span>
+          <span class="sr-arrow">→</span>
+          <span class="sr-sol">Skill 是调试好的结果，不用每次从头调</span>
+        </div>
+        <div class="skill-row">
+          <span class="sr-prob">输出格式不稳定</span>
+          <span class="sr-arrow">→</span>
+          <span class="sr-sol">Skill 里固定输出格式，保证每次结构一致</span>
+        </div>
+        <div class="skill-row">
+          <span class="sr-prob">简单任务描述成本高</span>
+          <span class="sr-arrow">→</span>
+          <span class="sr-sol">常用任务做成 Skill，一键触发</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ SLIDE 9: PRACTICE ══════════════ -->
+<div class="slide" id="s9">
+  <div style="max-width:900px;width:100%;">
+    <div style="text-align:center;margin-bottom:22px;">
+      <div class="sec-tag">ROUND 06 · 实战</div>
+      <div class="sec-title">设计一个你自己的 Skill</div>
+    </div>
+    <div class="practice-grid">
+      <div>
+        <div class="prac-card" style="margin-bottom:14px;">
+          <h3>📋 任务说明</h3>
+          <ul class="step-list">
+            <li><span class="step-n">1</span>每组选一个真实工作场景（见右侧参考）</li>
+            <li><span class="step-n">2</span>用五段式结构写 Skill（任务描述·材料·指令·示例·末尾提醒）</li>
+            <li><span class="step-n">3</span>现场跑一遍，看输出质量</li>
+            <li><span class="step-n">4</span>根据输出调整，准备 30 秒展示</li>
+          </ul>
+        </div>
+        <div class="prac-card">
+          <h3>🏆 评比维度</h3>
+          <ul class="criteria-list">
+            <li><strong>可复用性</strong>：这个 Skill 能被其他人直接用吗？</li>
+            <li><strong>输出稳定性</strong>：跑两次结果差不多吗？</li>
+            <li><strong>节省了多少</strong>：比手写 Prompt 效率提升多少？</li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <div class="prac-card" style="margin-bottom:14px;">
+          <h3>💡 场景参考（任选）</h3>
+          <div class="scenario-tags">
+            <span class="scenario-tag">需求文档初稿</span>
+            <span class="scenario-tag">竞品分析</span>
+            <span class="scenario-tag">用户反馈归类</span>
+            <span class="scenario-tag">会议纪要整理</span>
+            <span class="scenario-tag">PRD 评审问题清单</span>
+            <span class="scenario-tag">用户故事拆解</span>
+          </div>
+        </div>
+        <div class="prac-card">
+          <h3>⏱ 计时器</h3>
+          <div class="timer-box">
+            <div class="timer-num" id="timerDisp">30:00</div>
+            <div class="timer-lbl">小组工作时间</div>
+            <div class="timer-btns">
+              <button class="btn btn-primary" onclick="startTimer()">开始</button>
+              <button class="btn btn-ghost" onclick="pauseTimer()">暂停</button>
+              <button class="btn btn-danger" onclick="resetTimer()">重置</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ NAV BAR ══════════════ -->
+<div class="nav-bar">
+  <button class="nav-btn" id="prevBtn" onclick="goSlide(cur-1)">‹</button>
+  <div class="dots" id="dots"></div>
+  <span class="slide-counter" id="counter"></span>
+  <button class="nav-btn" id="nextBtn" onclick="goSlide(cur+1)">›</button>
+</div>
+<div class="slide-name" id="slideName"></div>
+
+<script>
+// ─── SLIDE DATA ───
+const slideNames = [
+  '封面', '破冰抢答', 'AI 词汇地图',
+  'Prompt 结构', 'Prompt 进阶', 'AI 痛点', '行业解法', 'Agent & Skill', '实战环节'
+];
+const totalSlides = 9;
+let cur = 1;
+
+function goSlide(n) {
+  if (n < 1 || n > totalSlides) return;
+  document.getElementById('s' + cur).classList.remove('active');
+  cur = n;
+  document.getElementById('s' + cur).classList.add('active');
+  document.getElementById('counter').textContent = cur + ' / ' + totalSlides;
+  document.getElementById('slideName').textContent = slideNames[cur - 1];
+  document.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('active', i === cur - 1));
+  // Hide def panel when leaving card slide
+  if (cur !== 2) closePanel();
+}
+
+// Build dots
+const dotsEl = document.getElementById('dots');
+for (let i = 0; i < totalSlides; i++) {
+  const d = document.createElement('div');
+  d.className = 'dot' + (i === 0 ? ' active' : '');
+  d.onclick = () => goSlide(i + 1);
+  dotsEl.appendChild(d);
+}
+document.getElementById('slideName').textContent = slideNames[0];
+document.getElementById('counter').textContent = '1 / ' + totalSlides;
+
+// Keyboard nav
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') goSlide(cur + 1);
+  if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   goSlide(cur - 1);
+});
+
+// ─── FLIP CARD DATA ───
+const terms = [
+  { id:1,  term:'Prompt / 提示词',         def:'你给 AI 的输入指令，直接决定 AI 输出质量的核心变量。' },
+  { id:2,  term:'Token',                   def:'AI 处理文本的最小单位，也是计费基础，大约等于半个中文字。' },
+  { id:3,  term:'LLM / 大语言模型',         def:'基于海量文本训练的模型，GPT、Claude、文心一言都属于这类。' },
+  { id:4,  term:'幻觉 Hallucination',       def:'AI 一本正经地输出错误信息，比如捏造一个不存在的参考文献。' },
+  { id:5,  term:'RAG',                     def:'让 AI 回答前先去知识库搜索，再生成答案，减少幻觉的技术方案。' },
+  { id:6,  term:'Fine-tuning / 微调',       def:'在已有大模型基础上，用特定领域数据继续训练，让模型更懂你的业务。' },
+  { id:7,  term:'Context Window\n上下文窗口', def:'AI 在单次对话中能记住的最大文本量，超出这个范围的内容它就忘了。' },
+  { id:8,  term:'Agent / 智能体',           def:'能自主规划步骤、调用工具、完成复杂任务的 AI 系统，不只是回答问题。' },
+  { id:9,  term:'Embedding\n向量嵌入',       def:'把文字转成数字向量，让 AI 能计算两段话的语义相似度。' },
+  { id:10, term:'多模态\nMulti-modal',      def:'AI 能同时处理文字、图片、音频等多种类型的输入。' },
+  { id:11, term:'Few-shot / 少样本',        def:'在 Prompt 里给 AI 几个例子，让它理解你想要的格式或风格。' },
+  { id:12, term:'Chain of Thought\n思维链', def:'让 AI 一步步推理而不是直接给答案，显著提升复杂问题的准确率。' },
+  { id:13, term:'System Prompt\n系统提示词', def:'对话开始前的隐藏指令，规定 AI 的角色、语气和边界。' },
+  { id:14, term:'Temperature / 温度',      def:'控制 AI 输出随机性的参数，温度低更稳定，温度高更有创意。' },
+  { id:15, term:'Vibe Coding',             def:'用自然语言描述需求让 AI 写代码，不需要自己懂编程。' },
+  { id:16, term:'AI Native',               def:'从一开始就以 AI 为核心能力设计的产品，而非在已有产品上叠加 AI。' },
+  { id:17, term:'Zero-shot / 零样本',       def:'不给任何例子，直接让 AI 完成任务，考验模型的泛化能力。' },
+  { id:18, term:'推理 Inference',           def:'AI 模型运行时生成输出的过程，与「训练」相对，是用户使用时发生的计算。' },
+  { id:19, term:'Foundation Model\n基础模型', def:'通用大模型，其他 AI 产品在它基础上套壳或微调，GPT-4 是典型例子。' },
+  { id:20, term:'MCP',                     def:'Anthropic 推出的开放协议，让 AI 能标准化地连接各种外部工具和数据源。' },
+];
+
+let activeCard = null;
+
+// Build grid
+const grid = document.getElementById('cardGrid');
+terms.forEach(t => {
+  const wrap = document.createElement('div');
+  wrap.className = 'flip-wrap';
+  wrap.id = 'card-' + t.id;
+  wrap.innerHTML = `
+    <div class="flip-inner">
+      <div class="flip-back">${t.id}</div>
+      <div class="flip-front">${t.term}</div>
+    </div>`;
+  wrap.onclick = () => handleCardClick(t.id);
+  grid.appendChild(wrap);
+});
+
+function handleCardClick(id) {
+  const wrap = document.getElementById('card-' + id);
+  if (wrap.classList.contains('used')) return;
+  // Remove active highlight from previous card and close panel
+  if (activeCard && activeCard !== id) {
+    document.getElementById('card-' + activeCard).classList.remove('active-card');
+    document.getElementById('defPanel').classList.remove('show');
+  }
+  // Flip if not already flipped
+  if (!wrap.classList.contains('flipped')) {
+    wrap.classList.add('flipped');
+  }
+  // Mark as active (highlight), but DON'T show definition yet
+  activeCard = id;
+  wrap.classList.add('active-card');
+  // Enable the "show def" button
+  const btn = document.getElementById('showDefBtn');
+  btn.disabled = false;
+  btn.style.opacity = '1';
+}
+
+function showDef() {
+  if (!activeCard) return;
+  const t = terms.find(x => x.id === activeCard);
+  document.getElementById('defTerm').textContent = t.term.replace('\n', ' ');
+  document.getElementById('defBody').textContent = t.def;
+  document.getElementById('defPanel').classList.add('show');
+}
+
+function markUsed() {
+  if (activeCard) {
+    const w = document.getElementById('card-' + activeCard);
+    w.classList.add('used');
+    w.classList.remove('active-card');
+  }
+  closePanel();
+}
+
+function closePanel() {
+  document.getElementById('defPanel').classList.remove('show');
+  activeCard = null;
+  const btn = document.getElementById('showDefBtn');
+  if (btn) { btn.disabled = true; btn.style.opacity = '0.4'; }
+}
+
+function resetCards() {
+  terms.forEach(t => {
+    const w = document.getElementById('card-' + t.id);
+    w.classList.remove('flipped', 'used', 'active-card');
+  });
+  closePanel();
+}
+
+// ─── TIMER ───
+let timerSec = 30 * 60;
+let timerInterval = null;
+let timerRunning = false;
+
+function fmtTime(s) {
+  const m = Math.floor(s / 60).toString().padStart(2, '0');
+  const sec = (s % 60).toString().padStart(2, '0');
+  return m + ':' + sec;
+}
+
+function startTimer() {
+  if (timerRunning) return;
+  timerRunning = true;
+  timerInterval = setInterval(() => {
+    if (timerSec <= 0) {
+      clearInterval(timerInterval);
+      timerRunning = false;
+      document.getElementById('timerDisp').textContent = '00:00';
+      document.getElementById('timerDisp').style.color = 'var(--danger)';
+      return;
+    }
+    timerSec--;
+    document.getElementById('timerDisp').textContent = fmtTime(timerSec);
+    if (timerSec <= 300) document.getElementById('timerDisp').style.color = 'var(--warning)';
+    if (timerSec <= 60)  document.getElementById('timerDisp').style.color = 'var(--danger)';
+  }, 1000);
+}
+
+function pauseTimer() {
+  clearInterval(timerInterval);
+  timerRunning = false;
+}
+
+function resetTimer() {
+  pauseTimer();
+  timerSec = 30 * 60;
+  document.getElementById('timerDisp').textContent = fmtTime(timerSec);
+  document.getElementById('timerDisp').style.color = 'var(--accent)';
+}
+</script>
+</body>
+</html>
