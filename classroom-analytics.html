@@ -141,11 +141,11 @@ body{font-family:'Microsoft YaHei',Arial,sans-serif;font-size:13px;background:#f
 .stu-urgency.new{background:#fff1f0;color:#ff4d4f;border:1px solid #ffa39e;}
 .stu-urgency.month{background:#fff7e6;color:#fa8c16;border:1px solid #ffd591;}
 .stu-urgency.long{background:#f5f5f5;color:#999;border:1px solid #d9d9d9;}
-.class-cmp-bar-row,.err-bar-row{display:flex;align-items:center;gap:6px;margin-bottom:5px;font-size:11px;}
-.class-cmp-bar-lbl,.err-bar-lbl{width:56px;color:#666;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.class-cmp-bar-track,.err-bar-track{flex:1;background:#f5f5f5;border-radius:3px;height:7px;overflow:hidden;}
-.class-cmp-bar-fill,.err-bar-fill{height:100%;border-radius:3px;}
-.class-cmp-bar-val,.err-bar-val{width:32px;text-align:right;color:#888;flex-shrink:0;}
+.class-cmp-bar-row{display:flex;align-items:center;gap:6px;margin-bottom:5px;font-size:11px;}
+.class-cmp-bar-lbl{width:56px;color:#666;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.class-cmp-bar-track{flex:1;background:#f5f5f5;border-radius:3px;height:7px;overflow:hidden;}
+.class-cmp-bar-fill{height:100%;border-radius:3px;}
+.class-cmp-bar-val{width:32px;text-align:right;color:#888;flex-shrink:0;}
 .kg-right{flex:1;display:flex;flex-direction:column;gap:8px;min-width:0;}
 .detail-card{background:#fff;border-radius:4px;padding:14px;flex:1;overflow:hidden;display:flex;flex-direction:column;min-height:0;}
 .ph{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;color:#ccc;font-size:13px;gap:6px;}
@@ -1352,24 +1352,7 @@ treeChart.on('click',function(params){
           </tr>`).join('')}</tbody>
         </table></div>
       </div>
-    </div>
-    ${(()=>{
-      const errTypes=['概念理解错误','计算失误','读题审题错误','思路方法错误','步骤书写错误'];
-      const ns=name.charCodeAt(0)*7+name.length*11;
-      const top3=[
-        {label:errTypes[ns%5],pct:Math.min(62,Math.max(28,35+(ns%27)))},
-        {label:errTypes[(ns+2)%5],pct:Math.min(48,Math.max(18,25+((ns*3)%20)))},
-        {label:errTypes[(ns+4)%5],pct:Math.min(35,Math.max(10,15+((ns*7)%18)))}
-      ];
-      return `<div style="margin-top:10px;padding:10px 12px;background:#fafafa;border-radius:6px;border:1px solid #f0f0f0">
-        <div style="font-size:11px;font-weight:600;color:#666;margin-bottom:8px">错误类型分析（TOP 3）</div>
-        ${top3.map(e=>`<div class="err-bar-row">
-          <div class="err-bar-lbl">${e.label}</div>
-          <div class="err-bar-track"><div class="err-bar-fill" style="width:${e.pct}%;background:#fa8c16"></div></div>
-          <div class="err-bar-val">${e.pct}%</div>
-        </div>`).join('')}
-      </div>`;
-    })()}`;
+    </div>`;
   document.querySelectorAll('.dtab').forEach(t=>{
     t.onclick=()=>{document.querySelectorAll('.dtab').forEach(x=>x.classList.remove('act'));t.classList.add('act');};
   });
