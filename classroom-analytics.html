@@ -131,6 +131,21 @@ body{font-family:'Microsoft YaHei',Arial,sans-serif;font-size:13px;background:#f
 .kg-left{background:#fff;border-radius:4px;position:relative;flex:0 0 52%;}
 #treeChart{width:100%;height:100%;}
 .tree-badge{position:absolute;top:8px;left:10px;font-size:11px;color:#999;background:rgba(255,255,255,.9);padding:2px 8px;border-radius:10px;border:1px solid #eee;pointer-events:none;}
+.kg-heat-legend{position:absolute;bottom:8px;right:8px;background:rgba(255,255,255,.93);border:1px solid #eee;border-radius:6px;padding:5px 8px;display:flex;flex-direction:column;gap:2px;font-size:10px;color:#777;pointer-events:none;z-index:2;}
+.kg-heat-legend-row{display:flex;align-items:center;gap:4px;}
+.kg-heat-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;display:inline-block;}
+.grade-trend-tabs{display:flex;gap:6px;}
+.grade-trend-tab{padding:3px 12px;border-radius:12px;font-size:12px;cursor:pointer;border:1px solid #e8e8e8;background:#fafafa;color:#888;white-space:nowrap;}
+.grade-trend-tab.act{background:#00b3d4;color:#fff;border-color:#00b3d4;}
+.stu-urgency{display:inline-block;font-size:9px;padding:1px 4px;border-radius:3px;margin-left:4px;vertical-align:middle;font-weight:600;}
+.stu-urgency.new{background:#fff1f0;color:#ff4d4f;border:1px solid #ffa39e;}
+.stu-urgency.month{background:#fff7e6;color:#fa8c16;border:1px solid #ffd591;}
+.stu-urgency.long{background:#f5f5f5;color:#999;border:1px solid #d9d9d9;}
+.class-cmp-bar-row,.err-bar-row{display:flex;align-items:center;gap:6px;margin-bottom:5px;font-size:11px;}
+.class-cmp-bar-lbl,.err-bar-lbl{width:56px;color:#666;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.class-cmp-bar-track,.err-bar-track{flex:1;background:#f5f5f5;border-radius:3px;height:7px;overflow:hidden;}
+.class-cmp-bar-fill,.err-bar-fill{height:100%;border-radius:3px;}
+.class-cmp-bar-val,.err-bar-val{width:32px;text-align:right;color:#888;flex-shrink:0;}
 .kg-right{flex:1;display:flex;flex-direction:column;gap:8px;min-width:0;}
 .detail-card{background:#fff;border-radius:4px;padding:14px;flex:1;overflow:hidden;display:flex;flex-direction:column;min-height:0;}
 .ph{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;color:#ccc;font-size:13px;gap:6px;}
@@ -452,23 +467,23 @@ body{font-family:'Microsoft YaHei',Arial,sans-serif;font-size:13px;background:#f
           <div class="stu-list-card">
             <div class="stu-list-title">⚠️ 重点关注 <span class="stu-list-tag warn">需干预</span></div>
             <div class="stu-list-item" onclick="openStuDetail('马睿欣',63,56,16)">
-              <span class="stu-list-name">马睿欣</span>
+              <span class="stu-list-name">马睿欣<span class="stu-urgency new">新增</span></span>
               <span><span class="stu-list-rate" style="color:#ff4d4f">63%</span><span class="stu-list-delta" style="color:#ff4d4f">↓ 3.1%</span></span>
             </div>
             <div class="stu-list-item" onclick="openStuDetail('邱银',64,72,15)">
-              <span class="stu-list-name">邱银</span>
+              <span class="stu-list-name">邱银<span class="stu-urgency new">新增</span></span>
               <span><span class="stu-list-rate" style="color:#ff4d4f">64%</span><span class="stu-list-delta" style="color:#ff4d4f">↓ 2.4%</span></span>
             </div>
             <div class="stu-list-item" onclick="openStuDetail('朱大媛',64,88,14)">
-              <span class="stu-list-name">朱大媛</span>
+              <span class="stu-list-name">朱大媛<span class="stu-urgency month">本月</span></span>
               <span><span class="stu-list-rate" style="color:#ff4d4f">64%</span><span class="stu-list-delta" style="color:#ff4d4f">↓ 1.8%</span></span>
             </div>
             <div class="stu-list-item" onclick="openStuDetail('毛瑞澜',66,45,13)">
-              <span class="stu-list-name">毛瑞澜</span>
+              <span class="stu-list-name">毛瑞澜<span class="stu-urgency long">长期</span></span>
               <span><span class="stu-list-rate" style="color:#fa8c16">66%</span><span class="stu-list-delta" style="color:#888">— 持平</span></span>
             </div>
             <div class="stu-list-item" onclick="openStuDetail('和义翔',67,36,11)">
-              <span class="stu-list-name">和义翔</span>
+              <span class="stu-list-name">和义翔<span class="stu-urgency long">长期</span></span>
               <span><span class="stu-list-rate" style="color:#fa8c16">67%</span><span class="stu-list-delta" style="color:#888">— 持平</span></span>
             </div>
           </div>
@@ -549,6 +564,14 @@ body{font-family:'Microsoft YaHei',Arial,sans-serif;font-size:13px;background:#f
           <div class="kg-left">
             <div id="treeChart"></div>
             <div class="tree-badge" id="treeLabel">高中数学 · 全体系</div>
+            <div class="kg-heat-legend">
+              <div class="kg-heat-legend-row"><i class="kg-heat-dot" style="background:#52c41a"></i>≥85%</div>
+              <div class="kg-heat-legend-row"><i class="kg-heat-dot" style="background:#95de64"></i>70–84%</div>
+              <div class="kg-heat-legend-row"><i class="kg-heat-dot" style="background:#ffc53d"></i>55–69%</div>
+              <div class="kg-heat-legend-row"><i class="kg-heat-dot" style="background:#fa8c16"></i>40–54%</div>
+              <div class="kg-heat-legend-row"><i class="kg-heat-dot" style="background:#ff4d4f"></i>&lt;40%</div>
+              <div style="margin-top:3px;color:#bbb;border-top:1px solid #f0f0f0;padding-top:2px">⬤ 大 = 题量多</div>
+            </div>
           </div>
           <div class="kg-right">
             <div class="detail-card" id="detailPanel">
@@ -773,6 +796,14 @@ body{font-family:'Microsoft YaHei',Arial,sans-serif;font-size:13px;background:#f
             <div class="kg-left">
               <div id="stuTreeCh" style="width:100%;height:100%"></div>
               <div class="tree-badge" id="stuTreeLabel">高中数学 · 全体系</div>
+              <div class="kg-heat-legend">
+                <div class="kg-heat-legend-row"><i class="kg-heat-dot" style="background:#52c41a"></i>≥85%</div>
+                <div class="kg-heat-legend-row"><i class="kg-heat-dot" style="background:#95de64"></i>70–84%</div>
+                <div class="kg-heat-legend-row"><i class="kg-heat-dot" style="background:#ffc53d"></i>55–69%</div>
+                <div class="kg-heat-legend-row"><i class="kg-heat-dot" style="background:#fa8c16"></i>40–54%</div>
+                <div class="kg-heat-legend-row"><i class="kg-heat-dot" style="background:#ff4d4f"></i>&lt;40%</div>
+                <div style="margin-top:3px;color:#bbb;border-top:1px solid #f0f0f0;padding-top:2px">⬤ 大 = 题量多</div>
+              </div>
             </div>
             <div class="kg-right">
               <div class="detail-card" id="stuDetailPnl" style="overflow-y:auto;">
@@ -875,6 +906,17 @@ body{font-family:'Microsoft YaHei',Arial,sans-serif;font-size:13px;background:#f
           </div>
           <div id="schoolGradeBarCh" style="width:100%;height:180px"></div>
         </div>
+        <div style="background:#fff;border-radius:6px;padding:14px 18px;margin-bottom:12px">
+          <div class="card-hd" style="margin-bottom:8px">
+            <span class="card-title">年级月度趋势</span>
+            <div class="grade-trend-tabs" id="gradeTrendTabs">
+              <span class="grade-trend-tab act" onclick="_selectGradeTrend('高一',this)">高一</span>
+              <span class="grade-trend-tab" onclick="_selectGradeTrend('高二',this)">高二</span>
+              <span class="grade-trend-tab" onclick="_selectGradeTrend('高三',this)">高三</span>
+            </div>
+          </div>
+          <div id="schoolGradeTrendCh" style="width:100%;height:180px"></div>
+        </div>
       </div><!-- end secSchoolOnly -->
 
       <!-- §年级专属：正确率概览 + 班级趋势 -->
@@ -919,6 +961,7 @@ body{font-family:'Microsoft YaHei',Arial,sans-serif;font-size:13px;background:#f
               <span><i style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#ffc53d;vertical-align:middle;margin-right:3px"></i>55–69%</span>
               <span><i style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#fa8c16;vertical-align:middle;margin-right:3px"></i>40–54%</span>
               <span><i style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#ff4d4f;vertical-align:middle;margin-right:3px"></i>&lt;40%</span>
+              <span style="color:#bbb;border-left:1px solid #eee;padding-left:8px">⬤ 大 = 题量多</span>
             </div>
           </div>
           <div class="date-sel">2026-06-01 — 2026-06-30 □</div>
@@ -1200,8 +1243,8 @@ const STYLES={
 };
 const TREE_LABELS={g3:'高中数学 · 全体系',g1:'高一数学 · 必修1'};
 function styleNodes(n,d,s){
-  n.symbol='circle';n.symbolSize=s.sizes[Math.min(d,s.sizes.length-1)];
-  n.itemStyle={color:s.colors[Math.min(d,s.colors.length-1)],borderWidth:0};n.label={show:false};
+  n.symbol='circle';n.symbolSize=_nodeQSize(n.name,d);
+  n.itemStyle={color:d===0?s.colors[0]:_scoreColor(_nodeScoreClass(n.name)),borderWidth:0};n.label={show:false};
   if(n.children) n.children.forEach(c=>styleNodes(c,d+1,s));return n;
 }
 let gaugeChart=null;
@@ -1309,7 +1352,24 @@ treeChart.on('click',function(params){
           </tr>`).join('')}</tbody>
         </table></div>
       </div>
-    </div>`;
+    </div>
+    ${(()=>{
+      const errTypes=['概念理解错误','计算失误','读题审题错误','思路方法错误','步骤书写错误'];
+      const ns=name.charCodeAt(0)*7+name.length*11;
+      const top3=[
+        {label:errTypes[ns%5],pct:Math.min(62,Math.max(28,35+(ns%27)))},
+        {label:errTypes[(ns+2)%5],pct:Math.min(48,Math.max(18,25+((ns*3)%20)))},
+        {label:errTypes[(ns+4)%5],pct:Math.min(35,Math.max(10,15+((ns*7)%18)))}
+      ];
+      return `<div style="margin-top:10px;padding:10px 12px;background:#fafafa;border-radius:6px;border:1px solid #f0f0f0">
+        <div style="font-size:11px;font-weight:600;color:#666;margin-bottom:8px">错误类型分析（TOP 3）</div>
+        ${top3.map(e=>`<div class="err-bar-row">
+          <div class="err-bar-lbl">${e.label}</div>
+          <div class="err-bar-track"><div class="err-bar-fill" style="width:${e.pct}%;background:#fa8c16"></div></div>
+          <div class="err-bar-val">${e.pct}%</div>
+        </div>`).join('')}
+      </div>`;
+    })()}`;
   document.querySelectorAll('.dtab').forEach(t=>{
     t.onclick=()=>{document.querySelectorAll('.dtab').forEach(x=>x.classList.remove('act'));t.classList.add('act');};
   });
@@ -1642,7 +1702,7 @@ function _nodeScoreSchool(name){
 }
 function _styleBySchool(n,d,sizes){
   n.symbol='circle';
-  n.symbolSize=sizes[Math.min(d,sizes.length-1)];
+  n.symbolSize=_nodeQSize(n.name,d);
   const score=_nodeScoreSchool(n.name);
   n.itemStyle={color:_scoreColor(score),borderWidth:0};
   n.label={show:false};
@@ -1682,12 +1742,42 @@ function showSchoolPage(level){
     },60);
   } else {
     if(!_schoolBarInited){_schoolBarInited=true;setTimeout(_initSchoolBar,80);}
-    else setTimeout(()=>{schoolGradeBarChart&&schoolGradeBarChart.resize();schoolTreeChart&&schoolTreeChart.resize();},60);
+    else setTimeout(()=>{schoolGradeBarChart&&schoolGradeBarChart.resize();schoolTreeChart&&schoolTreeChart.resize();gradeTrendChart&&gradeTrendChart.resize();},60);
     _renderSchoolGradeTable();
   }
 }
 
 function drillToGrade(gradeName){ showSchoolPage(gradeName); }
+
+const GRADE_TREND={
+  '高一':{rate:[78.2,79.1,79.8,81.5,82.3,83.1,81.6,80.1,78.9],task:[74.1,75.3,76.5,78.2,79.0,80.2,78.5,77.1,75.8]},
+  '高二':{rate:[80.5,81.2,81.8,82.5,82.9,83.1,83.5,83.8,84.2],task:[78.3,79.1,79.8,80.5,81.0,81.5,81.8,82.1,82.4]},
+  '高三':{rate:[82.1,82.8,83.5,84.2,84.7,85.1,85.4,85.5,85.8],task:[80.2,81.0,81.8,82.5,83.2,83.8,84.3,84.7,85.1]}
+};
+let gradeTrendChart=null;
+function _selectGradeTrend(grade,el){
+  document.querySelectorAll('#gradeTrendTabs .grade-trend-tab').forEach(t=>t.classList.remove('act'));
+  if(el) el.classList.add('act');
+  if(!gradeTrendChart) return;
+  const d=GRADE_TREND[grade];
+  gradeTrendChart.setOption({series:[{name:'正确率',data:d.rate},{name:'任务完成率',data:d.task}]});
+}
+function _initGradeTrendChart(){
+  gradeTrendChart=echarts.init(document.getElementById('schoolGradeTrendCh'));
+  const d=GRADE_TREND['高一'];
+  gradeTrendChart.setOption({
+    backgroundColor:'#fff',
+    grid:{top:28,right:24,bottom:32,left:44},
+    xAxis:{type:'category',data:SCHOOL_MONTHS,axisLabel:{color:'#888',fontSize:11},axisLine:{lineStyle:{color:'#eee'}},splitLine:{show:false}},
+    yAxis:{type:'value',min:60,max:100,axisLabel:{formatter:v=>v+'%',color:'#aaa',fontSize:11},splitLine:{lineStyle:{color:'#f5f5f5'}},axisLine:{show:false}},
+    tooltip:{trigger:'axis',formatter:p=>`${p[0].axisValue}<br/>${p.map(s=>`<span style="color:${s.color}">●</span> ${s.seriesName}: ${s.value}%`).join('<br/>')}`},
+    legend:{top:4,right:0,itemWidth:10,itemHeight:10,textStyle:{fontSize:11,color:'#888'}},
+    series:[
+      {name:'正确率',type:'line',data:d.rate,smooth:true,symbol:'circle',symbolSize:5,lineStyle:{color:'#00b3d4',width:2},itemStyle:{color:'#00b3d4'}},
+      {name:'任务完成率',type:'line',data:d.task,smooth:true,symbol:'circle',symbolSize:5,lineStyle:{color:'#95de64',width:2},itemStyle:{color:'#95de64'}}
+    ]
+  });
+}
 
 function _initSchoolBar(){
   _renderSchoolGradeTable();
@@ -1719,6 +1809,7 @@ function _initSchoolBar(){
     }
   },60);
   setTimeout(()=>_renderSchoolActDetail('tasks'),60);
+  setTimeout(_initGradeTrendChart,80);
 }
 
 function _initGradePage(){
@@ -1804,6 +1895,23 @@ function onSchoolKgNodeClick(params){
   const prevScore=Math.min(88,Math.max(38,schoolScore-4+(seed%8)-4));
   const topScore=Math.min(97,Math.max(60,schoolScore+8+(seed%5)));
   const badgeClass=schoolScore>=70?'good':schoolScore>=55?'warn':'bad';
+  const isGradeMode=document.getElementById('secGradeOnly').style.display!=='none';
+  const classBarsHtml=isGradeMode?(()=>{
+    const top8=SCHOOL_CLASSES.slice(0,8);
+    const rows=top8.map((c,i)=>{
+      const cs=(node.charCodeAt(0)*7+c.name.charCodeAt(2)*11+i*5)%30;
+      const cscore=Math.min(95,Math.max(40,schoolScore-10+cs));
+      return `<div class="class-cmp-bar-row">
+        <div class="class-cmp-bar-lbl">${c.name}</div>
+        <div class="class-cmp-bar-track"><div class="class-cmp-bar-fill" style="width:${cscore}%;background:${_scoreColor(cscore)}"></div></div>
+        <div class="class-cmp-bar-val">${cscore}%</div>
+      </div>`;
+    }).join('');
+    return `<div style="margin-top:10px;border-top:1px solid #f5f5f5;padding-top:8px">
+      <div style="font-size:11px;color:#666;font-weight:600;margin-bottom:6px">各班级得分率</div>
+      ${rows}
+    </div>`;
+  })():'';
   document.getElementById('schoolKgDetailPnl').innerHTML=`
     <div class="rdt-title">${node}</div>
     <div><span class="kgd-badge ${badgeClass}">${_scoreRange(schoolScore)}</span></div>
@@ -1823,7 +1931,8 @@ function onSchoolKgNodeClick(params){
           <div class="kgd-bar-track"><div class="kgd-bar-fill" style="width:${topScore}%;background:#ddd"></div></div>
         </div>
       </div>
-    </div>`;
+    </div>
+    ${classBarsHtml}`;
   const g=echarts.init(document.getElementById('schoolKgGauge'));
   g.setOption({series:[{
     type:'gauge',startAngle:200,endAngle:-20,min:0,max:100,
@@ -1917,6 +2026,16 @@ function _nodeScore(s,name){
   const seed=(s.name.charCodeAt(0)+name.charCodeAt(0)*7+s.rank*3)%40;
   return Math.min(97,Math.max(22,s.rate+seed-20));
 }
+function _nodeQSize(name,d){
+  const seed=(name.charCodeAt(0)*17+name.length*11+(name.charCodeAt(name.length-1)||0)*5)%50;
+  const mx=[18,22,14,9,7],mn=[18,12,8,5,4];
+  const i=Math.min(d,4);
+  return mn[i]+Math.round((seed/50)*(mx[i]-mn[i]));
+}
+function _nodeScoreClass(name){
+  const seed=(name.charCodeAt(0)*11+name.length*7+(name.charCodeAt(name.length-1)||0)*5)%50;
+  return Math.min(92,Math.max(38,65+seed-25));
+}
 function _scoreColor(v){
   if(v>=85) return '#52c41a';
   if(v>=70) return '#95de64';
@@ -1933,7 +2052,7 @@ function _scoreRange(v){
 }
 function _styleByStu(n,d,s,sizes){
   n.symbol='circle';
-  n.symbolSize=sizes[Math.min(d,sizes.length-1)];
+  n.symbolSize=_nodeQSize(n.name,d);
   const score=_nodeScore(s,n.name);
   n.itemStyle={color:_scoreColor(score),borderWidth:0};
   n.label={show:false};
