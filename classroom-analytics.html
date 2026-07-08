@@ -142,7 +142,7 @@ body{font-family:'Microsoft YaHei',Arial,sans-serif;font-size:13px;background:#f
 .stu-urgency.month{background:#fff7e6;color:#fa8c16;border:1px solid #ffd591;}
 .stu-urgency.long{background:#f5f5f5;color:#999;border:1px solid #d9d9d9;}
 .class-cmp-bar-row{display:flex;align-items:center;gap:6px;margin-bottom:5px;font-size:11px;}
-.class-cmp-bar-lbl{width:56px;color:#666;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.class-cmp-bar-lbl{width:80px;color:#666;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .class-cmp-bar-track{flex:1;background:#f5f5f5;border-radius:3px;height:7px;overflow:hidden;}
 .class-cmp-bar-fill{height:100%;border-radius:3px;}
 .class-cmp-bar-val{width:32px;text-align:right;color:#888;flex-shrink:0;}
@@ -879,17 +879,17 @@ body{font-family:'Microsoft YaHei',Arial,sans-serif;font-size:13px;background:#f
         <div class="school-sec-hd">年级正确率 &amp; 任务量对比</div>
         <div class="grade-kpi-row">
           <div class="grade-kpi-card" onclick="drillToGrade('高一')">
-            <div class="grade-kpi-name">高一年级</div>
+            <div class="grade-kpi-name">高一年级<span style="font-size:10px;color:#bbb;font-weight:400;margin-left:4px">张建国</span></div>
             <div class="grade-kpi-val">81.2%</div>
             <div class="grade-kpi-delta" style="color:#fa8c16">▼ 低于全校 2.3%</div>
           </div>
           <div class="grade-kpi-card" onclick="drillToGrade('高二')">
-            <div class="grade-kpi-name">高二年级</div>
+            <div class="grade-kpi-name">高二年级<span style="font-size:10px;color:#bbb;font-weight:400;margin-left:4px">李晓梅</span></div>
             <div class="grade-kpi-val">83.8%</div>
             <div class="grade-kpi-delta" style="color:#52c41a">▲ 高于全校 0.3%</div>
           </div>
           <div class="grade-kpi-card" onclick="drillToGrade('高三')">
-            <div class="grade-kpi-name">高三年级</div>
+            <div class="grade-kpi-name">高三年级<span style="font-size:10px;color:#bbb;font-weight:400;margin-left:4px">王志强</span></div>
             <div class="grade-kpi-val">85.5%</div>
             <div class="grade-kpi-delta" style="color:#52c41a">▲ 高于全校 2.0%</div>
           </div>
@@ -897,6 +897,13 @@ body{font-family:'Microsoft YaHei',Arial,sans-serif;font-size:13px;background:#f
             <div class="grade-kpi-name">全校均值</div>
             <div class="grade-kpi-val" style="color:#333;font-size:20px;font-weight:500">83.5%</div>
             <div class="grade-kpi-delta" style="color:#aaa">基准线</div>
+          </div>
+          <div class="grade-kpi-card" style="cursor:default;border-color:#e6f7ff;background:#f0f9ff;min-width:120px">
+            <div class="grade-kpi-name" style="color:#0099bb">本月活跃</div>
+            <div style="margin-top:6px;font-size:12px;color:#333;line-height:1.8">
+              <div>教师 <b style="color:#00b3d4">78%</b> <span style="color:#bbb;font-size:11px">47/60人</span></div>
+              <div>学生 <b style="color:#00b3d4">74%</b> <span style="color:#bbb;font-size:11px">892/1,200人</span></div>
+            </div>
           </div>
         </div>
         <div style="background:#fff;border-radius:6px;padding:14px 18px;margin-bottom:12px">
@@ -1024,7 +1031,7 @@ body{font-family:'Microsoft YaHei',Arial,sans-serif;font-size:13px;background:#f
           </div>
           <table class="exam-tbl">
             <thead><tr>
-              <th>年级</th><th>正确率</th><th>较全校均值</th>
+              <th>年级</th><th>年级主任</th><th>正确率</th><th>较全校均值</th>
               <th>任务完成率</th><th>班级数</th><th>操作</th>
             </tr></thead>
             <tbody id="schoolGradeBody"></tbody>
@@ -1670,10 +1677,11 @@ const SCHOOL_RATE_CUR=[76,77,78,80,79,80,81,82,83.5];
 const SCHOOL_RATE_PRE=[73,74,75,76,75,76,77,78,79.2];
 
 const GRADES=[
-  {name:'高一',rate:81.2,taskRate:78.4,classes:8,delta:-2.3},
-  {name:'高二',rate:83.8,taskRate:82.1,classes:8,delta:+0.3},
-  {name:'高三',rate:85.5,taskRate:84.7,classes:6,delta:+2.0}
+  {name:'高一',rate:81.2,taskRate:78.4,classes:8,delta:-2.3,principal:'张建国'},
+  {name:'高二',rate:83.8,taskRate:82.1,classes:8,delta:+0.3,principal:'李晓梅'},
+  {name:'高三',rate:85.5,taskRate:84.7,classes:6,delta:+2.0,principal:'王志强'}
 ];
+const CLASS_MATH_TEACHERS=['陈明','刘燕','赵磊','孙伟','周芳','吴杰','郑华','陈明','刘燕','赵磊','吴杰','周芳','赵磊','孙伟','陈明','郑华','刘燕','吴杰','周芳','赵磊','陈明','刘燕'];
 
 let schoolGradeBarChart=null,schoolMultiTrendChart=null;
 let schoolTreeChart=null,schoolActChart=null;
@@ -1833,6 +1841,7 @@ function _renderSchoolGradeTable(){
     const ds=(g.delta>=0?'▲ +':'▼ ')+Math.abs(g.delta)+'%';
     return `<tr>
       <td style="font-weight:600;cursor:pointer;color:#00b3d4" onclick="drillToGrade('${g.name}')">${g.name}年级</td>
+      <td style="color:#555">${g.principal}</td>
       <td>${g.rate}%</td>
       <td style="color:${dc}">${ds}</td>
       <td>${g.taskRate}%</td>
@@ -1878,14 +1887,14 @@ function onSchoolKgNodeClick(params){
   const prevScore=Math.min(88,Math.max(38,schoolScore-4+(seed%8)-4));
   const topScore=Math.min(97,Math.max(60,schoolScore+8+(seed%5)));
   const badgeClass=schoolScore>=70?'good':schoolScore>=55?'warn':'bad';
-  const isGradeMode=document.getElementById('secGradeOnly').style.display!=='none';
-  const classBarsHtml=isGradeMode?(()=>{
+  const classBarsHtml=(()=>{
     const top8=SCHOOL_CLASSES.slice(0,8);
     const rows=top8.map((c,i)=>{
       const cs=(node.charCodeAt(0)*7+c.name.charCodeAt(2)*11+i*5)%30;
       const cscore=Math.min(95,Math.max(40,schoolScore-10+cs));
+      const teacher=CLASS_MATH_TEACHERS[i]||'—';
       return `<div class="class-cmp-bar-row">
-        <div class="class-cmp-bar-lbl">${c.name}</div>
+        <div class="class-cmp-bar-lbl">${c.name}<span style="color:#bbb;font-size:10px;margin-left:3px">${teacher}</span></div>
         <div class="class-cmp-bar-track"><div class="class-cmp-bar-fill" style="width:${cscore}%;background:${_scoreColor(cscore)}"></div></div>
         <div class="class-cmp-bar-val">${cscore}%</div>
       </div>`;
@@ -1894,7 +1903,7 @@ function onSchoolKgNodeClick(params){
       <div style="font-size:11px;color:#666;font-weight:600;margin-bottom:6px">各班级得分率</div>
       ${rows}
     </div>`;
-  })():'';
+  })();
   document.getElementById('schoolKgDetailPnl').innerHTML=`
     <div class="rdt-title">${node}</div>
     <div><span class="kgd-badge ${badgeClass}">${_scoreRange(schoolScore)}</span></div>
