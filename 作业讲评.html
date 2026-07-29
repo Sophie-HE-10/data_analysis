@@ -1622,21 +1622,21 @@ body {
     <button class="btn-lj-close" onclick="closeLjDrawer()">✕</button>
   </div>
 
-  <!-- 题号 Tab 栏（待回复优先：2→5，其余正序：1→3→4） -->
+  <!-- 题号 Tab 栏（顺序：1→2→3→4→5） -->
   <div class="lj-tab-bar">
-    <div class="lj-tab active" id="lj-tab-2" onclick="ljSwitchTab(2)">
+    <div class="lj-tab active" id="lj-tab-1" onclick="ljSwitchTab(1)">1</div>
+    <div class="lj-tab" id="lj-tab-2" onclick="ljSwitchTab(2)">
       2<span class="lj-tab-badge" id="lj-badge-2">2</span>
     </div>
+    <div class="lj-tab" id="lj-tab-3" onclick="ljSwitchTab(3)">3</div>
+    <div class="lj-tab" id="lj-tab-4" onclick="ljSwitchTab(4)">4</div>
     <div class="lj-tab" id="lj-tab-5" onclick="ljSwitchTab(5)">
       5<span class="lj-tab-badge" id="lj-badge-5">3</span>
     </div>
-    <div class="lj-tab" id="lj-tab-1" onclick="ljSwitchTab(1)">1</div>
-    <div class="lj-tab" id="lj-tab-3" onclick="ljSwitchTab(3)">3</div>
-    <div class="lj-tab" id="lj-tab-4" onclick="ljSwitchTab(4)">4</div>
   </div>
 
   <!-- ─── 题1：无提问 ─── -->
-  <div class="lj-body" id="lj-content-1" style="display:none">
+  <div class="lj-body" id="lj-content-1">
     <div class="lj-q-collapse">
       <button class="lj-q-collapse-btn" onclick="ljToggleCollapse('qs-1')">
         📋 查看本题
@@ -1654,12 +1654,12 @@ body {
       </div>
     </div>
     <div>
-      <div class="lj-section-title">学生提问</div>
-      <div class="lj-empty"><div class="lj-empty-icon">💬</div>暂无学生提问</div>
+      <div class="lj-section-title">提问及讲评记录</div>
+      <div class="lj-empty"><div class="lj-empty-icon">💬</div>暂无提问及讲评记录</div>
+      <div id="lj-pub-list-1"></div>
     </div>
     <div class="lj-proactive">
-      <div class="lj-section-title">全员讲评 <span class="lj-done-badge" id="lj-pub-count-1" style="display:none"></span><span style="font-size:11px;color:#aaa;font-weight:400;margin-left:auto">发布后作业全员可见</span></div>
-      <div id="lj-pub-list-1"></div>
+      <div class="lj-section-title">全员讲评 <span style="font-size:11px;color:#aaa;font-weight:400;margin-left:auto">发布后全员可见</span></div>
       <div class="lj-type-toggle">
         <button class="lj-type-btn active" id="lj-tbtn-text-1" onclick="ljSwitchType(1,'text')">📝 图文讲评</button>
         <button class="lj-type-btn" id="lj-tbtn-media-1" onclick="ljSwitchType(1,'media')">🎬 音频视频</button>
@@ -1700,7 +1700,7 @@ body {
   </div>
 
   <!-- ─── 题2：2条待回复提问 ─── -->
-  <div class="lj-body" id="lj-content-2">
+  <div class="lj-body" id="lj-content-2" style="display:none">
     <div class="lj-q-collapse">
       <button class="lj-q-collapse-btn" onclick="ljToggleCollapse('qs-2')">
         📋 查看本题
@@ -1719,7 +1719,7 @@ body {
     </div>
     <div>
       <div class="lj-section-title">
-        学生提问
+        提问及讲评记录
         <span class="lj-pending-badge" id="lj-q2-badge">2 待回复</span>
       </div>
 
@@ -1737,7 +1737,7 @@ body {
           Ta的作答 <span class="lj-collapse-arrow" id="lj-arrow-lj-ans-2-1">▾</span>
         </button>
         <div class="lj-ans-body" id="lj-ans-2-1" style="display:none">
-          <span class="tag-wrong">✗ 选B</span>&ensp;正确答案：<span class="tag-ans">C</span>
+          <span class="tag-wrong">选B（错误）</span>
         </div>
         <div class="lj-reply-form" id="lj-form-2-1">
           <div class="lj-reply-form-label">↩ 回复张晓雯的提问</div>
@@ -1797,7 +1797,7 @@ body {
           Ta的作答 <span class="lj-collapse-arrow" id="lj-arrow-lj-ans-2-2">▾</span>
         </button>
         <div class="lj-ans-body" id="lj-ans-2-2" style="display:none">
-          <span class="tag-right">✓ 选C（正确）</span>&ensp;解法与标准不同
+          <span class="tag-right">选C（正确）</span>
         </div>
         <div class="lj-reply-form" id="lj-form-2-2">
           <div class="lj-reply-form-label">↩ 回复林子豪的提问</div>
@@ -1842,11 +1842,11 @@ body {
           </div>
         </div>
       </div>
+      <div id="lj-pub-list-2"></div>
     </div>
 
     <div class="lj-proactive">
-      <div class="lj-section-title">全员讲评 <span class="lj-done-badge" id="lj-pub-count-2" style="display:none"></span><span style="font-size:11px;color:#aaa;font-weight:400;margin-left:auto">发布后作业全员可见</span></div>
-      <div id="lj-pub-list-2"></div>
+      <div class="lj-section-title">全员讲评 <span style="font-size:11px;color:#aaa;font-weight:400;margin-left:auto">发布后全员可见</span></div>
       <div class="lj-type-toggle">
         <button class="lj-type-btn active" id="lj-tbtn-text-2" onclick="ljSwitchType(2,'text')">📝 图文讲评</button>
         <button class="lj-type-btn" id="lj-tbtn-media-2" onclick="ljSwitchType(2,'media')">🎬 音频视频</button>
@@ -1905,11 +1905,7 @@ body {
       </div>
     </div>
     <div>
-      <div class="lj-section-title">学生提问</div>
-      <div class="lj-empty"><div class="lj-empty-icon">💬</div>暂无学生提问</div>
-    </div>
-    <div class="lj-proactive">
-      <div class="lj-section-title">全员讲评 <span class="lj-done-badge" id="lj-pub-count-3">1 已发布</span><span style="font-size:11px;color:#aaa;font-weight:400;margin-left:auto">发布后作业全员可见</span></div>
+      <div class="lj-section-title">提问及讲评记录</div>
       <div id="lj-pub-list-3">
         <div class="lj-published">
           <div class="lj-published-hd">
@@ -1930,6 +1926,9 @@ body {
           </div>
         </div>
       </div>
+    </div>
+    <div class="lj-proactive">
+      <div class="lj-section-title">全员讲评 <span style="font-size:11px;color:#aaa;font-weight:400;margin-left:auto">发布后全员可见</span></div>
       <div class="lj-type-toggle" style="margin-top:10px">
         <button class="lj-type-btn active" id="lj-tbtn-text-3" onclick="ljSwitchType(3,'text')">📝 图文讲评</button>
         <button class="lj-type-btn" id="lj-tbtn-media-3" onclick="ljSwitchType(3,'media')">🎬 音频视频</button>
@@ -1988,12 +1987,12 @@ body {
       </div>
     </div>
     <div>
-      <div class="lj-section-title">学生提问</div>
-      <div class="lj-empty"><div class="lj-empty-icon">💬</div>暂无学生提问</div>
+      <div class="lj-section-title">提问及讲评记录</div>
+      <div class="lj-empty"><div class="lj-empty-icon">💬</div>暂无提问及讲评记录</div>
+      <div id="lj-pub-list-4"></div>
     </div>
     <div class="lj-proactive">
-      <div class="lj-section-title">全员讲评 <span class="lj-done-badge" id="lj-pub-count-4" style="display:none"></span><span style="font-size:11px;color:#aaa;font-weight:400;margin-left:auto">发布后作业全员可见</span></div>
-      <div id="lj-pub-list-4"></div>
+      <div class="lj-section-title">全员讲评 <span style="font-size:11px;color:#aaa;font-weight:400;margin-left:auto">发布后全员可见</span></div>
       <div class="lj-type-toggle">
         <button class="lj-type-btn active" id="lj-tbtn-text-4" onclick="ljSwitchType(4,'text')">📝 图文讲评</button>
         <button class="lj-type-btn" id="lj-tbtn-media-4" onclick="ljSwitchType(4,'media')">🎬 音频视频</button>
@@ -2053,7 +2052,7 @@ body {
     </div>
     <div>
       <div class="lj-section-title">
-        学生提问
+        提问及讲评记录
         <span class="lj-pending-badge" id="lj-q5-badge">3 待回复</span>
       </div>
 
@@ -2067,7 +2066,7 @@ body {
           Ta的作答 <span class="lj-collapse-arrow" id="lj-arrow-lj-ans-5-1">▾</span>
         </button>
         <div class="lj-ans-body" id="lj-ans-5-1" style="display:none">
-          <span class="tag-wrong">✗ 选D</span>&ensp;正确答案：<span class="tag-ans">C</span>
+          <span class="tag-wrong">选D（错误）</span>
         </div>
         <div class="lj-reply-form" id="lj-form-5-1">
           <div class="lj-reply-form-label">↩ 回复陈xx的提问</div>
@@ -2123,7 +2122,7 @@ body {
           Ta的作答 <span class="lj-collapse-arrow" id="lj-arrow-lj-ans-5-2">▾</span>
         </button>
         <div class="lj-ans-body" id="lj-ans-5-2" style="display:none">
-          <span class="tag-wrong">✗ 选B</span>&ensp;正确答案：<span class="tag-ans">C</span>
+          <span class="tag-wrong">选B（错误）</span>
         </div>
         <div class="lj-reply-form" id="lj-form-5-2">
           <div class="lj-reply-form-label">↩ 回复王xx的提问</div>
@@ -2179,7 +2178,7 @@ body {
           Ta的作答 <span class="lj-collapse-arrow" id="lj-arrow-lj-ans-5-3">▾</span>
         </button>
         <div class="lj-ans-body" id="lj-ans-5-3" style="display:none">
-          <span class="tag-right">✓ 选C（正确）</span>&ensp;解法与标准不同
+          <span class="tag-right">选C（正确）</span>
         </div>
         <div class="lj-reply-form" id="lj-form-5-3">
           <div class="lj-reply-form-label">↩ 回复李xx的提问</div>
@@ -2224,11 +2223,11 @@ body {
           </div>
         </div>
       </div>
+      <div id="lj-pub-list-5"></div>
     </div>
 
     <div class="lj-proactive">
-      <div class="lj-section-title">全员讲评 <span class="lj-done-badge" id="lj-pub-count-5" style="display:none"></span><span style="font-size:11px;color:#aaa;font-weight:400;margin-left:auto">发布后作业全员可见</span></div>
-      <div id="lj-pub-list-5"></div>
+      <div class="lj-section-title">全员讲评 <span style="font-size:11px;color:#aaa;font-weight:400;margin-left:auto">发布后全员可见</span></div>
       <div class="lj-type-toggle">
         <button class="lj-type-btn active" id="lj-tbtn-text-5" onclick="ljSwitchType(5,'text')">📝 图文讲评</button>
         <button class="lj-type-btn" id="lj-tbtn-media-5" onclick="ljSwitchType(5,'media')">🎬 音频视频</button>
@@ -2345,10 +2344,10 @@ body {
   <!-- ─── 题2：何11有提问 ─── -->
   <div class="lj-body" id="sv-content-2" style="display:none">
 
-    <!-- 何11的提问 -->
-    <div id="sv-q-section-2">
+    <!-- 提问及讲评记录 -->
+    <div>
       <div class="lj-section-title">
-        何11的提问
+        何11的提问及讲评记录
         <span class="lj-pending-badge" id="sv-q-badge-2">1 待回复</span>
       </div>
       <div class="lj-q-card" id="sv-qcard-2">
@@ -2364,7 +2363,7 @@ body {
           Ta的作答 <span class="lj-collapse-arrow" id="lj-arrow-sv-ans-2">▾</span>
         </button>
         <div class="lj-ans-body" id="sv-ans-2" style="display:none">
-          <span class="tag-wrong">✗ 选B</span>&ensp;正确答案：<span class="tag-ans">C</span>
+          <span class="tag-wrong">选B（错误）</span>
         </div>
         <div class="lj-reply-form" id="lj-form-sv-2">
           <div class="lj-reply-form-label">↩ 回复何11的提问</div>
@@ -2409,11 +2408,6 @@ body {
           </div>
         </div>
       </div>
-    </div>
-
-    <!-- 作业讲评（含全员+个人已发布，上方展示） -->
-    <div class="lj-proactive" style="margin-top:4px">
-      <div class="lj-section-title">作业讲评 <span class="lj-done-badge" id="sv-pub-count-2">1 已发布</span></div>
       <div id="sv-pub-list-2">
         <div class="lj-published">
           <div class="lj-published-hd">
@@ -2434,6 +2428,10 @@ body {
           </div>
         </div>
       </div>
+    </div>
+
+    <div class="lj-proactive">
+      <div class="lj-section-title">作业讲评</div>
       <div class="lj-vis-row">
         <span class="lj-vis-label">可见范围：</span>
         <div class="lj-radio-group">
@@ -2835,7 +2833,7 @@ function svLjUpdatePubCount(n) {
   const count = list.children.length;
   if (count === 0) { badge.style.display = 'none'; return; }
   badge.style.display = '';
-  badge.textContent = count + ' 已发布';
+  badge.textContent = count + ' 全员讲评';
 }
 function svLjPublish(n) {
   const ta       = document.getElementById('sv-ptext-' + n);
@@ -2923,7 +2921,7 @@ const ljReplyMode = {};  // 记录每张卡片当前回复模式 'text' | 'media
 const ljDrafts      = {};  // 图文回复草稿 { id: text }
 const ljSentHistory = {};  // 已发回复历史 { tabNum: [{text, toName, time}] }
 let ljTotal = 5;
-let ljActiveTab = 2;
+let ljActiveTab = 1;
 
 function openLjDrawer() {
   document.getElementById('lj-mask').classList.add('open');
@@ -3134,8 +3132,6 @@ function ljDeleteCard(btn, replyBtnId) {
     card.remove();
     if (list.id.startsWith('sv-pub-list-')) {
       svLjUpdatePubCount(parseInt(list.id.replace('sv-pub-list-', '')));
-    } else {
-      ljUpdatePubCount(parseInt(list.id.replace('lj-pub-list-', '')));
     }
   } else {
     card.remove();
@@ -3150,15 +3146,6 @@ function ljDeleteCard(btn, replyBtnId) {
   }
 }
 
-function ljUpdatePubCount(n) {
-  const list  = document.getElementById('lj-pub-list-' + n);
-  const badge = document.getElementById('lj-pub-count-' + n);
-  if (!list || !badge) return;
-  const count = list.children.length;
-  if (count === 0) { badge.style.display = 'none'; return; }
-  badge.style.display = '';
-  badge.textContent = count + ' 已发布';
-}
 
 function ljPublish(n) {
   const ta        = document.getElementById('ptext-' + n);
@@ -3198,7 +3185,6 @@ function ljPublish(n) {
       <button class="btn-lj-del" onclick="ljDeleteCard(this)">删除</button>
     </div>`;
   document.getElementById('lj-pub-list-' + n).appendChild(card);
-  ljUpdatePubCount(n);
 
   // Reset compose area
   ta.value = '';
@@ -3423,7 +3409,6 @@ function ljPublishMedia(n) {
       <button class="btn-lj-del" onclick="ljDeleteCard(this)">删除</button>
     </div>`;
   document.getElementById('lj-pub-list-' + n).appendChild(card);
-  ljUpdatePubCount(n);
 
   // Reset compose area
   mediaWrap.style.display = 'none';
