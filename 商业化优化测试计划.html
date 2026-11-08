@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>商业化优化测试计划</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif; background: #f6f4f0; color: #2b2b2b; padding: 32px 20px 60px; }
+  .wrap { max-width: 960px; margin: 0 auto; }
+  h1 { font-size: 25px; margin-bottom: 6px; }
+  .sub { color: #8a8a8a; font-size: 13px; margin-bottom: 24px; }
+  .panel { background: #fff; border-radius: 14px; padding: 22px; box-shadow: 0 1px 3px rgba(0,0,0,.06); margin-bottom: 22px; }
+  .panel h2 { font-size: 17px; margin-bottom: 4px; }
+  .panel .desc { font-size: 13px; color: #555; margin-bottom: 14px; line-height: 1.85; }
+  .formula { background: #2b2b2b; color: #fff; border-radius: 10px; padding: 12px 20px; font-size: 14px; display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-bottom: 22px; }
+  .formula .op { color: #e8a33d; font-weight: 700; }
+  .formula .f { background: rgba(255,255,255,.12); border-radius: 6px; padding: 3px 12px; }
+  .formula .res { font-size: 15px; font-weight: 700; margin-left: auto; }
+  .sketch { background: #fff; border-radius: 10px; border: 1px solid #eee; padding: 14px; }
+  .sketch img { width: 100%; border-radius: 6px; display: block; }
+  .sketch .cap { text-align: center; color: #999; font-size: 12px; margin-top: 8px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(430px, 1fr)); gap: 16px; }
+  @media (max-width: 1000px) { .grid { grid-template-columns: 1fr; } }
+  .item { border: 1px solid #eee; border-radius: 12px; padding: 18px; }
+  .item.p0 { border-left: 3px solid #e0533d; }
+  .item.hold { border-left: 3px solid #b0b0b0; opacity: .85; }
+  .item.running { border: 1px solid #cfe3d4; background: #f2f9f4; border-left: 3px solid #2e8b57; }
+  .item h3 { font-size: 15px; margin-bottom: 10px; }
+  .item h3 .pri { display: inline-block; padding: 1px 9px; border-radius: 20px; font-size: 11px; color: #fff; background: #e0533d; margin-right: 8px; vertical-align: 1px; }
+  .item h3 .pri.gray { background: #b0b0b0; }
+  .item h3 .hi { font-size: 12px; color: #e0533d; font-weight: 600; }
+  .row { display: flex; gap: 10px; font-size: 13px; line-height: 1.75; margin-bottom: 7px; }
+  .row .lb { flex: 0 0 56px; font-weight: 600; color: #555; }
+  .row .tx { flex: 1; }
+  .subline { background: #faf8f5; border-radius: 8px; padding: 12px 14px; margin-bottom: 10px; }
+  .subline .t { font-size: 13px; font-weight: 700; color: #3a6ea5; margin-bottom: 4px; }
+  .q-mark { color: #e8a33d; font-weight: 700; }
+  .progress .tagline { display: inline-block; background: #2e8b57; color: #fff; font-size: 12px; border-radius: 20px; padding: 2px 12px; margin-bottom: 10px; }
+  .big { font-size: 15px; line-height: 1.9; }
+  .big b.up { color: #2e8b57; }
+  .note { background: #fdf6ec; border-left: 3px solid #e8a33d; padding: 10px 14px; font-size: 13px; border-radius: 4px; margin-top: 14px; line-height: 1.7; }
+
+  /* ---- 甘特图 ---- */
+  .gantt { font-size: 13px; }
+  .g-head { display: flex; margin-bottom: 6px; color: #999; font-size: 12px; }
+  .g-name { flex: 0 0 190px; }
+  .g-track-h { flex: 1; position: relative; height: 18px; }
+  .g-track-h span { position: absolute; top: 0; font-size: 12px; color: #999; }
+  .g-row { display: flex; align-items: center; margin-bottom: 14px; }
+  .g-name { padding-right: 10px; line-height: 1.4; }
+  .g-name .flag { display: inline-block; font-size: 10px; color: #fff; border-radius: 8px; padding: 0 6px; margin-right: 5px; vertical-align: 1px; }
+  .g-track { flex: 1; position: relative; height: 26px; background: repeating-linear-gradient(90deg, #fafafa 0 7px, #f2f2f2 7px 8px); border-radius: 6px; overflow: hidden; }
+  .g-bar { position: absolute; top: 5px; height: 16px; border-radius: 8px; color: #fff; font-size: 11px; line-height: 16px; padding: 0 10px; white-space: nowrap; overflow: hidden; }
+  .g-bar.base { top: 9px; height: 8px; border-radius: 4px; }
+  .g-mark { position: absolute; top: 0; bottom: 0; width: 0; border-left: 2px dashed #e0533d; }
+  .g-mark .lb { position: absolute; top: -2px; left: 4px; font-size: 10px; color: #e0533d; white-space: nowrap; }
+  .g-zone { position: absolute; top: 0; bottom: 0; background: rgba(224,83,61,.06); }
+  .g-zone .lb { position: absolute; top: 2px; left: 6px; font-size: 10px; color: #c0392b; }
+  .g-legend { font-size: 12px; color: #777; margin-top: 4px; line-height: 1.7; }
+  .dot-live { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: #2e8b57; margin-right: 5px; animation: blink 1.6s infinite; }
+  @keyframes blink { 50% { opacity: .3; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>商业化优化测试计划</h1>
+  <div class="sub">财年末（2027-02-28）前 · 将漏斗各环节影响因子作为「待优化项」逐项测试 · 客单价实验已先行（10.30起）</div>
+
+  <div class="formula">
+    日ARPU = <span class="f">付费入口曝光率</span><span class="op">×</span><span class="f">付费入口点击率</span><span class="op">×</span><span class="f">点击转化率</span><span class="op">×</span><span class="f">客单价</span>
+    <span class="res">¥0.01 → ¥0.10</span>
+  </div>
+
+  <div class="panel">
+    <div class="sketch">
+      <img src="商业化计划_手稿.png" alt="商业化测试计划手稿">
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>整体计划</h2>
+    <div class="desc">将每个环节中的影响因子视作<b>「待优化项」</b>，在财年末前优化测试。从当前漏斗情况看，<b>入口点击和点击转化的天花板更高</b>，涉及的优化项可以优先推进测试。</div>
+  </div>
+
+  <div class="panel">
+    <h2>P0 项</h2>
+    <div class="grid">
+
+      <div class="item p0" style="grid-column: 1 / -1">
+        <h3><span class="pri">P0</span>用户兴趣度 <span class="hi">高优测试项</span></h3>
+        <div class="row"><div class="lb">假设</div><div class="tx">用户会点击自己感兴趣的内容详情，查看具体收费标准。「家长放心」和「孩子喜欢」是两个测试条线。</div></div>
+        <div class="subline">
+          <div class="t">条线一：家长放心的内容</div>
+          <div class="row" style="margin-bottom:0"><div class="lb">假设</div><div class="tx">类「AI课」，知识密度高，孩子能「学到东西」。</div></div>
+          <div class="row" style="margin-bottom:0"><div class="lb">测试时间</div><div class="tx"><span class="q-mark">？</span>12月1日-2月末，每周测5部家长微课</div></div>
+          <div class="row" style="margin-bottom:0"><div class="lb">测试方案</div><div class="tx">在「动画微课」中和线上最好卖的孩子向内容配置在同一位置进行 AB 测试。</div></div>
+        </div>
+        <div class="subline" style="margin-bottom:0">
+          <div class="t">条线二：孩子喜欢的内容</div>
+          <div class="row" style="margin-bottom:0"><div class="tx">当前基本盘，抄热点持续生产。</div></div>
+        </div>
+      </div>
+
+      <div class="item p0">
+        <h3><span class="pri">P0</span>权益认知</h3>
+        <div class="row"><div class="lb">假设</div><div class="tx">用户看不懂「付的钱买到什么」——单月/连包/剧集解锁的权益边界不清、价格无锚点，导致点击后不转化。</div></div>
+        <div class="row"><div class="lb">测试项</div><div class="tx">撞墙页、会员页权益展现 A/B：单集折算锚点、「解锁第X–Y集」钩子文案、连包 vs 单月对比呈现。</div></div>
+        <div class="row"><div class="lb">测试时间</div><div class="tx">12月中旬起，配合产品功能，与价格阶梯实验错峰跑。</div></div>
+      </div>
+
+      <div class="item p0">
+        <h3><span class="pri">P0</span>付费商品呈现结构变化</h3>
+        <div class="row"><div class="lb">测试项</div><div class="tx">① 新用户 tab 定位 AB：先「推荐」还是先「微课」；② 微课结构调整——往「视频会员」方向 /「凯叔讲故事」方向靠，需要 AB。</div></div>
+        <div class="row"><div class="lb">测试时间</div><div class="tx">12月中旬起。</div></div>
+      </div>
+
+      <div class="item p0">
+        <h3><span class="pri">P0</span>支付体验</h3>
+        <div class="row"><div class="lb">假设</div><div class="tx">付费决策的最后一步流失于「支付方式不是付款人的习惯方式」。</div></div>
+        <div class="row"><div class="lb">测试项</div><div class="tx">① 接入微信支付；② 支持「把付费申请发给家长支付」。</div></div>
+        <div class="row"><div class="lb">测试时间</div><div class="tx">1月初起。</div></div>
+      </div>
+
+      <div class="item running">
+        <h3><span class="pri" style="background:#2e8b57">P0</span>商品价格阶梯 <span style="font-size:12px;color:#2e8b57;font-weight:600"><span class="dot-live"></span>进行中</span></h3>
+        <div class="row"><div class="lb">假设</div><div class="tx">在月卡-年卡中增加新的产品，可改变价格菜单的锚定结构（折算单价更低的比价逻辑 + 中庸效应），使付费分布整体上移。</div></div>
+        <div class="row"><div class="lb">测试时间</div><div class="tx">11月初起。目标是测出目前内容量下的售卖最优价格梯度。</div></div>
+      </div>
+
+      <div class="item hold" style="grid-column: 1 / -1">
+        <h3><span class="pri gray">HOLD</span>定价</h3>
+        <div class="row"><div class="lb">状态</div><div class="tx">先 hold。前置链路不明朗的时候不要先做变价策略。</div></div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>P1 项</h2>
+    <div class="grid">
+      <div class="item" style="border-left: 3px solid #3a6ea5">
+        <h3><span class="pri" style="background:#3a6ea5">P1</span>用户浏览时长</h3>
+        <div class="row"><div class="lb">方向</div><div class="tx">先作为算法优化项长期推进。</div></div>
+      </div>
+      <div class="item" style="border-left: 3px solid #3a6ea5">
+        <h3><span class="pri" style="background:#3a6ea5">P1</span>付费商品数量</h3>
+        <div class="row"><div class="lb">方向</div><div class="tx">内容引入侧先从消费角度，提供365部剧，在付费权益测试中获得关于「数量」的更多认知。</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>目前进展</h2>
+    <div class="progress">
+      <div class="tagline">进行中 · 客单价实验</div>
+      <div class="big">
+        从比较<b>「干净」、不和内容探索挂钩的客单价指标</b>开始测起。测试项为<b>「商品价格阶梯」</b>，测试周期为 <b>10.30 12点至今</b>。<br>
+        验证<b>半年包组合</b>能够在前序指标不降低的情况下，将客单价从 <b class="up">¥36 → ¥48</b>。
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>测试排期（11月初 – 2027年2月末）</h2>
+    <div class="desc">财年末前四个月，各实验按「错峰、不互相污染」的原则排布。价格阶梯先行（已进行中），权益认知与呈现结构12月中旬接力，支付体验1月初上线，家长内容测试贯穿寒假+春节档。</div>
+    <div class="gantt">
+      <div class="g-head">
+        <div class="g-name"></div>
+        <div class="g-track-h">
+          <span style="left:0">10月末</span>
+          <span style="left:6.5%">11月</span>
+          <span style="left:30.5%">12月</span>
+          <span style="left:55.5%">1月</span>
+          <span style="left:79%">2月</span>
+        </div>
+      </div>
+
+      <div class="g-row">
+        <div class="g-name"><span class="flag" style="background:#2e8b57">进行中</span>商品价格阶梯<br><span style="color:#999;font-size:11px">半年包·最优价格梯度</span></div>
+        <div class="g-track">
+          <div class="g-bar" style="left:2%; width:40%; background:#2e8b57">10.30 起</div>
+          <div class="g-mark" style="left:30.5%"><span class="lb">错峰</span></div>
+        </div>
+      </div>
+
+      <div class="g-row">
+        <div class="g-name"><span class="flag" style="background:#3a6ea5">P0</span>权益认知 A/B<br><span style="color:#999;font-size:11px">撞墙页/会员页权益展现</span></div>
+        <div class="g-track">
+          <div class="g-bar" style="left:41%; width:36%; background:#3a6ea5">12月中旬起</div>
+        </div>
+      </div>
+
+      <div class="g-row">
+        <div class="g-name"><span class="flag" style="background:#7b5ea7">P0</span>呈现结构变化<br><span style="color:#999;font-size:11px">tab定位 AB / 微课结构 AB</span></div>
+        <div class="g-track">
+          <div class="g-bar" style="left:41%; width:36%; background:#7b5ea7">12月中旬起</div>
+        </div>
+      </div>
+
+      <div class="g-row">
+        <div class="g-name"><span class="flag" style="background:#c98f2a">P0</span>支付体验<br><span style="color:#999;font-size:11px">微信支付 + 家长代付</span></div>
+        <div class="g-track">
+          <div class="g-bar" style="left:56%; width:30%; background:#c98f2a">1月初起</div>
+        </div>
+      </div>
+
+      <div class="g-row">
+        <div class="g-name"><span class="flag" style="background:#e0533d">P0</span>家长放心内容测试<br><span style="color:#999;font-size:11px">每周5部家长微课</span></div>
+        <div class="g-track">
+          <div class="g-bar" style="left:30.5%; width:69.5%; background:#e0533d">12.1 – 2月末 · 覆盖寒假+春节</div>
+        </div>
+      </div>
+
+      <div class="g-row">
+        <div class="g-name"><span class="flag" style="background:#9a9a9a">基本盘</span>孩子喜欢内容<br><span style="color:#999;font-size:11px">抄热点持续生产</span></div>
+        <div class="g-track">
+          <div class="g-bar base" style="left:0; width:100%; background:#c9b8a8"></div>
+        </div>
+      </div>
+
+      <div class="g-row" style="margin-bottom:4px; height:40px">
+        <div class="g-name"></div>
+        <div class="g-track" style="background:none; height:40px">
+          <div class="g-mark" style="left:83.3%; border-left-color:#c98f2a"><span class="lb" style="top:22px; color:#c98f2a; left:5px">春节 2.6</span></div>
+          <div class="g-zone" style="left:79%; width:21%"><span class="lb" style="left:10px">2月 = 考核月</span></div>
+        </div>
+      </div>
+
+      <div class="g-legend">
+        时间轴：2026-10月末 → 2027-02-28（财年考核截止，按2月均值口径）。各实验仅标注了起始时间，结束时间为排期建议；2月为考核月，建议当月只放量已验证的实验，不再新增实验变量。
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
